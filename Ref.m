@@ -10,7 +10,7 @@
 %   pas lies.
 
 % Les non-linearite ne sont pas traite automatiquement car il faut
-%   re-appliquer les CL. impossible avec substitution pour l'instant
+%   re-appliquer les CL. impossible avec substitution pour l'instant.
 
 w = warning ('off','all');
 % w = warning ('on','all');
