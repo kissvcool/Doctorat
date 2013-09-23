@@ -1,4 +1,4 @@
-function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt)
+function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt)
 
     HistMf    =zeros(size(K0,1)+size(D,1),Mmax);
     HistMg  =zeros(size((0:dt:Ttot)',1),Mmax);

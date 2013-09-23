@@ -129,7 +129,7 @@ for program=0:(IterProgram-1)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-for n = 1:2  % taille de la base modale
+for n = 1:4  % taille de la base modale
 %% Creation de la base reduite / d une matrice de passage
     
     reduc = 1;
@@ -138,7 +138,7 @@ for n = 1:2  % taille de la base modale
     % 3 PGD
 
     [PRT] = BaseReduite (reduc,n,nombreNoeuds,M,D,sortie(1).f.HistU');
-    sortie(program+IterProgram+1).p = PRT;
+    sortie(program+IterProgram+n).p = PRT;
     
 %% Projection
     
@@ -148,9 +148,10 @@ for n = 1:2  % taille de la base modale
     
     tic;
     Ttot;
-    sortie(program+IterProgram+1).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR);
+    sortie(program+IterProgram+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR);
     Tcalcul= toc;
     disp(['Estimation du temps de calcul sur base reduite ' num2str(Tcalcul, '%10.1e\n') 's']);
+end
     
 %% Animation
     
@@ -159,13 +160,18 @@ for n = 1:2  % taille de la base modale
     % 
     % AfficherAnimation(Reference,Resultat,VectL,L);
     
-%% Affichage Complet          
-    
-    Reference = sortie(program+1).f.HistU ;
-    Resultat  = (sortie(program+IterProgram+1).p*sortie(program+IterProgram+1).f.HistU) ;
-    NomFigure = ['Calcul sur base reduite par POD a ' num2str(n, '%10.u\n') ' modes'];
+%% Affichage Complet
 
-    AfficherSolution(Reference,Resultat,NomFigure,0:dt:Ttot,VectL);
+    Reference = sortie(program+1).f.HistU;
+    ModesEspaceTemps = 0;
+    ModesEspace = 0;
+    ModesTemps = 0;
+    NombreResultat = n;
+    NoDisplay = 1;
+    Methode = 1; % POD
+
+    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(program+IterProgram+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplay,Methode,D,cas);
+
         
 %% Affichage erreur
     
@@ -174,9 +180,7 @@ for n = 1:2  % taille de la base modale
     % 
     % AfficherErreur(n,nombreNoeuds,Reference,Resultat,VectL)
     
-end
 
-end 
 
                             %% PGD %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,10 +193,10 @@ for PGD = 1
 OthoIntern = 0;
 
 Mmax=10;        % Nombre de modes maximum
-Kmax=40;        % Nombre d'iterations max pour obtenir un mode
+Kmax=30;        % Nombre d'iterations max pour obtenir un mode
 epsilon = 10^-6;
 
-[HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt);
+[HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt);
 
 %% Affichage Complet
 
@@ -201,9 +205,24 @@ epsilon = 10^-6;
     ModesEspace = 0;
     ModesTemps = 0;
     NombreResultat = Mmax;
-    AfficherPGD(dt,Ttot,VectL,HistMg,HistMf(1:size(VectL,2),:),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps);
+    NoDisplay = 1;
+    Methode = 2; % PGD
+    
+    % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplay);
+        AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplay,Methode,D,cas);
+    
+    % Convergence du point fixe
+        for i=1:0 % 1:NombreResultat
+            figure('Name',['Norme du couple '  num2str(i) ' dans le point fixe' ],'NumberTitle','off')
+            plot(TableConv(i,:))
+        end
+
+        
     
 % for PGD =
+end 
+
+% for program=
 end 
 
 
@@ -229,8 +248,9 @@ for cacher=1:0
         NomFigure = ['Calcul sur modele EF a ' num2str(n, '%10.u\n') ' modes'];
         VectLR = TablVectL{n};
         VectTR = TablVectT{n};
+        NoDisplay = 0;
         
-        [erreurCarre(n),erreurAmpTotale(n)] = AfficherSolutionDifferenteDiscretisation(Reference,Resultat,NomFigure,VectT,VectL,VectTR,VectLR);
+        [erreurCarre(n),erreurAmpTotale(n)] = AfficherSolutionDifferenteDiscretisation(Reference,Resultat,NomFigure,VectT,VectL,VectTR,VectLR,NoDisplay);
         
     end
 end
