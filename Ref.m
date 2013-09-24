@@ -56,7 +56,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 6;
+        cas = 2;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -151,8 +151,8 @@ end
     ModesEspaceTemps = 0;
     ModesEspace = 0;
     ModesTemps = 0;
-    NombreResultat = n;
-    NoDisplayResultat = 0;
+    NombreResultat = 0; %n;
+    NoDisplayResultat = 1;
     NoDisplayErreur = 0;
     Methode = 1; % POD
 
@@ -181,8 +181,8 @@ for PGD = 1
         ModesEspaceTemps = 0;
         ModesEspace = 0;
         ModesTemps = 0;
-        NombreResultat = Mmax;
-        NoDisplayResultat = 0;
+        NombreResultat = 0; %Mmax;
+        NoDisplayResultat = 1;
         NoDisplayErreur = 0;
         Methode = 2; % PGD
 
@@ -216,65 +216,37 @@ for cacher=1:0
     VectT = TablVectT{IterProgram};
     Reference = sortie(IterProgram).f.HistU ;    
 
-    for n=1:0 %:IterProgram %nombre de calcul EF a afficher
+    for i=1:0 %:IterProgram %nombre de calcul EF a afficher
                                  
         %Reference
-        Resultat  = sortie(n).f.HistU ;
-        NomFigure = ['Calcul sur modele EF a ' num2str(n, '%10.u\n') ' modes'];
-        VectLR = TablVectL{n};
-        VectTR = TablVectT{n};
+        Resultat  = sortie(i).f.HistU ;
+        NomFigure = ['Calcul sur modele EF a ' num2str(i, '%10.u\n') ' modes'];
+        VectLR = TablVectL{i};
+        VectTR = TablVectT{i};
         NoDisplayResultat = 0;
         
-        [erreurCarre(n),erreurAmpTotale(n)] = AfficherSolutionDifferenteDiscretisation(Reference,Resultat,NomFigure,VectT,VectL,VectTR,VectLR,NoDisplayResultat);
+        [erreurCarre(i),erreurAmpTotale(i)] = AfficherSolutionDifferenteDiscretisation(Reference,Resultat,NomFigure,VectT,VectL,VectTR,VectLR,NoDisplayResultat);
         
     end
 end
 
                         %% Analyse des modes %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for cacher = 1:0
-    
+for cacher = 1:0    
     [U_SVD,S_SVD,V_SVD]=svd(sortie(program+1).f.HistU');
-    n=Mmax; % nombre de modes a analyser
-    MAC = zeros(n);
-    for k=1:3    %1:3
-
-        for i=1:n
-            if ( k == 1 )
-                modeI = S_SVD(i,i)*V_SVD(:,i)';
-            elseif (k == 2 )
-                modeI = S_SVD(i,i)*V_SVD(:,i)';
-            elseif (k == 3 )
-                modeI = HistMf(1:size(VectLR,2),i)';
-            end
-
-            for j=1:n
-                if ( k == 1 )
-                    modeJ = S_SVD(j,j)*V_SVD(:,j)';
-                elseif (k == 2 )
-                    modeJ = HistMf(1:size(VectLR,2),j)';
-                elseif (k == 3 )
-                    modeJ = HistMf(1:size(VectLR,2),j)';
-                end
-                MAC(i,j)= (modeI*modeJ')^2 / ( (modeI*modeI')*(modeJ*modeJ') );
-            end
-        end
-
-        if ( k == 1 )
-            figure('Name','Analyse MAC des modes obtenus par SVD','NumberTitle','off')
-        elseif (k == 2 )
-            figure('Name','Analyse MAC entre les modes obtenus par SVD et PGD','NumberTitle','off')
-        elseif (k == 3 )
-            figure('Name','Analyse MAC entre les modes obtenus par PGD','NumberTitle','off')
-        end
-
-        h=bar3(MAC);
-        for n=1:numel(h)
-             cdata=get(h(n),'zdata');
-             cdata=repmat(max(cdata,[],2),1,4);
-             set(h(n),'cdata',cdata,'facecolor','flat')
-        end
+    NbModesPOD = (size(VectL,2) - size(D,1));
+    NbModesPGD = Mmax;
+    ModePOD=zeros(NbModesPOD,size(VectL,2));
+    ModePGD=zeros(NbModesPGD,size(VectL,2));
+    
+    for i=1:NbModesPOD
+        ModePOD(i,:) = S_SVD(i,i)*V_SVD(:,i)';
     end
+    for i=1:NbModesPGD
+        ModePGD(i,:) = HistMf(1:size(VectL,2),i)';
+    end
+    
+    AnalyseDeMAC(NbModesPOD,NbModesPGD,ModePOD,ModePGD);
 end
 
     
