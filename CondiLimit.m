@@ -1,4 +1,4 @@
-function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0] = CondiLimit(CL,M,C,K0,cas,nombrePasTemps,dt,Ttot,AmpliF)
+function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF)
 %% Encastrement en debut et fin (ressort encastre)
 if (CL==1)
     % Expression generale

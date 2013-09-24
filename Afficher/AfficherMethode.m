@@ -1,4 +1,4 @@
-function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficerMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplay,Methode,D,cas)
+function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas)
 %% Verification
 
     if (Methode == 1) % POD
@@ -172,7 +172,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficerMethode(dt,Ttot,V
                 %VectT
                 %VectL
 
-                [out1,out2,out3] = AfficherSolution(Reference,Resultat,NomFigure,0:dt:Ttot,VectL,NoDisplay);
+                [out1,out2,out3] = AfficherSolution(Reference,Resultat,NomFigure,0:dt:Ttot,VectL,NoDisplayResultat);
                 erreurMaximale(n)  = out1;
                 erreurCarre(n)     = out2;
                 erreurAmpTotale(n) = out3;
@@ -182,7 +182,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficerMethode(dt,Ttot,V
     
 %% Affichage de l'erreur
 
-    % Indicateurs d erreur
+    if (NombreResultat && ~NoDisplayErreur)
         figure;
         plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurCarre)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur volume au carre');
@@ -190,6 +190,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficerMethode(dt,Ttot,V
         figure;
         plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurMaximale)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur Maximale');
+    end
 
         % Modification de l'affichage
         % % figure;

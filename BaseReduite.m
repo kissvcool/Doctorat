@@ -1,4 +1,4 @@
-function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,D,Donnees,Famille)
+function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,VectL,Donnees)
 
 
         if (TailleBase>nombreNoeuds)
@@ -9,6 +9,7 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,D,Donnees,Famille)
                                            % de la base Reduite a la base Totale
 
         if (reduc == 1)
+            % POD
             [U_SVD,S_SVD,V_SVD]=svd(Donnees);
             for i=1:TailleBase
                 ModeEspace = S_SVD(i,i)*V_SVD(:,i)';
@@ -16,6 +17,8 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,D,Donnees,Famille)
             end
 
         elseif (reduc == 2)
+            % Rayleigh-Ritz
+            [Famille,omega]=AnalyseRR(TailleBase,M,K0,conditionU,D,VectL);
             if (size(Famille,2) >= TailleBase)
                 PRT(:,1:TailleBase) = Famille(:,1:TailleBase);
             else
@@ -24,6 +27,7 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,D,Donnees,Famille)
             end
             
         elseif (reduc == 3)
+            % PGD
             if (Mmax >= TailleBase)                
                 for i=1:TailleBase
                     ModeEspace = HistMfOrth(1:size(VectL,2),i)';
