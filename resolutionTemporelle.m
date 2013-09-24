@@ -1,15 +1,4 @@
 function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite)
-    U = U0;                     % deplacements - vecteur colonne
-    V = V0;                     % vitesses
-    A = zeros(size(M,1),1);     % accelerations
-    F = HistF(:,1);     
-    nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
-    if (nonLine==1)
-        % Ajout du ressort
-        kres =  nonLinearite(1).scalaires(1);
-        KresU = nonLinearite(1).matriceKUnit;
-        UresU = nonLinearite(1).dependanceEnU;
-    end
 %%  Schemas d'integration
 
     if (schem == 1)             % Newmark - Difference centree
@@ -35,7 +24,7 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
         beta  = ((1-alpha)^2)/4;
     end
 
-  %% Initialisation
+%% Initialisation
 
     %S = M + ( 1+alpha )*(C*gamma*dt + K0*beta*dt^2);
     %Si = inv(S);
@@ -52,24 +41,45 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
     HistEu =zeros(1,size(HistF,2));
     Eu =0;
     
-  %% Iterations Temporelles
+%% Iterations Temporelles
   
-  verif=0;
-  if (size(D,1))    % correction de l erreur d integration, impossible si les deplacements sont lies
-     verif=1;       % verification que les deplacement ne sont pas lies
-     [c,~]=find(D);
-     for j=1:size(c,1)
-        for k=1:size(c,1)
-             if k~=j 
-                 if ( c(j)==c(k) || verif == 0)
-                     verif = 0;
-                     break;
+    verif=0;
+    if (size(D,1))    % correction de l erreur d integration, impossible si les deplacements sont lies
+         verif=1;       % verification que les deplacement ne sont pas lies
+         [c,~]=find(D);
+         for j=1:size(c,1)
+            for k=1:size(c,1)
+                 if k~=j 
+                     if ( c(j)==c(k) || verif == 0)
+                         verif = 0;
+                         break;
+                     end
                  end
-             end
-        end
-     end
-  end
+            end
+         end
+    end
+    
+    if norm(U0)
+        if (verif)
+            [i,~]=find(D');
+            U0(i,1) = conditionU(:,1);
+        else
+            ErreurVerifConditionInitialNonPriseEnCompte;
+        end     
+    end
+    U = U0;                     % deplacements - vecteur colonne
+    V = V0;                     % vitesses
+    A = zeros(size(M,1),1);     % accelerations
+    F = HistF(:,1);     
+    nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
+    if (nonLine==1)
+        % Ajout du ressort
+        kres =  nonLinearite(1).scalaires(1);
+        KresU = nonLinearite(1).matriceKUnit;
+        UresU = nonLinearite(1).dependanceEnU;
+    end
 
+    
     for t=0:nombrePasTemps
 
     % Conditions initiales

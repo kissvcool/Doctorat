@@ -56,7 +56,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 2;
+        cas = 6;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -181,8 +181,8 @@ for PGD = 1
         ModesEspaceTemps = 0;
         ModesEspace = 0;
         ModesTemps = 0;
-        NombreResultat = 0; %Mmax;
-        NoDisplayResultat = 1;
+        NombreResultat = Mmax;
+        NoDisplayResultat = 0;
         NoDisplayErreur = 0;
         Methode = 2; % PGD
 
@@ -207,9 +207,9 @@ for cacher=1:0
     erreurCarre=zeros(IterProgram,1);
     erreurAmpTotale=zeros(IterProgram,1);
 % Il faut placer :
-    TablVectT{program+1}=0:dt:Ttot;
-    % et 
-    TablVectL{program+1}=[0:L/nombreElements:L L+Lres];
+    % TablVectT{program+1}=0:dt:Ttot;
+% et 
+    % TablVectL{program+1}=[0:L/nombreElements:L L+Lres];
 % dans la boucle du programme
     
     VectL = TablVectL{IterProgram};

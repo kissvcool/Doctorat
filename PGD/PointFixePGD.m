@@ -1,4 +1,4 @@
-function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q] = CalcCouplePGD(Kmax,M, C, K0, HistF, U0, V0, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot)
+function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q] = PointFixePGD(Kmax,M, C, K0, HistF, U0, V0, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot)
 
     % Initialiser g(t) %, h(theta)
     gpp_q = ones(size( 0:dt:Ttot ))';
