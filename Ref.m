@@ -7,7 +7,8 @@
 %   choisir Ttot/dt entier.
 
 % La correction des deplacements imposes n'est possible que si il ne sont
-%   pas lies.
+%   pas lies. !! Les deplacements imposes en PGD ne sont pas non plus
+%   possibles si il y a plus d'une composante non nulle par ligne de D
 
 % Les non-linearite ne sont pas traite automatiquement car il faut
 %   re-appliquer les CL. impossible avec substitution pour l'instant.
@@ -56,7 +57,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 6;
+        cas = 4;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -153,7 +154,7 @@ end
     ModesTemps = 0;
     NombreResultat = 0; %n;
     NoDisplayResultat = 1;
-    NoDisplayErreur = 0;
+    NoDisplayErreur = 1;
     Methode = 1; % POD
 
     AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(program+IterProgram+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);

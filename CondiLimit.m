@@ -43,7 +43,7 @@ end
 
 
 if (cas == 2)
-    omega = 1.5516e+04 ; 
+    omega = 1e+04 ; 
     HistF(NoeudCharge,:) = (1- cos( (0:dt:Ttot)*omega))*AmpliF;
 elseif (cas ==4)
     HistF(NoeudCharge,:) = AmpliF;

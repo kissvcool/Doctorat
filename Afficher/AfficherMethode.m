@@ -66,7 +66,11 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
                     ampli = max(max(Hist)) - min(min(Hist));
                     surf(0:dt:Ttot,VectL,Hist','EdgeColor','none');
                     title(['d ordre '  num2str(i) ' d amplitude ' num2str(ampli, '%10.1e\n') ]);
-                    axis([0 Ttot 0 VectL(end) min(min(Hist))-0.1*ampli max(max(Hist))+0.1*ampli]);
+                    if ampli
+                        axis([0 Ttot 0 VectL(end) min(min(Hist))-0.1*ampli max(max(Hist))+0.1*ampli]);
+                    else
+                        axis([0 Ttot 0 VectL(end) 0 VectL(end)]);
+                    end
             end
     end
     
@@ -81,7 +85,11 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
                     end                
                     ampli = max(max(Hist)) - min(min(Hist));
                     plot(VectL,Hist');
-                    axis([0 VectL(end) min(Hist)-0.2*abs(min(Hist)) max(Hist)+0.2*abs(max(Hist))]);
+                    if ampli
+                        axis([0 VectL(end) min(Hist)-0.1*ampli max(Hist)+0.1*ampli]);
+                    else
+                        axis([0 VectL(end) 0 VectL(end)]);
+                    end
                     title(['d ordre '  num2str(i) ' d amplitude ' num2str(ampli, '%10.1e\n') ]);
             end
     end
@@ -106,6 +114,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
                             Signal = Hist;
                         else
                             Signal = -Hist;
+                            moy = -moy;
                         end
                         compt = 0;
                         top = (1:3)*0;
@@ -139,7 +148,11 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
 
                     plot(0:dt:Ttot,Hist');
                     %plot(0:dt:Ttot,Hist',dt:dt:Ttot,(sin((dt:dt:Ttot)*(2*pi/periode)))*(ampli/2)');
-                    axis([(-5*dt) Ttot min(min(Hist))-0.1*ampli max(max(Hist))+0.1*ampli]);
+                    if ampli
+                        axis([(-5*dt) Ttot min(min(Hist))-0.1*ampli max(max(Hist))+0.1*ampli]);
+                    else
+                        axis([(-5*dt) Ttot 0 VectL(end)]);
+                    end
                     title(['d ordre ' num2str(i) ' d amplitude ' num2str(ampli, '%10.1e\n') ' de periode ' num2str(periode, '%10.2e\n') 's']);
             end
     end

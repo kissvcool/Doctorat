@@ -30,6 +30,7 @@ function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = Calc
      end
     end
     
+    LectureConditionU =1;
     for m=1:Mmax
         disp(['m = ' num2str(m)]);
         
@@ -47,20 +48,47 @@ function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = Calc
             HistKgpp  = [];
             f_q = [U0 ; zeros(size(D,1),1)] ;
             g_q = ones(size(HistF,2),1);
+            g_q = g_q * norm(f_q(1:size(VectL,2)));
+            f_q = f_q / norm(f_q(1:size(VectL,2)));
             gp_q = zeros(size(HistF,2),1);
             gpp_q = zeros(size(HistF,2),1);
 
-%             gpp_q = ones(size( 0:dt:Ttot ))';
-%             gp_q  = (0:dt:Ttot)';
-%             g_q   = 1/2*gp_q.^2;
+            % gpp_q = ones(size( 0:dt:Ttot ))';
+            % gp_q  = (0:dt:Ttot)';
+            % g_q   = 1/2*gp_q.^2;
     
+        elseif norm(conditionU(LectureConditionU:end,:)) && LectureConditionU <= size(conditionU,1)
+            for i=LectureConditionU:size(conditionU,1)
+                if norm(conditionU(i,:))
+                    if ~verif    
+                        ErreurVerifConditionInitialNonPriseEnCompte;
+                    end
+                    
+                    HistKf = [];
+                    HistKg  = [];
+                    HistKgp  = [];
+                    HistKgpp  = [];
+                    f_q = [D(i,:)' ; zeros(size(D,1),1) ];
+                    g_q = conditionU(i,:);
+                    g_q = g_q * norm(f_q(1:size(VectL,2)));
+                    f_q = f_q / norm(f_q(1:size(VectL,2)));
+                    gp_q = zeros(size(HistF,2),1);
+                    gpp_q = zeros(size(HistF,2),1);
+            
+                    LectureConditionU = i + 1;
+                    break
+                elseif i>=size(conditionU,1)
+                    % LectureConditionU = size(conditionU,1) + 1;
+                    Il.y.a.une.erreur
+                end
+            end            
         else
             [HistKf,HistKg,HistKgp,HistKgpp,TableConv(m,:),TableCondi(m,:),f_q,g_q,gp_q,gpp_q] = PointFixePGD(Kmax,M, C, K0, HistF, U0, V0, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot);
         end
         
-%         norme_f_q=norm(f_q(1:size(VectL,2)))-1
-%         f_q(1:size(VectL,2)) = f_q(1:size(VectL,2)) / norm(f_q(1:size(VectL,2))); 
-%         norme_f_q=norm(f_q(1:size(VectL,2)))-1
+        % norme_f_q=norm(f_q(1:size(VectL,2)))-1
+        % f_q(1:size(VectL,2)) = f_q(1:size(VectL,2)) / norm(f_q(1:size(VectL,2))); 
+        % norme_f_q=norm(f_q(1:size(VectL,2)))-1
         
         HistTotf{m} = HistKf;
         HistTotg{m}   = HistKg;
