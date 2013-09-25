@@ -57,7 +57,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 4;
+        cas = 3;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -170,11 +170,11 @@ for PGD = 1
 
     OthoIntern = 0;
 
-    Mmax=10;        % Nombre de modes maximum
+    Mmax=1;        % Nombre de modes maximum
     Kmax=40;        % Nombre d'iterations max pour obtenir un mode
     epsilon = 10^-6;
 
-    [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt);
+    [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt);
 
     %% Affichage Complet
 
@@ -183,8 +183,8 @@ for PGD = 1
         ModesEspace = 0;
         ModesTemps = 0;
         NombreResultat = Mmax;
-        NoDisplayResultat = 0;
-        NoDisplayErreur = 0;
+        NoDisplayResultat = 1;
+        NoDisplayErreur = 1;
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
@@ -233,16 +233,18 @@ end
 
                         %% Analyse des modes %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for cacher = 1:0    
-    [U_SVD,S_SVD,V_SVD]=svd(sortie(program+1).f.HistU');
-    NbModesPOD = (size(VectL,2) - size(D,1));
+for cacher = 1    
+    %[U_SVD,S_SVD,V_SVD]=svd(sortie(program+1).f.HistU');
+    %NbModesPOD = (size(VectL,2) - size(D,1));
+    %ModePOD=zeros(NbModesPOD,size(VectL,2));
+    ModePOD = (sortie(program+IterProgram+n).p)';
+    NbModesPOD= size(ModePOD,1);
     NbModesPGD = Mmax;
-    ModePOD=zeros(NbModesPOD,size(VectL,2));
     ModePGD=zeros(NbModesPGD,size(VectL,2));
     
-    for i=1:NbModesPOD
-        ModePOD(i,:) = S_SVD(i,i)*V_SVD(:,i)';
-    end
+    % for i=1:NbModesPOD
+    %     ModePOD(i,:) = S_SVD(i,i)*V_SVD(:,i)';
+    % end
     for i=1:NbModesPGD
         ModePGD(i,:) = HistMf(1:size(VectL,2),i)';
     end

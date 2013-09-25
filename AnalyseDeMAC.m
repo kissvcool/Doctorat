@@ -28,7 +28,7 @@ function AnalyseDeMAC(NbModesMethode1,NbModesMethode2,ModeMethode1,ModeMethode2)
                 modeI = ModeMethode2(i,:);
             end
 
-            for j=1:NbModesMethode2
+            for j=1:(max(NbModesMethode1,NbModesMethode2))
                 if ( k == 1 )
                     if j > NbModesMethode1
                         break;
@@ -50,9 +50,9 @@ function AnalyseDeMAC(NbModesMethode1,NbModesMethode2,ModeMethode1,ModeMethode2)
         end
 
         if ( k == 1 )
-            figure('Name','Analyse MAC des modes obtenus par SVD','NumberTitle','off')
+            figure('Name','Analyse MAC des modes obtenus par POD','NumberTitle','off')
         elseif (k == 2 )
-            figure('Name','Analyse MAC entre les modes obtenus par SVD et PGD','NumberTitle','off')
+            figure('Name','Analyse MAC entre les modes obtenus par POD et PGD','NumberTitle','off')
         elseif (k == 3 )
             figure('Name','Analyse MAC entre les modes obtenus par PGD','NumberTitle','off')
         end

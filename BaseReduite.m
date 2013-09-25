@@ -1,6 +1,5 @@
 function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,VectL,Donnees)
 
-
         if (TailleBase>nombreNoeuds)
             fprintf('Nombre de noeuds insuffisant\n');
             return;
@@ -8,16 +7,14 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,Ve
         PRT =zeros(size(M,1),TailleBase+size(D,1)); % Matrice de Passage 
                                            % de la base Reduite a la base Totale
 
-        if (reduc == 1)
-            % POD
+        if (reduc == 1)         % POD
             [U_SVD,S_SVD,V_SVD]=svd(Donnees);
             for i=1:TailleBase
                 ModeEspace = S_SVD(i,i)*V_SVD(:,i)';
                 PRT(:,i) = ModeEspace /norm(ModeEspace); 
             end
 
-        elseif (reduc == 2)
-            % Rayleigh-Ritz
+        elseif (reduc == 2)     % Rayleigh-Ritz
             [Famille,omega]=AnalyseRR(TailleBase,M,K0,conditionU,D,VectL);
             if (size(Famille,2) >= TailleBase)
                 PRT(:,1:TailleBase) = Famille(:,1:TailleBase);
@@ -26,8 +23,7 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,Ve
                 return;
             end
             
-        elseif (reduc == 3)
-            % PGD
+        elseif (reduc == 3)     % PGD
             if (Mmax >= TailleBase)                
                 for i=1:TailleBase
                     ModeEspace = HistMfOrth(1:size(VectL,2),i)';
@@ -49,5 +45,13 @@ function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,Ve
                 end
             end
             PRT(:,TailleBase+j)=(D(j,:)/norm(D(j,:)))';
+        end        
+        % On reorthogonalise les modes altere par la boucle precedente
+        for j=2:TailleBase
+            x = PRT(:,j);
+            for k=1:(j-1)
+                x = x - (PRT(:,k)'* x/norm(PRT(:,k))) * (PRT(:,k)/norm(PRT(:,k)));
+            end
+            PRT(:,j) = x/norm(x);
         end
 end

@@ -1,18 +1,4 @@
-function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt)
-
-    HistMf    =zeros(size(K0,1)+size(D,1),Mmax);
-    HistMg  =zeros(size((0:dt:Ttot)',1),Mmax);
-    HistMgp =zeros(size(HistMg));
-    HistMgpp=zeros(size(HistMg));
-
-    HistTotf=cell(1,Mmax);
-    HistTotg  =cell(1,Mmax);
-    HistTotgp =cell(1,Mmax);
-    HistTotgpp=cell(1,Mmax);
-
-
-    TableCondi = zeros(Mmax,Kmax);
-    TableConv =  zeros(Mmax,Kmax);
+function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt)
 
     verif=0;
     if (size(D,1))      % correction de l erreur d integration, impossible si les deplacements sont lies
@@ -28,20 +14,51 @@ function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = Calc
              end
         end
      end
+    end    
+    
+    if norm(U0)
+        if (verif)
+            Mmax = Mmax + 1;
+            [i,~]=find(D');
+            U0(i,1) = conditionU(:,1);
+        else
+            ErreurVerifConditionInitialNonPriseEnCompte;
+        end
     end
+    
+    if norm(conditionU)     
+        if ~verif    
+            ErreurVerifConditionDeplacementNonPriseEnCompte;
+        end
+        
+        for i=1:size(conditionU,1)
+            if norm(conditionU(i,:))
+                Mmax = Mmax + 1;
+            end
+        end
+        
+    end
+        
+    HistMf    =zeros(size(K0,1)+size(D,1),Mmax);
+    HistMg  =zeros(size((0:dt:Ttot)',1),Mmax);
+    HistMgp =zeros(size(HistMg));
+    HistMgpp=zeros(size(HistMg));
+
+    HistTotf=cell(1,Mmax);
+    HistTotg  =cell(1,Mmax);
+    HistTotgp =cell(1,Mmax);
+    HistTotgpp=cell(1,Mmax);
+
+
+    TableCondi = zeros(Mmax,Kmax);
+    TableConv =  zeros(Mmax,Kmax);
+
     
     LectureConditionU =1;
     for m=1:Mmax
         disp(['m = ' num2str(m)]);
         
-        if norm(U0) && m==1
-            if (verif)
-                [i,~]=find(D');
-                U0(i,1) = conditionU(:,1);
-            else
-                ErreurVerifConditionInitialNonPriseEnCompte;
-            end
-                     
+        if norm(U0) && m==1                     
             HistKf = [];
             HistKg  = [];
             HistKgp  = [];
@@ -52,17 +69,10 @@ function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv] = Calc
             f_q = f_q / norm(f_q(1:size(VectL,2)));
             gp_q = zeros(size(HistF,2),1);
             gpp_q = zeros(size(HistF,2),1);
-
-            % gpp_q = ones(size( 0:dt:Ttot ))';
-            % gp_q  = (0:dt:Ttot)';
-            % g_q   = 1/2*gp_q.^2;
-    
-        elseif norm(conditionU(LectureConditionU:end,:)) && LectureConditionU <= size(conditionU,1)
+            
+        elseif norm(conditionU(LectureConditionU:end,:)) %&& LectureConditionU <= size(conditionU,1)
             for i=LectureConditionU:size(conditionU,1)
                 if norm(conditionU(i,:))
-                    if ~verif    
-                        ErreurVerifConditionInitialNonPriseEnCompte;
-                    end
                     
                     HistKf = [];
                     HistKg  = [];
