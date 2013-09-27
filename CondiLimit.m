@@ -1,4 +1,4 @@
-function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF)
+function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF)
 %% Encastrement en debut et fin (ressort encastre)
 if (CL==1)
     % Expression generale
@@ -91,7 +91,53 @@ elseif (CL==2)
 end
 
 
-
+    verif=0;
+    if (size(D,1))      % correction de l erreur d integration, impossible si les deplacements sont lies
+     verif=1;           % verification que les deplacement ne sont pas lies
+     
+     % Y a t il deux elements non nul sur la meme ligne de D : deplacements lies
+     [c,~]=find(D);
+     for j=1:size(c,1)
+        for k=1:size(c,1)
+             if k~=j 
+                 if ( c(j)==c(k) || verif == 0)
+                     verif = 0;
+                     DeplacementsLies;
+                     break;
+                 end
+             end
+        end
+     end
+     
+     % Y a t il deux elements non nul sur la meme colonne de D : double definition
+     [~,c]=find(D);
+     for j=1:size(c,1)
+        for k=1:size(c,1)
+             if k~=j 
+                 if ( c(j)==c(k) || verif == 0)
+                     verif = 0;
+                     DoubleDefinition;
+                     break;
+                 end
+             end
+        end
+     end     
+     
+     % Les colonnes sont elles normees
+     [c,d]=find(D);
+     for j=1:size(c,1)
+         if ( D(c(j),d(j))~=1 || verif == 0)
+             verif = 0;
+             ColonnesNonNomee;
+             break;
+        end
+     end
+     
+     % Si on souhaite voir les erreur impliquees
+     
+     
+    end    
+    
 
 
 

@@ -57,7 +57,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 3;
+        cas = 1;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -97,12 +97,12 @@ for program=0:(IterProgram-1)
 
 %% Conditions limites
 
-    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF);
+    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF);
 
 %% Resolution Temporelle
 
     tic;
-    sortie(program+1).f =resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite);
+    sortie(program+1).f =resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
@@ -115,7 +115,7 @@ for program=0:(IterProgram-1)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-for n = 1:3  % taille de la base modale
+for n = 1:4  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
         reduc = 1;
@@ -134,7 +134,7 @@ for n = 1:3  % taille de la base modale
 
         tic;
         Ttot;
-        sortie(program+IterProgram+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR);
+        sortie(program+IterProgram+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR,verif);
         Tcalcul= toc;
         disp(['Estimation du temps de calcul sur base reduite ' num2str(Tcalcul, '%10.1e\n') 's']);
 end
@@ -154,7 +154,7 @@ end
     ModesTemps = 0;
     NombreResultat = 0; %n;
     NoDisplayResultat = 1;
-    NoDisplayErreur = 1;
+    NoDisplayErreur = 0;
     Methode = 1; % POD
 
     AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(program+IterProgram+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
@@ -170,11 +170,11 @@ for PGD = 1
 
     OthoIntern = 0;
 
-    Mmax=1;        % Nombre de modes maximum
+    Mmax=100;        % Nombre de modes maximum
     Kmax=40;        % Nombre d'iterations max pour obtenir un mode
     epsilon = 10^-6;
 
-    [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt);
+    [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif);
 
     %% Affichage Complet
 
@@ -184,7 +184,7 @@ for PGD = 1
         ModesTemps = 0;
         NombreResultat = Mmax;
         NoDisplayResultat = 1;
-        NoDisplayErreur = 1;
+        NoDisplayErreur = 0;
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);

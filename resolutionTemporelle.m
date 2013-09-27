@@ -1,4 +1,4 @@
-function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite)
+function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif)
 %%  Schemas d'integration
 
     if (schem == 1)             % Newmark - Difference centree
@@ -42,22 +42,6 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
     Eu =0;
     
 %% Iterations Temporelles
-  
-    verif=0;
-    if (size(D,1))    % correction de l erreur d integration, impossible si les deplacements sont lies
-         verif=1;       % verification que les deplacement ne sont pas lies
-         [c,~]=find(D);
-         for j=1:size(c,1)
-            for k=1:size(c,1)
-                 if k~=j 
-                     if ( c(j)==c(k) || verif == 0)
-                         verif = 0;
-                         break;
-                     end
-                 end
-            end
-         end
-    end
     
     if norm(U0)
         if (verif)

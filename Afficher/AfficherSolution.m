@@ -44,7 +44,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherSolution(Referen
         end
     end
 
-    erreurMaximale = (s(3).a/s(1).a);
+    erreurMaximale = max(max(abs(s(3).f)))/s(1).a;
     DiffAmp = (s(1).a - s(2).a)/s(1).a;
     DiffVol = sum(sum((s(3).f).^2))/sum(sum((s(1).f).^2));
     erreurCarre = abs(DiffVol);

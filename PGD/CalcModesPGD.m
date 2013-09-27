@@ -1,21 +1,5 @@
-function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot, dt)
+function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif)
 
-    verif=0;
-    if (size(D,1))      % correction de l erreur d integration, impossible si les deplacements sont lies
-     verif=1;           % verification que les deplacement ne sont pas lies
-     [c,~]=find(D);
-     for j=1:size(c,1)
-        for k=1:size(c,1)
-             if k~=j 
-                 if ( c(j)==c(k) || verif == 0)
-                     verif = 0;
-                     break;
-                 end
-             end
-        end
-     end
-    end    
-    
     if norm(U0)
         if (verif)
             Mmax = Mmax + 1;
