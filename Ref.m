@@ -23,9 +23,13 @@ clc
 
 IterProgram=1;
 
-sortie(2*IterProgram)=struct('f',[],'a',0,'p',[]);
+sortie(IterProgram)=struct('f',[],'a',0,'p',[]);
 
 for program=0:(IterProgram-1)
+    
+    % clearvars -except program IterProgram ;
+    % program
+    
 %% Parametres
     for cacher = 1
         L = 0.5;            % 0.5 m^2
@@ -42,7 +46,7 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=2; %5  *2^program;
+        nombreElementsParPartie=40; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
@@ -57,7 +61,7 @@ for program=0:(IterProgram-1)
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
 
     % probleme :
-        cas = 1;
+        cas = 6;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -99,10 +103,13 @@ for program=0:(IterProgram-1)
 
     [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF);
 
+%% Solution Exacte
+
+
 %% Resolution Temporelle
 
     tic;
-    sortie(program+1).f =resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
+    sortie(1).f =resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
@@ -115,7 +122,7 @@ for program=0:(IterProgram-1)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-for n = 1:4  % taille de la base modale
+for n = 1:5  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
         reduc = 1;
@@ -124,7 +131,7 @@ for n = 1:4  % taille de la base modale
         % 3 PGD
 
         [PRT] = BaseReduite (reduc,n,nombreNoeuds,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
-        sortie(program+IterProgram+n).p = PRT;
+        sortie(1+n).p = PRT;
 
     %% Projection
 
@@ -134,30 +141,32 @@ for n = 1:4  % taille de la base modale
 
         tic;
         Ttot;
-        sortie(program+IterProgram+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR,verif);
+        sortie(1+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR,verif);
         Tcalcul= toc;
         disp(['Estimation du temps de calcul sur base reduite ' num2str(Tcalcul, '%10.1e\n') 's']);
 end
+
     
 %% Animation
-    
-    % Reference = sortie(1).f.HistU;
-    % Resultat = sortie(program+IterProgram+1).p*sortie(IterProgram+1).f.HistU;
-    % 
-    % AfficherAnimation(Reference,Resultat,VectL,L);
+    for i=1:n
+        Reference = sortie(1).f.HistU;
+        Resultat = sortie(1+i).p*sortie(1+i).f.HistU;
+
+        AfficherAnimation(Reference,Resultat,VectL,L);
+    end
     
 %% Affichage Complet
 
-    Reference = sortie(program+1).f.HistU;
+    Reference = sortie(1).f.HistU;
     ModesEspaceTemps = 0;
     ModesEspace = 0;
     ModesTemps = 0;
     NombreResultat = 0; %n;
     NoDisplayResultat = 1;
-    NoDisplayErreur = 0;
+    NoDisplayErreur = 1;
     Methode = 1; % POD
 
-    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(program+IterProgram+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(1+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
 
 % return;
                             %% PGD %%
@@ -166,25 +175,25 @@ end
 for PGD = 1
     %% Algorithme
 
-    % Fonction f(X), g(t) %, h(theta)
+        % Fonction f(X), g(t) %, h(theta)
 
-    OthoIntern = 0;
+        OthoIntern = 0;
 
-    Mmax=100;        % Nombre de modes maximum
-    Kmax=40;        % Nombre d'iterations max pour obtenir un mode
-    epsilon = 10^-6;
+        Mmax=10;        % Nombre de modes maximum
+        Kmax=40;        % Nombre d'iterations max pour obtenir un mode
+        epsilon = 10^-6;
 
-    [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif);
+        [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif);
 
     %% Affichage Complet
 
-        Reference = sortie(program+1).f.HistU;
+        Reference = sortie(1).f.HistU;
         ModesEspaceTemps = 0;
         ModesEspace = 0;
         ModesTemps = 0;
         NombreResultat = Mmax;
         NoDisplayResultat = 1;
-        NoDisplayErreur = 0;
+        NoDisplayErreur = 1;
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
@@ -196,10 +205,48 @@ for PGD = 1
                 plot(TableConv(i,:))
             end
 
+    %% Animation
+    
+        for i=1:Mmax
+            Reference = sortie(1).f.HistU;
+            Resultat  = zeros(size(VectL,2),size(0:dt:Ttot,2));
+                f=HistMf(1:size(VectL,2),1:n);
+                g=HistMg(:,1:n);
+                for j=1:size(VectL,2)
+                    for k=1:1:size(0:dt:Ttot,2)
+                        for l=1:n
+                            Resultat(j,k) = Resultat(j,k) + f(j,l)*g(k,l);
+                        end
+                    end
+                end
+
+            AfficherAnimation(Reference,Resultat,VectL,L);
+        end
+    
 end 
+
+                        
+                        %% Analyse des modes %%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   
+    ModePOD = (sortie(1+n).p)';
+    NbModesPOD= size(ModePOD,1);
+    NbModesPGD = Mmax;
+    ModePGD=zeros(NbModesPGD,size(VectL,2));
+    
+    for i=1:NbModesPGD
+        ModePGD(i,:) = HistMf(1:size(VectL,2),i)';
+    end
+    
+    AnalyseDeMAC(NbModesPOD,NbModesPGD,ModePOD,ModePGD);
+
+    
+    % fichier = ['Resultats' num2str(program+1)];
+    % save(fichier);
 
 % for program=
 end 
+
 
 
                           %% Solutions EF %%
@@ -218,8 +265,6 @@ for cacher=1:0
     Reference = sortie(IterProgram).f.HistU ;    
 
     for i=1:0 %:IterProgram %nombre de calcul EF a afficher
-                                 
-        %Reference
         Resultat  = sortie(i).f.HistU ;
         NomFigure = ['Calcul sur modele EF a ' num2str(i, '%10.u\n') ' modes'];
         VectLR = TablVectL{i};
@@ -227,30 +272,9 @@ for cacher=1:0
         NoDisplayResultat = 0;
         
         [erreurCarre(i),erreurAmpTotale(i)] = AfficherSolutionDifferenteDiscretisation(Reference,Resultat,NomFigure,VectT,VectL,VectTR,VectLR,NoDisplayResultat);
-        
     end
 end
 
-                        %% Analyse des modes %%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for cacher = 1    
-    %[U_SVD,S_SVD,V_SVD]=svd(sortie(program+1).f.HistU');
-    %NbModesPOD = (size(VectL,2) - size(D,1));
-    %ModePOD=zeros(NbModesPOD,size(VectL,2));
-    ModePOD = (sortie(program+IterProgram+n).p)';
-    NbModesPOD= size(ModePOD,1);
-    NbModesPGD = Mmax;
-    ModePGD=zeros(NbModesPGD,size(VectL,2));
-    
-    % for i=1:NbModesPOD
-    %     ModePOD(i,:) = S_SVD(i,i)*V_SVD(:,i)';
-    % end
-    for i=1:NbModesPGD
-        ModePGD(i,:) = HistMf(1:size(VectL,2),i)';
-    end
-    
-    AnalyseDeMAC(NbModesPOD,NbModesPGD,ModePOD,ModePGD);
-end
 
     
 

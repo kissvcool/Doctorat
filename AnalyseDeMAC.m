@@ -49,19 +49,21 @@ function AnalyseDeMAC(NbModesMethode1,NbModesMethode2,ModeMethode1,ModeMethode2)
             end
         end
 
-        if ( k == 1 )
-            figure('Name','Analyse MAC des modes obtenus par POD','NumberTitle','off')
-        elseif (k == 2 )
-            figure('Name','Analyse MAC entre les modes obtenus par POD et PGD','NumberTitle','off')
-        elseif (k == 3 )
-            figure('Name','Analyse MAC entre les modes obtenus par PGD','NumberTitle','off')
-        end
-
-        h=bar3(MAC);
-        for n=1:numel(h)
-             cdata=get(h(n),'zdata');
-             cdata=repmat(max(cdata,[],2),1,4);
-             set(h(n),'cdata',cdata,'facecolor','flat')
+        if norm(MAC)
+            if ( k == 1 )
+                figure('Name','Analyse MAC des modes obtenus par POD','NumberTitle','off')
+            elseif (k == 2 )
+                figure('Name','Analyse MAC entre les modes obtenus par POD et PGD','NumberTitle','off')
+            elseif (k == 3 )
+                figure('Name','Analyse MAC entre les modes obtenus par PGD','NumberTitle','off')
+            end
+            
+            h=bar3(MAC);
+            for n=1:numel(h)
+                 cdata=get(h(n),'zdata');
+                 cdata=repmat(max(cdata,[],2),1,4);
+                 set(h(n),'cdata',cdata,'facecolor','flat')
+            end
         end
     end
     

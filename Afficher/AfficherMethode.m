@@ -196,11 +196,13 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
 %% Affichage de l'erreur
 
     if (NombreResultat && ~NoDisplayErreur)
-        figure;
+        NomFigure = ['Erreur / nombre de modes ' NomMethode ' du cas #' num2str(cas, '%10.u\n') ];
+                
+        figure('Name',NomFigure,'NumberTitle','off')
         plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurCarre)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur volume au carre');
 
-        figure;
+        figure('Name',NomFigure,'NumberTitle','off')
         plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurMaximale)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur Maximale');
     end

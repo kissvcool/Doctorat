@@ -1,4 +1,4 @@
-function [HistMf,HistMg,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif)
+function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif)
 
     if norm(U0)
         if (verif)

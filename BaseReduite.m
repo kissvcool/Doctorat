@@ -1,21 +1,21 @@
 function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,VectL,Donnees)
 
-        if (TailleBase>nombreNoeuds)
-            fprintf('Nombre de noeuds insuffisant\n');
+        if ((TailleBase+size(D,1))>nombreNoeuds)
+            fprintf('\nNombre de noeuds insuffisant\n\n(TailleBase+size(D,1))>nombreNoeuds\n\n');
             return;
         end
         PRT =zeros(size(M,1),TailleBase+size(D,1)); % Matrice de Passage 
                                            % de la base Reduite a la base Totale
 
         if (reduc == 1)         % POD
-            [U_SVD,S_SVD,V_SVD]=svd(Donnees);
+            [~,S_SVD,V_SVD]=svd(Donnees);
             for i=1:TailleBase
                 ModeEspace = S_SVD(i,i)*V_SVD(:,i)';
                 PRT(:,i) = ModeEspace /norm(ModeEspace); 
             end
 
         elseif (reduc == 2)     % Rayleigh-Ritz
-            [Famille,omega]=AnalyseRR(TailleBase,M,K0,conditionU,D,VectL);
+            [Famille,~]=AnalyseRR(TailleBase,M,K0,conditionU,D,VectL);
             if (size(Famille,2) >= TailleBase)
                 PRT(:,1:TailleBase) = Famille(:,1:TailleBase);
             else
