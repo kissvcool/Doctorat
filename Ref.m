@@ -41,8 +41,10 @@ for program=0:(IterProgram-1)
         AmpliF=100;         % N
 
     % Ressort
-        Lres = L/8;
-        kres = Egene*Sec/Lres;
+        % Lres = L/8;
+        % kres = Egene*Sec/Lres;
+        Lres = 0;
+        kres = 0;
         nonLine = 0; %1;
 
     % elements
@@ -59,6 +61,7 @@ for program=0:(IterProgram-1)
         c=(Egene/rho)^(0.5);
         NbOscil=Ttot/(2*L/c);          % correct si E constant / recalcule plus loin
         nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
+        VectT=0:dt:Ttot;
 
     % probleme :
         cas = 6;
@@ -68,6 +71,7 @@ for program=0:(IterProgram-1)
         % 4 Effort continue en bout de poutre
         % 5 Effort augmentant lineairement en bout de poutre
         % 6 Effort continue en bout de poutre les 50 premiers pas de temps
+            NbPas6 = 50;    % Pourrait être calcule en fonction d'un temps
 
     % schema d integration :
         schem = 1;
@@ -101,10 +105,7 @@ for program=0:(IterProgram-1)
 
 %% Conditions limites
 
-    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF);
-
-%% Solution Exacte
-
+    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF,NbPas6);
 
 %% Resolution Temporelle
 
@@ -117,12 +118,16 @@ for program=0:(IterProgram-1)
     %  s(1).a = max(max(sortie(program+1).f.HistU)) - min(min(sortie(program+1).f.HistU));   % amplitude
     %  surf(0:dt:Ttot,VectL,sortie(program+1).f.HistU,'EdgeColor','none');
         
-                 
+%% Solution Exacte
+
+    % Sans ressort - Cas 4, 5 et 6
+    [HistUExact,HistVExact,HistAExact] = SolutionExacte(cas,c,AmpliF,Egene,Sec,L,VectL,VectT,dt,NbPas6);
+    
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-for n = 1:5  % taille de la base modale
+for n = 5:10  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
         reduc = 1;
@@ -148,11 +153,12 @@ end
 
     
 %% Animation
-    for i=1:n
-        Reference = sortie(1).f.HistU;
+    for i=5:n
+        Reference1 = sortie(1).f.HistU;
+        Reference2 = HistUExact;
         Resultat = sortie(1+i).p*sortie(1+i).f.HistU;
 
-        AfficherAnimation(Reference,Resultat,VectL,L);
+        AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
     end
     
 %% Affichage Complet
@@ -208,7 +214,8 @@ for PGD = 1
     %% Animation
     
         for i=1:Mmax
-            Reference = sortie(1).f.HistU;
+            Reference1 = sortie(1).f.HistU;
+            Reference2 = [];
             Resultat  = zeros(size(VectL,2),size(0:dt:Ttot,2));
                 f=HistMf(1:size(VectL,2),1:n);
                 g=HistMg(:,1:n);
@@ -220,7 +227,7 @@ for PGD = 1
                     end
                 end
 
-            AfficherAnimation(Reference,Resultat,VectL,L);
+            AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
         end
     
 end 
