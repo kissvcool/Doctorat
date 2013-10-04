@@ -15,7 +15,7 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
     Conditionnement  = zeros(1,Kmax);
         
     for k=1:Kmax
-        [f_q,condi] = ProblemEspace(M, C, K0, HistF, U0, V0, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
+        [f_q,condi] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
         if OthoIntern
             for i=1:(m-1)
                 f_q(1:size(VectL,2)) = f_q(1:size(VectL,2)) - HistMf(1:size(VectL,2),i)*(HistMf(1:size(VectL,2),i)'*f_q(1:size(VectL,2)) );
@@ -32,7 +32,7 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
             HistMfg=HistMf;
         end
         %disp(['---------Probleme en temps------------']);
-        [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, D, conditionU, f_q(1:size(VectL,2),:), m, dt, HistMfg, HistMg, HistMgp, HistMgpp, 3);
+        [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, f_q(1:size(VectL,2),:), m, dt, HistMfg, HistMg, HistMgp, HistMgpp, 3);
 
         HistKg(:,k)   = g_q  ;
         HistKgp(:,k)  = gp_q ;

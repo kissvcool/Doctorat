@@ -135,7 +135,7 @@ for n = 5:10  % taille de la base modale
         % 2 Rayleigh
         % 3 PGD
 
-        [PRT] = BaseReduite (reduc,n,nombreNoeuds,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
+        [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
         sortie(1+n).p = PRT;
 
     %% Projection
@@ -153,7 +153,7 @@ end
 
     
 %% Animation
-    for i=5:n
+    for i=1:0
         Reference1 = sortie(1).f.HistU;
         Reference2 = HistUExact;
         Resultat = sortie(1+i).p*sortie(1+i).f.HistU;
@@ -215,13 +215,13 @@ for PGD = 1
     
         for i=1:Mmax
             Reference1 = sortie(1).f.HistU;
-            Reference2 = [];
+            Reference2 = HistUExact;
             Resultat  = zeros(size(VectL,2),size(0:dt:Ttot,2));
-                f=HistMf(1:size(VectL,2),1:n);
-                g=HistMg(:,1:n);
+                f=HistMf(1:size(VectL,2),1:i);
+                g=HistMg(:,1:i);
                 for j=1:size(VectL,2)
                     for k=1:1:size(0:dt:Ttot,2)
-                        for l=1:n
+                        for l=1:i
                             Resultat(j,k) = Resultat(j,k) + f(j,l)*g(k,l);
                         end
                     end

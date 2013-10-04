@@ -1,4 +1,4 @@
-function [f_q,condi] = ProblemEspace(M, C, K0, HistF, U0, V0, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp)
+function [f_q,condi] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp)
 
     K = [ K0 D' ; D zeros(size(D,1))];
     C = [ C zeros(size(D')) ; zeros(size(D)) zeros(size(D,1))];

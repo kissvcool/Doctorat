@@ -1,4 +1,4 @@
-function [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, D, conditionU, f_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp, schem)
+function [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, f_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp, schem)
 
     K = K0; %[ K0 D' ; D zeros(size(D,1))];
 %     C = [ C zeros(size(D')) ; zeros(size(D)) zeros(size(D,1))];
@@ -81,8 +81,8 @@ function [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, D, conditionU, f_q, m,
 
             sum = 0;
             for i=1:(m-1)
-                %g_k_q = HistMg(:,i);
-                %g_kp_q   = DerivVect(g_k_q  ,dt,5);
+                % g_k_q = HistMg(:,i);
+                % %g_kp_q   = DerivVect(g_k_q  ,dt,5);
                 g_kp_q = HistMgp(:,i);
                 f_k_q = HistMf(:,i);
                 h_k_q = ;
@@ -92,10 +92,10 @@ function [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, D, conditionU, f_q, m,
 
             sum = 0;
             for i=1:(m-1)
-                %g_k_q = HistMg(:,i);
-                %g_kp_q   = DerivVect(g_k_q  ,dt,5);
-                %g_kp_q = HistMgp(:,i);
-                %g_kpp_q  = DerivVect(g_kp_q ,dt,5);
+                % g_k_q = HistMg(:,i);
+                % %g_kp_q   = DerivVect(g_k_q  ,dt,5);
+                % g_kp_q = HistMgp(:,i);
+                % %g_kpp_q  = DerivVect(g_kp_q ,dt,5);
                 g_kpp_q = HistMgpp(:,i);
                 f_k_q = HistMf(:,i);
                 h_k_q = ;

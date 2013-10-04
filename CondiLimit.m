@@ -29,7 +29,6 @@ elseif (CL==2)  % elemination
     M=M(2:end-1,2:end-1);
     K0=K0(2:end-1,2:end-1);
     C=C(2:end-1,2:end-1);
-    nombreNoeuds = size(M,1);
 end
 
 %% Condition en effort

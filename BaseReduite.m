@@ -1,6 +1,6 @@
-function [PRT] = BaseReduite (reduc,TailleBase,nombreNoeuds,M,K0,D,conditionU,VectL,Donnees)
+function [PRT] = BaseReduite (reduc,TailleBase,M,K0,D,conditionU,VectL,Donnees)
 
-        if ((TailleBase+size(D,1))>nombreNoeuds)
+        if ((TailleBase+size(D,1))>size(M,1))
             fprintf('\nNombre de noeuds insuffisant\n\n(TailleBase+size(D,1))>nombreNoeuds\n\n');
             return;
         end

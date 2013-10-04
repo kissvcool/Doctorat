@@ -15,8 +15,8 @@ function [x,w] = rayleigh(KD,M,b,epsilon,x,Famille)
     %y=A*x;
     y = KD \ [M*x;b];
     y = y(1:size(M,1)) / norm(y(1:size(M,1)));
-    x;
-    y;
+    x
+    y
     if (x'*y <0)
         err = norm(x+y);
     else

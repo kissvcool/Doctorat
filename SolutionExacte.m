@@ -1,6 +1,6 @@
 function [HistUExact,HistVExact,HistAExact] = SolutionExacte(cas,c,AmpliF,Egene,Sec,L,VectL,VectT,dt,NbPas6)
 
-        if cas == 4
+   if cas == 4
         HistAExact=zeros( size(VectL,2),size(VectT,2) );
         HistVExact=zeros( size(VectL,2),size(VectT,2) );
         HistUExact=zeros( size(VectL,2),size(VectT,2) );
