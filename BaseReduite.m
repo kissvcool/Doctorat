@@ -8,9 +8,9 @@ function [PRT] = BaseReduite (reduc,TailleBase,M,K0,D,conditionU,VectL,Donnees)
                                            % de la base Reduite a la base Totale
 
         if (reduc == 1)         % POD
-            [~,S_SVD,V_SVD]=svd(Donnees);
+            [~,~,V_SVD]=svd(Donnees);
             for i=1:TailleBase
-                ModeEspace = S_SVD(i,i)*V_SVD(:,i)';
+                ModeEspace = V_SVD(:,i)';
                 PRT(:,i) = ModeEspace /norm(ModeEspace); 
             end
 

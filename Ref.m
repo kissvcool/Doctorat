@@ -48,7 +48,7 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=40; %5  *2^program;
+        nombreElementsParPartie=49; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
@@ -64,7 +64,7 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 6;
+        cas = 2;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -74,7 +74,7 @@ for program=0:(IterProgram-1)
             NbPas6 = 50;    % Pourrait être calcule en fonction d'un temps
 
     % schema d integration :
-        schem = 1;
+        schem = 3;
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -115,7 +115,6 @@ for program=0:(IterProgram-1)
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
     % figure('Name','Calcul sur base complete','NumberTitle','off')
-    %  s(1).a = max(max(sortie(program+1).f.HistU)) - min(min(sortie(program+1).f.HistU));   % amplitude
     %  surf(0:dt:Ttot,VectL,sortie(program+1).f.HistU,'EdgeColor','none');
         
 %% Solution Exacte
@@ -134,7 +133,7 @@ for n = 5:10  % taille de la base modale
         % 1 POD
         % 2 Rayleigh
         % 3 PGD
-
+        
         [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
         sortie(1+n).p = PRT;
 
