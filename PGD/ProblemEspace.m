@@ -1,5 +1,7 @@
-function [f_q,condi] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp)
+function [f_q,condi,erreur] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp)
 
+    erreur=0;
+    
     K = [ K0 D' ; D zeros(size(D,1))];
     C = [ C zeros(size(D')) ; zeros(size(D)) zeros(size(D,1))];
     M = [ M zeros(size(D')) ; zeros(size(D)) zeros(size(D,1))];
@@ -69,6 +71,9 @@ function [f_q,condi] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,g
         sum2
         sum3
         sum4
-        shakaponk;
+        erreur = 1;
+        f_q = zeros( size(HistF(:,1)) );
+        condi = 0;
+        return
     end
 end

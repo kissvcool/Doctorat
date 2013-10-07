@@ -1,5 +1,7 @@
-function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q] = PointFixePGD(Kmax,M, C, K0, HistF, U0, V0, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot)
+function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q,erreur] = PointFixePGD(Kmax,M, C, K0, HistF, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot)
 
+    erreur = 0;
+    
     % Initialiser g(t) %, h(theta)
     gpp_q = ones(size( 0:dt:Ttot ))';
     gp_q  = (0:dt:Ttot)';
@@ -15,7 +17,10 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
     Conditionnement  = zeros(1,Kmax);
         
     for k=1:Kmax
-        [f_q,condi] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
+        [f_q,condi,erreur] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
+        if (erreur) 
+            return;
+        end
         if OthoIntern
             for i=1:(m-1)
                 f_q(1:size(VectL,2)) = f_q(1:size(VectL,2)) - HistMf(1:size(VectL,2),i)*(HistMf(1:size(VectL,2),i)'*f_q(1:size(VectL,2)) );

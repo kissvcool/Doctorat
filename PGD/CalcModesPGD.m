@@ -1,5 +1,7 @@
-function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif)
+function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax,erreur] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif)
 
+    erreur = 0;
+    
     if norm(U0)
         if (verif)
             Mmax = Mmax + 1;
@@ -77,7 +79,12 @@ function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,
                 end
             end            
         else
-            [HistKf,HistKg,HistKgp,HistKgpp,TableConv(m,:),TableCondi(m,:),f_q,g_q,gp_q,gpp_q] = PointFixePGD(Kmax,M, C, K0, HistF, U0, V0, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot);
+            [HistKf,HistKg,HistKgp,HistKgpp,TableConv(m,:),TableCondi(m,:),f_q,g_q,gp_q,gpp_q,erreur] = PointFixePGD(Kmax,M, C, K0, HistF, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot);
+        end
+        
+        if (erreur)
+            Mmax = m-1;
+            return;
         end
         
         % norme_f_q=norm(f_q(1:size(VectL,2)))-1
