@@ -55,7 +55,7 @@ for program=0:(IterProgram-1)
         LElement = L/nombreElements;
 
     % temps
-        dt=  1e-6 ; %*0.5^program;
+        dt=  0.5e-6 ; %*0.5^program;
         Ttot= 1.0e-03;% * 5^program;% dt*400; %3.0000e-04;
 
         c=(Egene/rho)^(0.5);
@@ -72,6 +72,7 @@ for program=0:(IterProgram-1)
         % 5 Effort augmentant lineairement en bout de poutre
         % 6 Effort continue en bout de poutre les 50 premiers pas de temps
             NbPas6 = 50;    % Pourrait être calcule en fonction d'un temps
+        % 7 Vitesse initiale
 
     % schema d integration :
         schem = 3;
@@ -163,15 +164,15 @@ end
 %% Affichage Complet
 
     Reference = sortie(1).f.HistU;
-    ModesEspaceTemps = 0;
-    ModesEspace = 0;
-    ModesTemps = 0;
-    NombreResultat = 0; %n;
+    ModesEspaceTemps = [];
+    ModesEspace = [];
+    ModesTemps = [];
+    Resultat = 5:10;
     NoDisplayResultat = 1;
     NoDisplayErreur = 1;
     Methode = 1; % POD
 
-    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(1+(1:n)),Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(1+(1:n)),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
 
 % return;
                             %% PGD %%
@@ -193,16 +194,16 @@ for PGD = 1
     %% Affichage Complet
 
         Reference = sortie(1).f.HistU;
-        ModesEspaceTemps = 0;
-        ModesEspace = 0;
-        ModesTemps = 0;
-        NombreResultat = Mmax;
+        ModesEspaceTemps = [];
+        ModesEspace = [];
+        ModesTemps = [];
+        Resultat = 1:Mmax;
         NoDisplayResultat = 1;
         NoDisplayErreur = 1;
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
-            AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+            AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
 
         % Convergence du point fixe
             for i=1:0 % 1:NombreResultat
@@ -212,7 +213,7 @@ for PGD = 1
 
     %% Animation
     
-        for i=1:Mmax
+        for i=1:0%Mmax
             Reference1 = sortie(1).f.HistU;
             Reference2 = HistUExact;
             Resultat  = zeros(size(VectL,2),size(0:dt:Ttot,2));

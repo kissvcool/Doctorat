@@ -55,6 +55,7 @@ end
 
 %% Position et Vitesse initiales   
 U0 = zeros(size(M,1),1);
+V0 = zeros(size(M,1),1) ; 
 if (cas==1)          % Deformee correspondant a un effort en bout
     if (CL==1)
         for j=1:size(M,1)       
@@ -65,8 +66,17 @@ if (cas==1)          % Deformee correspondant a un effort en bout
             U0(j,1) = 0.1*L*j/nombreElements;
         end      
     end
+elseif (cas==7)          % Vitesse initiale
+    if (CL==1)
+        for j=1:size(M,1)       
+            V0(j,1) = 0.1*(L/dt)*(j-1)/nombreElements;
+        end 
+    elseif (CL==2)
+        for j=1:size(M,1)       
+            V0(j,1) = 0.1*(L/dt)*j/nombreElements;
+        end      
+    end
 end
-V0 = zeros(size(M,1),1) ; 
 
 %% Deplacement impose au cours du temps
 if (cas ==3)

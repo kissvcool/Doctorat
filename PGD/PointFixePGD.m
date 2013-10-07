@@ -19,6 +19,7 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
     for k=1:Kmax
         [f_q,condi,erreur] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
         if (erreur) 
+            disp(['m = ' num2str(m) ' , k = ' num2str(k)]);
             return;
         end
         if OthoIntern

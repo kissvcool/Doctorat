@@ -1,9 +1,9 @@
-function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas)
+function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas)
 %% Verification
 
     if (Methode == 1) % POD
-        if (ModesEspaceTemps > (size(VectL,2) - size(D,1)))
-            disp(['Il n y a pas assez de DDL pour calculer ' num2str(ModesEspaceTemps) ' Modes Espace-Temps']);
+        if (max(ModesEspaceTemps) > (size(VectL,2) - size(D,1)))
+            disp(['Il n y a pas assez de DDL pour calculer ' num2str(max(ModesEspaceTemps)) ' Modes Espace-Temps']);
             ErreurPOD;
         elseif (ModesEspace > (size(VectL,2) - size(D,1)))
             disp(['Il n y a pas assez de DDL pour calculer ' num2str(ModesEspace) ' Modes Espace']);
@@ -17,11 +17,11 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
     elseif  (Methode == 2) % PGD
         HistMf = Donnees1;
         HistMg = Donnees2;
-        if ( NombreResultat > size(HistMg,2))
+        if ( max(Resultat) > size(HistMg,2))
             disp(['Il n y a pas assez de Modes PGD calcules pour afficher ' num2str(NombreResultat) ' Resultats']);
             ErreurPGD;
-        elseif ( ModesEspaceTemps > size(HistMg,2))
-            disp(['Il n y a pas assez de Modes PGD calcules pour afficher ' num2str(ModesEspaceTemps) ' Modes Espace-Temps']);
+        elseif ( max(ModesEspaceTemps) > size(HistMg,2))
+            disp(['Il n y a pas assez de Modes PGD calcules pour afficher ' num2str(max(ModesEspaceTemps)) ' Modes Espace-Temps']);
             ErreurPGD;
         elseif ( ModesEspace > size(HistMg,2))
             disp(['Il n y a pas assez de Modes PGD calcules pour afficher ' num2str(ModesEspace) ' Modes Espace']);
@@ -49,10 +49,13 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
 
 %% Affichage des modes
     
-    if ModesEspaceTemps
+    NbModesEspaceTemps = length(ModesEspaceTemps);
+    if NbModesEspaceTemps
         figure('Name',['mode Espace-Temps par ' NomMethode],'NumberTitle','off')
-            for i=1:ModesEspaceTemps
-                subplot(ceil(sqrt(ModesEspaceTemps)),ceil(ModesEspaceTemps/ceil(sqrt(ModesEspaceTemps))),i);
+            iter=0;
+            for i=ModesEspaceTemps
+                iter=iter+1;
+                subplot(ceil(sqrt(NbModesEspaceTemps)),ceil(NbModesEspaceTemps/ceil(sqrt(NbModesEspaceTemps))),iter);
                     if (Methode == 1) % POD
                         Hist = U_SVD(:,i)*S_SVD(i,i)*V_SVD(:,i)';
                     elseif (Methode == 2) % PGD
@@ -74,10 +77,13 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
             end
     end
     
-    if ModesEspace
+    NbModesEspace = length(ModesEspace);
+    if NbModesEspace
         figure('Name',['modes Espace par ' NomMethode],'NumberTitle','off')
-            for i=1:ModesEspace
-                subplot(ceil(sqrt(ModesEspace)),ceil(ModesEspace/ceil(sqrt(ModesEspace))),i); 
+            iter=0;
+            for i=ModesEspace
+                iter=iter+1;
+                subplot(ceil(sqrt(NbModesEspace)),ceil(NbModesEspace/ceil(sqrt(NbModesEspace))),iter); 
                     if Methode == 1
                         Hist = S_SVD(i,i)*V_SVD(:,i)';
                     elseif Methode == 2
@@ -94,11 +100,13 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
             end
     end
 
-    
-    if ModesTemps
+    NbModesTemps = length(ModesTemps);
+    if NbModesTemps
         figure('Name',['mode Temps par ' NomMethode],'NumberTitle','off')
-            for i=1:ModesTemps
-                subplot(ceil(sqrt(ModesTemps)),ceil(ModesTemps/ceil(sqrt(ModesTemps))),i);            
+            iter=0;
+            for i=ModesTemps
+                iter=iter+1;
+                subplot(ceil(sqrt(NbModesTemps)),ceil(NbModesTemps/ceil(sqrt(NbModesTemps))),iter);            
                     if Methode == 1
                         Hist = U_SVD(:,i)*S_SVD(i,i);                        
                     elseif Methode == 2
@@ -159,23 +167,26 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
 
 %% Affichage des solutions
 
-    if NombreResultat
+    NbResultat = length(Resultat);
+    if NbResultat
         % Solutions - Comparaison Methode / Resolution complete    
-            erreurMaximale  = zeros(1,NombreResultat);
-            erreurCarre     = zeros(1,NombreResultat);
-            erreurAmpTotale = zeros(1,NombreResultat);
-            for n=1:NombreResultat
+            erreurMaximale  = zeros(1,NbResultat);
+            erreurCarre     = zeros(1,NbResultat);
+            erreurAmpTotale = zeros(1,NbResultat);
+            iter=0;
+            for n=Resultat
+                iter= iter+1;
                           
                     if Methode == 1
-                         Resultat  = (Donnees2(n).p*Donnees2(n).f.HistU) ;
+                        ResultatSol  = (Donnees2(n).p*Donnees2(n).f.HistU) ;
                     elseif Methode == 2               
-                        Resultat  = zeros(size(VectL,2),size(0:dt:Ttot,2));
+                        ResultatSol  = zeros(size(VectL,2),size(0:dt:Ttot,2));
                         f=HistMf(1:size(VectL,2),1:n);
                         g=HistMg(:,1:n);
                         for j=1:size(VectL,2)
                             for k=1:1:size(0:dt:Ttot,2)
                                 for l=1:n
-                                    Resultat(j,k) = Resultat(j,k) + f(j,l)*g(k,l);
+                                    ResultatSol(j,k) = ResultatSol(j,k) + f(j,l)*g(k,l);
                                 end
                             end
                         end                        
@@ -185,25 +196,25 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
                 %VectT
                 %VectL
 
-                [out1,out2,out3] = AfficherSolution(Reference,Resultat,NomFigure,0:dt:Ttot,VectL,NoDisplayResultat);
-                erreurMaximale(n)  = out1;
-                erreurCarre(n)     = out2;
-                erreurAmpTotale(n) = out3;
+                [out1,out2,out3] = AfficherSolution(Reference,ResultatSol,NomFigure,0:dt:Ttot,VectL,NoDisplayResultat);
+                erreurMaximale(iter)  = out1;
+                erreurCarre(iter)     = out2;
+                erreurAmpTotale(iter)  = out3;
 
             end
     end
     
 %% Affichage de l'erreur
 
-    if (NombreResultat && ~NoDisplayErreur)
+    if (NbResultat && ~NoDisplayErreur)
         NomFigure = ['Erreur / nombre de modes ' NomMethode ' du cas #' num2str(cas, '%10.u\n') ];
-                
+        
         figure('Name',NomFigure,'NumberTitle','off')
-        plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurCarre)));
+        plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurCarre)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur volume au carre');
 
         figure('Name',NomFigure,'NumberTitle','off')
-        plotyy(1:NombreResultat,log(abs(erreurAmpTotale))/log(10),1:NombreResultat,log(abs(erreurMaximale)));
+        plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurMaximale)));
         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur Maximale');
     end
 

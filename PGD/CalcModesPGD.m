@@ -39,12 +39,24 @@ function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,
     TableCondi = zeros(Mmax,Kmax);
     TableConv =  zeros(Mmax,Kmax);
 
+    if norm(U0)
+        initU=1;
+    else
+        initU=0;
+    end
+    
+    if norm(V0)
+        initV=1;
+    else
+        initV=0;
+    end
     
     LectureConditionU =1;
     for m=1:Mmax
         disp(['m = ' num2str(m)]);
         
-        if norm(U0) && m==1                     
+        if initU
+            initU=0;
             HistKf = [];
             HistKg  = [];
             HistKgp  = [];
@@ -54,6 +66,19 @@ function [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,
             g_q = g_q * norm(f_q(1:size(VectL,2)));
             f_q = f_q / norm(f_q(1:size(VectL,2)));
             gp_q = zeros(size(HistF,2),1);
+            gpp_q = zeros(size(HistF,2),1);
+            
+        elseif initV
+            initV=0;
+            HistKf = [];
+            HistKg  = [];
+            HistKgp  = [];
+            HistKgpp  = [];
+            f_q = [V0 ; zeros(size(D,1),1)] ;
+            gp_q = ones(size(HistF,2),1);
+            gp_q = gp_q * norm(f_q(1:size(VectL,2)));
+            f_q = f_q / norm(f_q(1:size(VectL,2)));
+            g_q = zeros(size(HistF,2),1);
             gpp_q = zeros(size(HistF,2),1);
             
         elseif norm(conditionU(LectureConditionU:end,:)) %&& LectureConditionU <= size(conditionU,1)
