@@ -48,7 +48,7 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=49; %5  *2^program;
+        nombreElementsParPartie=2; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
@@ -64,7 +64,7 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 2;
+        cas = 5;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -94,7 +94,7 @@ for program=0:(IterProgram-1)
         end
 
     % Matrice de Masse :
-        RepartMasse = 2;
+        RepartMasse = 3;
         % 1 Me= [1/2  0 ;  0  1/2]  la masse est repartie equitablement entre les deux
         % 2 Me= [ 0   0 ;  0   1 ]  la masse est donnee au noeud a la droite de l'element
         % 3 Me= [1/3 1/6; 1/6 1/3]  la masse est repartie comme le decrivent les fonctions EF
@@ -126,8 +126,8 @@ for program=0:(IterProgram-1)
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-for n = 5:10  % taille de la base modale
+VectN = 1:4;
+for n = VectN  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
         reduc = 1;
@@ -167,13 +167,13 @@ end
     ModesEspaceTemps = [];
     ModesEspace = [];
     ModesTemps = [];
-    Resultat = 5:10;
+    Resultat = VectN;
     NoDisplayResultat = 1;
     NoDisplayErreur = 1;
     Methode = 1; % POD
 
-    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(1+(1:n)),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
-
+    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+    
 % return;
                             %% PGD %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,7 +185,7 @@ for PGD = 1
 
         OthoIntern = 0;
 
-        Mmax=10;        % Nombre de modes maximum
+        Mmax=20;        % Nombre de modes maximum
         Kmax=40;        % Nombre d'iterations max pour obtenir un mode
         epsilon = 10^-6;
 

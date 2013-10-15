@@ -178,7 +178,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
                 iter= iter+1;
                           
                     if Methode == 1
-                        ResultatSol  = (Donnees2(n).p*Donnees2(n).f.HistU) ;
+                        ResultatSol  = (Donnees2(1+n).p*Donnees2(1+n).f.HistU) ;
                     elseif Methode == 2               
                         ResultatSol  = zeros(size(VectL,2),size(0:dt:Ttot,2));
                         f=HistMf(1:size(VectL,2),1:n);

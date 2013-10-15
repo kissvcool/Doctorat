@@ -48,7 +48,7 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherSolution(Referen
     DiffAmp = (s(1).a - s(2).a)/s(1).a;
     DiffVol = sum(sum((s(3).f).^2))/sum(sum((s(1).f).^2));
     erreurCarre = abs(DiffVol);
-    erreurAmpTotale = abs(DiffAmp/s(1).a);
+    erreurAmpTotale = abs(DiffAmp);
     
     if ~NoDisplay    
         ax = subplot(2,2,4);
