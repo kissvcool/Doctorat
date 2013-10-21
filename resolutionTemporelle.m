@@ -22,6 +22,9 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
         alpha = -1/9;      % -1/3 <= alpha <= 0 
         gamma = 1/2 - alpha;        % alpha = -1/3 -> amortissement maximal
         beta  = ((1-alpha)^2)/4;
+    elseif (schem == 6)
+        sortie = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
+        return;
     end
 
 %% Initialisation
@@ -41,7 +44,7 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
     HistEu =zeros(1,size(HistF,2));
     Eu =0;
     
-%% Iterations Temporelles
+%% Conditions Initiales
     
     if norm(U0)
         if (verif)
@@ -56,6 +59,7 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
     A = zeros(size(M,1),1);     % accelerations
     F = HistF(:,1);     
     nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
+    
     if (nonLine==1)
         % Ajout du ressort
         kres =  nonLinearite(1).scalaires(1);
@@ -63,10 +67,11 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
         UresU = nonLinearite(1).dependanceEnU;
     end
 
+%% Iterations Temporelles
+    
     
     for t=0:nombrePasTemps
 
-    % Conditions initiales
         if (t>0)
             % prediction
              F = (1+alpha)*HistF(:,t+1) - alpha*HistF(:,t);

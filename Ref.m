@@ -64,7 +64,7 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 5;
+        cas = 4;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -75,15 +75,16 @@ for program=0:(IterProgram-1)
         % 7 Vitesse initiale
 
     % schema d integration :
-        schem = 3;
+        schem = 6;
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
         % 4 Newmark - Acceleration moyenne modifiee
         % 5 HHT-alpha
+        % 6 Galerkin Discontinu
 
     % Application des conditions limites :
-        CL=1;
+        CL=2;
         % 1 Multiplicateur de Lagrange
         % 2 Substitution
 
@@ -115,8 +116,9 @@ for program=0:(IterProgram-1)
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
-    % figure('Name','Calcul sur base complete','NumberTitle','off')
-    %  surf(0:dt:Ttot,VectL,sortie(program+1).f.HistU,'EdgeColor','none');
+    figure('Name','Calcul sur base complete','NumberTitle','off')
+     surf(0:dt:Ttot,VectL,sortie(program+1).f.HistU_m,'EdgeColor','none');
+        return;
         
 %% Solution Exacte
 
@@ -153,13 +155,15 @@ end
 
     
 %% Animation
-    for i=1:0
-        Reference1 = sortie(1).f.HistU;
-        Reference2 = HistUExact;
-        Resultat = sortie(1+i).p*sortie(1+i).f.HistU;
+    for i=1:0%VectN
+        Reference1 = sortie(1).f.HistV;
+        Reference2 = HistVExact;
+        Resultat = sortie(1+i).p*sortie(1+i).f.HistV;
 
         AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
     end
+    
+    return;
     
 %% Affichage Complet
 
@@ -185,7 +189,7 @@ for PGD = 1
 
         OthoIntern = 0;
 
-        Mmax=20;        % Nombre de modes maximum
+        Mmax=10;        % Nombre de modes maximum
         Kmax=40;        % Nombre d'iterations max pour obtenir un mode
         epsilon = 10^-6;
 
