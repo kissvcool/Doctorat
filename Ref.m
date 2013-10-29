@@ -48,7 +48,7 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=2; %5  *2^program;
+        nombreElementsParPartie=80; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
@@ -75,7 +75,7 @@ for program=0:(IterProgram-1)
         % 7 Vitesse initiale
 
     % schema d integration :
-        schem = 6;
+        schem = 5;
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -117,8 +117,11 @@ for program=0:(IterProgram-1)
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
     figure('Name','Calcul sur base complete','NumberTitle','off')
-     surf(0:dt:Ttot,VectL,sortie(program+1).f.HistU_m,'EdgeColor','none');
-        return;
+     surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
+     
+%     figure('Name','Difference entre U_m et U_p','NumberTitle','off')
+%      surf(0:dt:Ttot,VectL,(sortie(1).f.HistU_m - sortie(1).f.HistU_p),'EdgeColor','none');
+%         return;
         
 %% Solution Exacte
 
@@ -155,10 +158,10 @@ end
 
     
 %% Animation
-    for i=1:0%VectN
-        Reference1 = sortie(1).f.HistV;
-        Reference2 = HistVExact;
-        Resultat = sortie(1+i).p*sortie(1+i).f.HistV;
+    for i=VectN
+        Reference1 = sortie(1).f.HistA;
+        Reference2 = HistAExact;
+        Resultat = sortie(1+i).p*sortie(1+i).f.HistA;
 
         AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
     end

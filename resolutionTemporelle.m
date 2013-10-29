@@ -19,7 +19,7 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
         beta  = ((1-alpha)^2)/4;  
         alpha = 0;
     elseif (schem == 5)         % HHT-alpha
-        alpha = -1/9;      % -1/3 <= alpha <= 0 
+        alpha = -1/3;      % -1/3 <= alpha <= 0 
         gamma = 1/2 - alpha;        % alpha = -1/3 -> amortissement maximal
         beta  = ((1-alpha)^2)/4;
     elseif (schem == 6)

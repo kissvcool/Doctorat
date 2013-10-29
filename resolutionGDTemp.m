@@ -5,18 +5,19 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
     HistU_p=zeros(size(HistF));
     HistV_m=zeros(size(HistF));
     HistV_p=zeros(size(HistF));
-    %HistA=zeros(size(HistF));
-    HistE  =zeros(1,size(HistF,2));
-    HistEc =zeros(1,size(HistF,2));
-    HistEp =zeros(1,size(HistF,2));
-    HistEnl=zeros(1,size(HistF,2));
-    HistEf =zeros(1,size(HistF,2));
-    Ef =0;
-    HistEu =zeros(1,size(HistF,2));
-    Eu =0;
+    % HistA=zeros(size(HistF));
+    % HistE  =zeros(1,size(HistF,2));
+    % HistEc =zeros(1,size(HistF,2));
+    % HistEp =zeros(1,size(HistF,2));
+    % HistEnl=zeros(1,size(HistF,2));
+    % HistEf =zeros(1,size(HistF,2));
+    % Ef =0;
+    % HistEu =zeros(1,size(HistF,2));
+    % Eu =0;
     
     K = K0;
-    Mp= M + (2/3) * (dt^2) * K; % Attention en nonLineaire il faudra recalculer
+    %Mp= M + (2/3) * (dt^2) * K;
+    Mp= M + (1/6) * (dt^2) * K; % Attention en nonLineaire il faudra recalculer
     
 %% Conditions Initiales
     
@@ -29,9 +30,9 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
         end     
     end
     U_m = U0;   % deplacements - vecteur colonne
-    U_p  = U0;
+    U_p = U0;
     V_m = V0;   % vitesses
-    V_p  = V0;
+    V_p = V0;
 %     A = zeros(size(M,1),1);     % accelerations
     
     nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
@@ -59,10 +60,13 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
             F1 = dt*( (1/3)*HistF(:,t) + (1/6)*HistF(:,t+1) );
             F2 = dt*( (1/6)*HistF(:,t) + (1/3)*HistF(:,t+1) );
             
-            F1p= (5/2)*F1 + M*V_m - (1/3)*F2 - (2/3)*dt*K*U_m;
+            %F1p= (5/2)*F1 + M*V_m - (1/3)*F2 - (2/3)*dt*K*U_m;
+            F1p= (5/3)*(F1 + M*V_m) - (1/3)*F2 - (2/3)*dt*K*U_m;
             F2p= F1 + F2  + M*V_m            -       dt*K*U_m;
             
-            VmVp = [ (1/3)*(dt^2)*Mp  Mp ; Mp  (2/3)*M ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
+            %VmVp = [ (1/3)*(dt^2)*Mp  Mp ; Mp  (2/3)*M ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
+            %VmVp = [ (1/3)*(dt^2)*K  Mp ; Mp  (2/3)*M ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
+            VmVp = [ M-(1/12)*(dt^2)*K  -(1/12)*(dt^2)*K ; (1/3)*(dt^2)*K  M+(1/6)*(dt^2)*K ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
             
             V_m = VmVp(1:size(V_m));            %V_m(t+1)
             V_p = VmVp((size(V_m)+1):end);      %V_p(t)
@@ -73,8 +77,7 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
             HistU_m(:,t+1)  = U_m;
             HistU_p(:,t  )  = U_p;
             HistV_m(:,t+1)  = V_m;
-            HistV_p(:,t  )  = V_p;
-            
+            HistV_p(:,t  )  = V_p;            
         end
     
     end
