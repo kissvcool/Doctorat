@@ -59,6 +59,7 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
     if k==Kmax        
         disp(['ne convergence pas apres ' num2str(k) ' iterations']);
     end
+    
     HistKf   = HistKf(:,1:k);
     HistKg   = HistKg(:,1:k);
     HistKgp  = HistKgp(:,1:k);

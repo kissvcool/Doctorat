@@ -48,14 +48,14 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=80; %5  *2^program;
+        nombreElementsParPartie=20; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
         LElement = L/nombreElements;
 
     % temps
-        dt=  0.5e-6 ; %*0.5^program;
+        dt=  4e-6 ; %*0.5^program;
         Ttot= 1.0e-03;% * 5^program;% dt*400; %3.0000e-04;
 
         c=(Egene/rho)^(0.5);
@@ -75,7 +75,7 @@ for program=0:(IterProgram-1)
         % 7 Vitesse initiale
 
     % schema d integration :
-        schem = 5;
+        schem = 6;
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -117,7 +117,7 @@ for program=0:(IterProgram-1)
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
     figure('Name','Calcul sur base complete','NumberTitle','off')
-     surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
+     surf(0:dt:Ttot,VectL,sortie(1).f.HistU_m,'EdgeColor','none');
      
 %     figure('Name','Difference entre U_m et U_p','NumberTitle','off')
 %      surf(0:dt:Ttot,VectL,(sortie(1).f.HistU_m - sortie(1).f.HistU_p),'EdgeColor','none');
@@ -131,7 +131,7 @@ for program=0:(IterProgram-1)
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VectN = 1:4;
+VectN = 4;
 for n = VectN  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
@@ -140,7 +140,7 @@ for n = VectN  % taille de la base modale
         % 2 Rayleigh
         % 3 PGD
         
-        [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
+        [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU_m');
         sortie(1+n).p = PRT;
 
     %% Projection
@@ -159,15 +159,13 @@ end
     
 %% Animation
     for i=VectN
-        Reference1 = sortie(1).f.HistA;
-        Reference2 = HistAExact;
-        Resultat = sortie(1+i).p*sortie(1+i).f.HistA;
+        Reference1 = sortie(1).f.HistV_m;
+        Reference2 = HistVExact;
+        Resultat = sortie(1+i).p*sortie(1+i).f.HistV_m;
 
         AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
     end
-    
-    return;
-    
+        
 %% Affichage Complet
 
     Reference = sortie(1).f.HistU;
@@ -181,7 +179,7 @@ end
 
     AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
     
-% return;
+
                             %% PGD %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

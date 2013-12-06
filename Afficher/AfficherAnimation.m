@@ -21,7 +21,7 @@ function [] = AfficherAnimation(Reference1,Reference2,Resultat,VectL,L)
         xlabel('x');
         ylabel('u(x,t)');
         %legend('Reference',['Resultat, avec ' num2str(size(PRT,2)) ' modes']);
-        pause(0.02);
+        pause(0.4);
     end
     
 end
