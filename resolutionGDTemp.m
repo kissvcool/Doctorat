@@ -16,10 +16,6 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
     % Eu =0;
     
     K = K0;
-    %Mp= M + (2/3) * (dt^2) * K;
-    %Mp= M + (1/6) * (dt^2) * K; % Attention en nonLineaire il faudra recalculer
-    % Gravouil
-    Mp= (1/2)*M + (5/36)*(dt^2)*K;
     
 %% Conditions Initiales
     
@@ -58,33 +54,22 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
             HistV_m(:,t+1)  = V_m;
             HistV_p(:,t+1)  = V_p;
         else       
-            % t
-            F1 = dt*( (1/3)*HistF(:,t) + (1/6)*HistF(:,t+1) );
-            F2 = dt*( (1/6)*HistF(:,t) + (1/3)*HistF(:,t+1) );
-            
-            %F1p= (5/2)*F1 + M*V_m - (1/3)*F2 - (2/3)*dt*K*U_m;
-            %F1p= (5/3)*(F1 + M*V_m) - (1/3)*F2 - (2/3)*dt*K*U_m;
-            %F1p= F1 - F2  + M*V_m;
-            %F2p= F1 + F2  + M*V_m            -       dt*K*U_m;
-            % Gravouil
-            F1p=        -(1/2)*dt*K*U_m + F2;
-            F2p= M*V_m  -(1/2)*dt*K*U_m + F1;
+            % % Gravouil 
+                % Mp= (1/2)*M + (5/36)*(dt^2)*K;
+                % F1 = dt*( (1/3)*HistF(:,t) + (1/6)*HistF(:,t+1) );
+                % F2 = dt*( (1/6)*HistF(:,t) + (1/3)*HistF(:,t+1) );
+                % F1p=        -(1/2)*dt*K*U_m + F2;
+                % F2p= M*V_m  -(1/2)*dt*K*U_m + F1;
+                % VmVp = [ -(1/2)*M+(7/36)*(dt^2)*K           Mp              ;
+                %                     Mp              (1/2)*M+(1/36)*(dt^2)*K ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
             % % Perso
-            % F2p= M*V_m + (1/2)*dt*(HistF(:,t) + HistF(:,t+1)) - dt*K*U_m;
-            % F1p= -(1/6)*dt*(K*U_m + HistF(:,t+1)) - (1/3)*(M*V_m + dt*(HistF(:,t) + HistF(:,t+1)));
-            % % Correction Maple            
-            % F1p= -(1/6)*dt*(K*U_m - HistF(:,t+1)) - (1/3)* M*V_m;        
-            %VmVp = [ (1/3)*(dt^2)*Mp  Mp ; Mp  (2/3)*M ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
-            %VmVp = [ (1/3)*(dt^2)*K  Mp ; Mp  (2/3)*M ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
-            %VmVp = [ M-(1/12)*(dt^2)*K  -(1/12)*(dt^2)*K ; (1/3)*(dt^2)*K  M+(1/6)*(dt^2)*K ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
-            % Gravouil
-            VmVp = [ (1/2)*M+(1/36)*(dt^2)*K  Mp ; Mp  -(1/2)*M+(7/36)*(dt^2)*K ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
-            % Perso
-            % VmVp = [ (1/3)*(dt^2)*K+(1/2)*dt*C  (1/6)*(dt^2)*K+M+(1/2)*dt*C ; 
-            %          (1/12)*(dt^2)*K-(1/2)*M  (1/12)*(dt^2)*K+(1/6)*M+(1/6)*dt*C ] \ [F2p ; F1p]; % Mettre en place multiplicateur Lagrange
+                F1p= M*V_m + (1/2)*dt*(HistF(:,t) + HistF(:,t+1)) - dt*K*U_m;
+                F2p= -(1/6)*dt*(K*U_m - HistF(:,t+1)) - (1/3)*M*V_m;
+                VmVp = [ (1/3)*(dt^2)*K+(1/2)*dt*C  (1/6)*(dt^2)*K+M+(1/2)*dt*C ; 
+                         (1/12)*(dt^2)*K-(1/2)*M  (1/12)*(dt^2)*K+(1/6)*M+(1/6)*dt*C ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
                         
-            V_m = VmVp(1:size(V_m));            %V_m(t+1)
-            V_p = VmVp((size(V_m)+1):end);      %V_p(t)
+            V_m = VmVp((size(V_m)+1):end);  %V_m(t+1)
+            V_p = VmVp(1:size(V_m));        %V_p(t)
             
             U_p = U_m + (1/6)*dt*V_p - (1/6)*dt*V_m; %U_p(t)
             U_m = U_m + (1/2)*dt*V_p + (1/2)*dt*V_m; %U_m(t+1)            
@@ -105,19 +90,6 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
     sortie.HistU_p= HistU_p;
     sortie.HistV_m= HistV_m;
     sortie.HistV_p= HistV_p;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
