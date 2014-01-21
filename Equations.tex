@@ -1,0 +1,4283 @@
+\documentclass[12pt,a4paper]{report}
+  \usepackage[utf8]{inputenc}
+  \usepackage[francais]{babel}
+  \usepackage[T1]{fontenc}
+  \usepackage{amsmath}
+  \usepackage{cancel} % Barrer des éléments mathématiques
+  
+  \usepackage[linkcolor=black,colorlinks=true]{hyperref}
+  
+\begin{document}
+
+
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\chapter{Calcul du système à résoudre pour GD}
+%\maketitle
+\section{Intro}
+  
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\left(
+		\mathbf{M}~\mathbf{\dot{v}} 
+			+ \mathbf{C}\mathbf{v} 
+			+ \mathbf{K}\mathbf{u}
+			- \mathbf{f}
+		\right)~dt
+	  +\displaystyle\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_2}
+		\mathbf{K} 
+			\left( \mathbf{\dot{u}} - \mathbf{v} 
+			\right) ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K}[\mathbf{u}]_m
+	   +  \mathbf{w_1}(t_m) \mathbf{M}[\mathbf{v}]_m
+	~~~~=0
+\end{array}
+\end{equation}
+
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{C}\mathbf{v} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+			\mathbf{f} ~dt		
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K}[\mathbf{u}]_m
+	   +  \mathbf{w_1}(t_m) \mathbf{M}[\mathbf{v}]_m
+	~~~~=0
+\end{array}
+\end{equation}
+
+\begin{equation}
+\label{AvantHypotheseConst}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{C}\mathbf{v} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+			\mathbf{f} ~dt		
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1}(t_m) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+\section{Hypothèse de fonction de poids constantes}
+
+On choisit des fonctions de poids constantes sur l'intervalle :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!	
+		\mathbf{C}\mathbf{v} ~dt
+	 +\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		 	\mathbf{f} ~dt		
+	   + \mathbf{w_2} \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\mathbf{w_2} \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+Si on admet l'indépendance par rapport au temps des matrices M, C et K (cas linéaire) on a :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}\int_{t_m}^{t_{m+1}} \!\!\!
+		\mathbf{\dot{v}} ~dt
+	 +\mathbf{w_1} \mathbf{C}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{v} ~dt
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		 	\mathbf{f} ~dt	
+	   + \mathbf{w_2} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\!
+	    	\mathbf{\dot{u}}~dt 
+	    -\mathbf{w_2} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On admet la définition des fonctions sur chaque intervalles telle que :
+\begin{equation}
+\mathbf{q}(t) = 
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{q}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{q}_{m+1}^-
+\end{equation}
+
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{w_1} \mathbf{C}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On s'intéresse à la première intégrale :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\frac{\mathbf{w_1} \mathbf{C}}{\Delta t}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			(t_{m+1}-t) \mathbf{v}_m^+ + 
+			(t-t_m) \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On sépare :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\frac{\mathbf{w_1} \mathbf{C}}{\Delta t}
+	     \left(
+	  		\mathbf{v}_m^+ \int_{t_m}^{t_{m+1}} \!\!\! 	
+			(t_{m+1}-t) dt  + 
+			\mathbf{v}_{m+1}^- \int_{t_m}^{t_{m+1}} \!\!\!
+			(t-t_m) dt
+		 \right)
+	\\
+	  &\displaystyle
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On calcule :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\frac{\mathbf{w_1} \mathbf{C}}{\Delta t}
+	     \left(
+	  		\mathbf{v}_m^+ 
+				\left[ \frac{(\Delta t)^2}{2} \right]
+			+ \mathbf{v}_{m+1}^-
+				\left[ \frac{(\Delta t)^2}{2} \right]
+		 \right)
+	\\
+	  &\displaystyle
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+En factorisant :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{w_1} \mathbf{C} \frac{\Delta t}{2}
+	     \left(
+	  		\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-
+		 \right)
+	\\
+	  &\displaystyle
+	 +\mathbf{w_1} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w_1} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+en l'appliquant aux autres lignes:
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{w_1} \mathbf{M}
+		\left[ \mathbf{v}_{m+1}^- - \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{w_1} \mathbf{C} \frac{\Delta t}{2}	  
+	     \left(
+	  		\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-
+		 \right)
+	\\
+	  &\displaystyle
+	  +\mathbf{w_1} \mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + \mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	  -\mathbf{w_1} \frac{\Delta t}{2}
+		\left( 
+			\mathbf{f}_m + \mathbf{f}_{m+1} 
+		\right) 
+	\\
+	  &+\displaystyle
+	    \mathbf{w_2} \mathbf{K}
+		\left[ \mathbf{u}_{m+1}^- - \mathbf{u}_m^+ \right]
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w_2} \mathbf{K} \frac{\Delta t}{2}
+			\left(
+				\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+			\right)
+	\\
+	  &+ \mathbf{w_2} \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+\subsubsection{Matrice}
+\begin{equation}
+\label{PremiereEquation}
+\begin{array}{l l}
+		\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+		\!\!\!\!\!\!\!\!\! 
+		 \left(
+		 \mathbf{w_1}
+		\begin{bmatrix}	   
+		   \mathbf{K}\frac{\Delta t}{2} 
+		   &\mathbf{K}\frac{\Delta t}{2} 
+		   &\mathbf{C}\frac{\Delta t}{2}
+		   &\left( \mathbf{M}+\mathbf{C}\frac{\Delta t}{2} \right) \\ 
+		\end{bmatrix}
+		+ \mathbf{w_2}
+		\begin{bmatrix}	   
+		   0 
+		   &\mathbf{K} 
+		   &-\mathbf{K}\frac{\Delta t}{2} 
+		   &-\mathbf{K}\frac{\Delta t}{2} \\ 
+		\end{bmatrix}
+		\right)
+		\times 
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		=  \mathbf{w_2} \mathbf{K} \mathbf{u}_m^- 
+		 + \mathbf{w_1} \mathbf{M} \mathbf{v}_m^-
+		 + \mathbf{w_1} (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+	
+\end{array}
+\end{equation}
+
+\subsection{Hypothèse d'homogénéité : $\displaystyle \mathbf{w_1} = \frac{d\mathbf{w_2}}{dt}$}
+
+\subsubsection{Matrice}
+Si on choisi $\displaystyle \mathbf{w_1} = \frac{d\mathbf{w_2}}{dt}$ , on peut alors vérifier l'homogénéité des équations. La forme matricielle précédente est basée sur l'hypothèse que $ \mathbf{w_2} $ est constante et donc que $ \mathbf{w_1} $ est nulle. Alors :
+\begin{equation}
+\begin{array}{l l}
+		\mathbf{w_2}
+		\begin{bmatrix}	   
+		   0 
+		   &\mathbf{K} 
+		   &-\mathbf{K}\frac{\Delta t}{2} 
+		   &-\mathbf{K}\frac{\Delta t}{2} \\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		=  \mathbf{w_2} \mathbf{K} \mathbf{u}_m^- 
+	
+\end{array}
+\end{equation}
+
+\section{Hypothèse de fonctions de poids affine}
+
+Si on veut plus d'équations il faut retourner à l'équation \ref{AvantHypotheseConst} juste avant de faire l'hypothèse de fonctions $\mathbf{w}$ constantes.
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{C}\mathbf{v} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+			\mathbf{f} ~dt		
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1}(t_m) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $\mathbf{w_2} = \mathbf{w}.(t-t_m)$}
+
+On choisit des fonctions de poids sur l'intervalle $\mathbf{w_2} = \mathbf{w}.(t-t_m)$ alors $\mathbf{w_1} = \mathbf{w}$:
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\!
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\!	
+		\mathbf{C}\mathbf{v} ~dt
+	 +\mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\!
+		 	\mathbf{f} ~dt		
+	   + \mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(t-t_m)\mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(t-t_m)\mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w} (t_m-t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+Si on admet l'indépendance par rapport au temps des matrices M, C et K (cas linéaire) on a :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{w} \mathbf{M}\int_{t_m}^{t_{m+1}} \!\!\!
+		\mathbf{\dot{v}} ~dt
+	 +\mathbf{w} \mathbf{C}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{v} ~dt
+	 +\mathbf{w} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\!
+		 	\mathbf{f} ~dt	
+	   + \mathbf{w} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\!
+	    	(t-t_m) \mathbf{\dot{u}}~dt 
+	    -\mathbf{w} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	     (t-t_m) \mathbf{v} ~dt
+	\\
+	  &+  \mathbf{w} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On admet la définition des fonctions sur chaque intervalles telle que :
+\begin{equation}
+\mathbf{q}(t) = 
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{q}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{q}_{m+1}^-
+			~~~~\text{ avec } ~~~~\Delta t = t_{m+1} - t_m
+\end{equation}
+
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{w} \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{w} \mathbf{C}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	 +\mathbf{w} \mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\mathbf{w} \int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{w} \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}			
+			\int_{t_m}^{t_{m+1}} \!\!\! (t-t_m) 
+	\\
+	  &\displaystyle	    
+	    -\mathbf{w} \mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+  \mathbf{w} \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+On retire  $\mathbf{w}$:
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	 +\mathbf{K}\int_{t_m}^{t_{m+1}} \!\!\! 	
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   -\int_{t_m}^{t_{m+1}} \!\!\!
+		\left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+			\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1}
+			\right] ~dt
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}			
+			\int_{t_m}^{t_{m+1}} \!\!\! (t-t_m) 
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+On utilise le résultat obtenu précédemment :
+\begin{equation}
+\int_{t_m}^{t_{m+1}} \!\!\! 	
+	\left[
+		\frac{t_{m+1}-t}{\Delta t} A + 
+		\frac{t-t_m}{\Delta t} B 
+	\right] ~dt
+= \frac{\Delta t}{2} (A+B)
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}			
+			\int_{t_m}^{t_{m+1}} \!\!\! (t-t_m) 
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+Puis:
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right)
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}		
+			\frac{(\Delta t)^2}{2}
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+L'intégrale restante :
+\begin{equation}
+\begin{array}{r l}
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+		t \left[
+			\frac{\Delta t-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}~\int_{0}^{\Delta t} \!	
+		\left[
+			\frac{t.\Delta t}{\Delta t} \mathbf{v}_m^+  
+			+\frac{-t^2}{\Delta t} \mathbf{v}_m^+  
+			+\frac{t^2}{\Delta t} \mathbf{v}_{m+1}^- 
+		\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{t^2.\Delta t}{2 \Delta t} \mathbf{v}_m^+  
+			+\frac{-t^3}{3 \Delta t} \mathbf{v}_m^+  
+			+\frac{t^3}{3 \Delta t} \mathbf{v}_{m+1}^- 
+		\right]_{0}^{\Delta t} 
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{2} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+\end{array}
+\end{equation}
+
+Donc:
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right)
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}		
+			\frac{(\Delta t)^2}{2}
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{2} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+et 
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right)
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]		
+			\frac{\Delta t}{2}
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{2} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation} 
+
+soit
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right)
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]		
+			\frac{\Delta t}{2}
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{6} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	  &+  \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+\subsubsection{Matrice}
+\begin{equation}
+\begin{array}{l l}
+		\begin{bmatrix}	   
+		   0 
+		   &K \Delta t
+		   & \left( C \frac{\Delta t}{2}
+		    		- K \frac{(\Delta t)^2}{6}
+		     \right)
+		   & \left(	M
+		    		+ C \frac{\Delta t}{2}
+		    		- K \frac{(\Delta t)^2}{3} 
+		     \right)\\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		= \mathbf{M} \mathbf{v}_m^-
+		 + (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+	
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $\mathbf{w_2} = \mathbf{w}.(t_{m+1}-t)$}
+
+On choisit des fonctions de poids sur l'intervalle : $\mathbf{w_2} = \mathbf{w}.(t_{m+1}-t)$ alors $\mathbf{w_1} = -\mathbf{w}$.
+Ce qui donne :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M} 
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right] \times (-1)
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right) \times (-1)
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right) \times (-1)
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right)  \times (-1)
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}			
+			\int_{t_m}^{t_{m+1}} \!\!\! (t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t_{m+1}-t) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \Delta t
+	   + \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-) \times (-1)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+donc :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 -\mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  -\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 -\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   +\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]		
+			\frac{\Delta t}{2}
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t_{m+1}-t) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &+ \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \Delta t
+	   - \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+
+L'intégrale restante :
+\begin{equation}
+\begin{array}{r l}
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t_{m+1}-t) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+		(\Delta t-t) \left[
+			\frac{\Delta t-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}~\int_{0}^{\Delta t} \!	
+		\left[
+			(\Delta t-t) \mathbf{v}_m^+ + 
+			t. \mathbf{v}_{m+1}^- 
+			\right]	~dt
+		\\&\displaystyle
+		-\mathbf{K}~\int_{0}^{\Delta t} \!
+		- \left[
+			\frac{t.\Delta t}{\Delta t} \mathbf{v}_m^+  
+			+\frac{-t^2}{\Delta t} \mathbf{v}_m^+  
+			+\frac{t^2}{\Delta t} \mathbf{v}_{m+1}^- 
+		\right] 	
+		~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K} \frac{(\Delta t)^2}{2}
+		  \left[
+			\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+		  \right]
+		\\
+		&\displaystyle
+		+\mathbf{K}
+		\left[
+			\frac{t^2.\Delta t}{2 \Delta t} \mathbf{v}_m^+  
+			+\frac{-t^3}{3 \Delta t} \mathbf{v}_m^+  
+			+\frac{t^3}{3 \Delta t} \mathbf{v}_{m+1}^- 
+		\right]_{0}^{\Delta t} 
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K} \frac{(\Delta t)^2}{2}
+		  \left[
+			\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+		  \right]
+		\\
+		&\displaystyle	    
+	    +\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{2} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right] 
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K} \frac{(\Delta t)^2}{2}
+		  \left[
+		    \mathbf{v}_{m+1}^- 
+		  \right]
+		\\
+		&\displaystyle	    
+	    +\mathbf{K}
+		\left[ 
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	=&\displaystyle	    
+	    +\mathbf{K}
+		\left[ 
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^-
+			-\frac{(\Delta t)^2}{2} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	=&\displaystyle	    
+	    +\mathbf{K}
+		\left[ 
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{6} \mathbf{v}_{m+1}^-
+		\right]
+\end{array}
+\end{equation}
+
+alors :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 -\mathbf{M}
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right]
+	\\ 
+	  &\displaystyle
+	  -\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	 -\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right)
+	\\
+	  &\displaystyle
+	   +\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]		
+			\frac{\Delta t}{2}
+	\\
+	&\displaystyle	    
+	    +\mathbf{K}
+		\left[ 
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{6} \mathbf{v}_{m+1}^-
+		\right]
+	\\
+	  &+ \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \Delta t
+	   - \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0	
+\end{array}
+\end{equation}
+
+\subsubsection{Matrice}
+\begin{equation}
+\begin{array}{l l}
+		\begin{bmatrix}	   
+		   0
+		   &0
+		   & \left( - C \frac{\Delta t}{2}
+		    		- K \frac{(\Delta t)^2}{3}
+		     \right)
+		   & \left(	- M
+		    		- C \frac{\Delta t}{2}
+		    		- K \frac{(\Delta t)^2}{6} 
+		     \right)\\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		= - \mathbf{M} \mathbf{v}_m^-
+		  + \mathbf{K} \mathbf{u}_m^- \Delta t
+		  - (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+	
+\end{array}
+\end{equation}
+
+En changeant de signe
+\begin{equation}
+\begin{array}{l l}
+		\begin{bmatrix}	   
+		   0
+		   &0
+		   & \left(   C \frac{\Delta t}{2}
+		    		+ K \frac{(\Delta t)^2}{3}
+		     \right)
+		   & \left(	  M
+		    		+ C \frac{\Delta t}{2}
+		    		+ K \frac{(\Delta t)^2}{6} 
+		     \right)\\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		=   \mathbf{M} \mathbf{v}_m^-
+		  - \mathbf{K} \mathbf{u}_m^- \Delta t
+		  + (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+	
+\end{array}
+\end{equation}
+
+
+\subsection{Fonction de poids : $\mathbf{w_2} = \mathbf{w}.(t-t_m-\Delta t/2)$}
+
+On choisit des fonctions de poids sur l'intervalle : $\mathbf{w_2} = \mathbf{w}.(t-t_m-\Delta t/2)$ alors $\mathbf{w_1} = \mathbf{w}$.
+Ce qui donne :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M} 
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right] 
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &+\displaystyle
+	    \mathbf{K}
+	    	\frac{\left[ \mathbf{u}_{m+1}^- 
+	    		- \mathbf{u}_m^+ \right]    }{\Delta t}			
+			\int_{t_m}^{t_{m+1}} \!\!\! (t-t_m-\Delta t/2) ~dt
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m-\Delta t/2) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle
+	   + \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \frac{-\Delta t}{2}
+	   + \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-) 
+	~~~~=0	
+\end{array}
+\end{equation}
+
+Donc :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M} 
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right] 
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m-\Delta t/2) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &- \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \frac{\Delta t}{2}
+	   + \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-) 
+	~~~~=0	
+\end{array}
+\end{equation}
+
+L'intégrale restante :
+\begin{equation}
+\begin{array}{r l}
+	  &\displaystyle	    
+	    -\mathbf{K}~\int_{t_m}^{t_{m+1}} \!\!\! 	
+		(t-t_m-\Delta t/2) \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	 =&\displaystyle	    
+	    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+		(t-\Delta t/2) \left[
+			\frac{\Delta t - t}{\Delta t} \mathbf{v}_m^+ + 
+			\frac{t}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+	\\
+	=&\displaystyle	    
+		    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+			t \left[
+				\frac{\Delta t - t}{\Delta t} \mathbf{v}_m^+ + 
+				\frac{t}{\Delta t} \mathbf{v}_{m+1}^- 
+				\right] ~dt
+		\\
+		 &\displaystyle	    
+		    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+			- \frac{\Delta t}{2} \left[
+				\frac{\Delta t - t}{\Delta t} \mathbf{v}_m^+ + 
+				\frac{t}{\Delta t} \mathbf{v}_{m+1}^- 
+				\right] ~dt
+	\\
+	=&\displaystyle	    
+		    -\mathbf{K}~\int_{0}^{\Delta t} \!	
+			\left[
+				\frac{t.\Delta t}{\Delta t} \mathbf{v}_m^+  
+				+\frac{-t^2}{\Delta t} \mathbf{v}_m^+  
+				+\frac{t^2}{\Delta t} \mathbf{v}_{m+1}^- 
+			\right] ~dt
+		\\
+		 &\displaystyle	    
+		    -\mathbf{K}~\int_{0}^{\Delta t} \!\!\! 	
+			- \frac{1}{2} \left[
+				(\Delta t - t) \mathbf{v}_m^+ + 
+				t. \mathbf{v}_{m+1}^- 
+				\right] ~dt
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{t^2.\Delta t}{2 \Delta t} \mathbf{v}_m^+  
+			+\frac{-t^3}{3 \Delta t} \mathbf{v}_m^+  
+			+\frac{t^3}{3 \Delta t} \mathbf{v}_{m+1}^- 
+		\right]_{0}^{\Delta t} 
+		\\
+		 &\displaystyle	    
+		    + \frac{1}{2} \mathbf{K} \frac{(\Delta t)^2}{2}
+			 \left[
+				\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+			\right] 
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{2} \mathbf{v}_m^+  
+			-\frac{(\Delta t)^2}{3} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+		\\
+		 &\displaystyle	    
+		    + \mathbf{K} \frac{(\Delta t)^2}{4}
+			 \left[
+				\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+			\right]  
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{(\Delta t)^2}{6} \mathbf{v}_m^+  
+			+\frac{(\Delta t)^2}{3} \mathbf{v}_{m+1}^- 
+		\right]
+		\\
+		 &\displaystyle	    
+		    + \mathbf{K} \frac{(\Delta t)^2}{4}
+			 \left[
+				\mathbf{v}_m^+ + \mathbf{v}_{m+1}^- 
+			\right]  
+	\\
+	=&\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{-(\Delta t)^2}{12} \mathbf{v}_m^+ 
+			+\frac{(\Delta t)^2}{12} \mathbf{v}_{m+1}^- 
+		\right]
+\end{array}
+\end{equation}
+
+Alors :
+\begin{equation}
+\begin{array}{r l}
+	&\displaystyle
+	 \mathbf{M} 
+	    	\left[ \mathbf{v}_{m+1}^- 
+	    		- \mathbf{v}_m^+ \right] 
+	\\ 
+	  &\displaystyle
+	  +\mathbf{C} \frac{\Delta t}{2}
+		\left(
+			\mathbf{v}_m^+ + 
+			\mathbf{v}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	 +\mathbf{K} \frac{\Delta t}{2}
+		\left(
+			\mathbf{u}_m^+ + 
+			\mathbf{u}_{m+1}^- 
+		\right) 
+	\\
+	  &\displaystyle
+	   -\frac{\Delta t}{2}
+		\left(
+			\mathbf{f}_m + 
+			\mathbf{f}_{m+1}
+		\right) 
+	\\
+	  &\displaystyle	    
+	    -\mathbf{K}
+		\left[
+			\frac{-(\Delta t)^2}{12} \mathbf{v}_m^+ 
+			+\frac{(\Delta t)^2}{12} \mathbf{v}_{m+1}^- 
+		\right]
+	\\
+	  &- \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-) \frac{\Delta t}{2}
+	   + \mathbf{M} (\mathbf{v}_m^+ - \mathbf{v}_m^-) 
+	~~~~=0	
+\end{array}
+\end{equation}
+
+\subsubsection{Matrice}
+
+\begin{equation}
+\begin{array}{l l}
+		\begin{bmatrix}	   
+		   0
+		   &K \frac{\Delta t}{2}
+		   & \left( C \frac{\Delta t}{2}
+		    		+ K \frac{(\Delta t)^2}{12}
+		     \right)
+		   & \left(	M
+		    		+ C \frac{\Delta t}{2}
+		    		- K \frac{(\Delta t)^2}{12} 
+		     \right)\\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		= + \mathbf{M} \mathbf{v}_m^-
+		  - \mathbf{K} \mathbf{u}_m^- \frac{\Delta t}{2}
+		  + (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+	
+\end{array}
+\end{equation}
+
+\section{Système des quatre équations}
+\begin{equation}
+\begin{array}{l l}
+		\begin{bmatrix}	   
+			   0 
+			   &\mathbf{K} 
+			   &-\mathbf{K}\frac{\Delta t}{2} 
+			   &-\mathbf{K}\frac{\Delta t}{2} 
+		   \\  
+			   0 
+			   &K \Delta t
+			   & \left( C \frac{\Delta t}{2}
+			    		- K \frac{(\Delta t)^2}{6}
+			     \right)
+			   & \left(	M
+			    		+ C \frac{\Delta t}{2}
+			    		- K \frac{(\Delta t)^2}{3} 
+			     \right)
+		   \\ 
+			   0
+			   &0
+			   & \left(   C \frac{\Delta t}{2}
+			    		+ K \frac{(\Delta t)^2}{3}
+			     \right)
+			   & \left(	  M
+			    		+ C \frac{\Delta t}{2}
+			    		+ K \frac{(\Delta t)^2}{6} 
+			     \right)
+			\\   
+			   0
+			   &K \frac{\Delta t}{2}
+			   & \left(   C \frac{\Delta t}{2}
+			    		+ K \frac{(\Delta t)^2}{12}
+			     \right)
+			   & \left(	M
+			    		+ C \frac{\Delta t}{2}
+			    		- K \frac{(\Delta t)^2}{12} 
+			     \right)\\ 
+		\end{bmatrix}
+		\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+		\end{bmatrix}
+	\\
+		=  
+		\begin{bmatrix}
+			\mathbf{K} \mathbf{u}_m^- 
+		\\
+			\mathbf{M} \mathbf{v}_m^-
+			 + (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+		 \\
+			\mathbf{M} \mathbf{v}_m^-
+			  - \mathbf{K} \mathbf{u}_m^- \Delta t
+			  + (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+		\\
+			  \mathbf{M} \mathbf{v}_m^-
+		  	- \mathbf{K} \mathbf{u}_m^- \frac{\Delta t}{2}
+		  	+ (\mathbf{f}_m + \mathbf{f}_{m+1})  \frac{\Delta t}{2}
+		\end{bmatrix}
+	
+\end{array}
+\end{equation}
+
+\subsection{Problème}
+Il y a un problème puisque la première colonne est nulle. D'autre part les Lignes 2 et 4 sont des combinaisons des lignes 1 et 3. Il n'y a donc que deux équation indépendantes.
+
+\section{Trouver un coefficient non nul pour $\mathbf{u}_m^+$}
+En retournant avant la moindre hypothèse, à l'équation \ref{AvantHypotheseConst} :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{C}\mathbf{v} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+			\mathbf{f} ~dt		
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1}(t_m) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+Je m'intéresse aux membres contenant $\mathbf{u}$.
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+\end{array}
+\end{equation}
+
+Par définition de $\mathbf{u}$, on obtient :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K} \left[
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+			\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+			\right] ~dt
+	\\
+	  &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K} 
+	    			\frac{\left[ \mathbf{u}_{m+1}^- 
+	    				 - \mathbf{u}_m^+ \right]  }{\Delta t}	~dt 
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+\end{array}
+\end{equation}
+
+Je m'intéresse aux membres contenant $\mathbf{u}_m^+$.
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}
+			\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ ~dt
+	\\
+	  &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K} 
+	    			\frac{ - \mathbf{u}_m^+ }{\Delta t}	~dt 
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} \mathbf{u}_m^+ 
+\end{array}
+\end{equation}
+
+donc :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \mathbf{w_1}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  \mathbf{w_2} 	~dt 
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} \mathbf{u}_m^+ 
+\end{array}
+\end{equation}
+
+\subsection{Hypothèse d'homogénéité : $\displaystyle \mathbf{w_1} = \frac{d\mathbf{w_2}}{dt}$}
+Si on choisi $\displaystyle \mathbf{w_1} = \frac{d\mathbf{w_2}}{dt}$ , on peut alors vérifier l'homogénéité des équations, et on obtient :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \frac{d\mathbf{w_2}}{dt}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  \mathbf{w_2} 	~dt 
+	\\
+	  &+ \mathbf{K} \mathbf{u}_m^+  \mathbf{w_2}(t_m)
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $ \mathbf{w_2} = \mathbf{w}.(t-t_m)^2$}
+Si on choisi $ \mathbf{w_2} = \mathbf{w}.(t-t_m)^2$ :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \frac{d(t-t_m)^2}{dt}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t} \mathbf{w}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m)^2 	~dt 
+\end{array}
+\end{equation}
+
+donc :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{t_m}^{t_{m+1}} \!\!\! 2( t - t_m)(t_{m+1}-t) ~dt
+	 	 -\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m)^2 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+En faisant un changement de variable $(t-t_m) \rightarrow t$
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{0}^{\Delta t} \!\!\! 2.t.(\Delta t-t) ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\!  t^2 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{0}^{\Delta t} \!\!\! 2.t.\Delta t ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\! 2.t^2 ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\!  t^2 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  2\Delta t \int_{0}^{\Delta t} \!\!\! t ~dt
+	 	 -3\int_{0}^{\Delta t} \!\!\! t^2 ~dt
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  2\Delta t \frac{(\Delta t)^2}{2} 
+	 	 -3 \frac{(\Delta t)^3}{3}
+	 	\right]
+	 	~~~ = 0
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $ \mathbf{w_2} = \mathbf{w}.(t-t_m)^n$}
+Si on choisi $ \mathbf{w_2} = \mathbf{w}.(t-t_m)^n$ :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \frac{d(t-t_m)^n}{dt}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t} \mathbf{w}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m)^n 	~dt 
+\end{array}
+\end{equation}
+
+donc :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{t_m}^{t_{m+1}} \!\!\! n( t - t_m)^{(n-1)}(t_{m+1}-t) ~dt
+	 	 -\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m)^n 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+En faisant un changement de variable $(t-t_m) \rightarrow t$
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{0}^{\Delta t} \!\!\! n.t^{(n-1)}.(\Delta t-t) ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\!  t^n 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  \int_{0}^{\Delta t} \!\!\! n.t^{(n-1)}.\Delta t ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\! n.t^n ~dt
+	 	 -\int_{0}^{\Delta t} \!\!\!  t^n 	~dt 
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  n\Delta t \int_{0}^{\Delta t} \!\!\! t^{(n-1)} ~dt
+	 	 -(n+1)\int_{0}^{\Delta t} \!\!\! t^n ~dt
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}
+	 	\left[
+	 	  n\Delta t \frac{(\Delta t)^n}{n} 
+	 	 -(n+1) \frac{(\Delta t)^{(n+1)}}{n+1}
+	 	\right]
+	 	~~~ = 0
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $\mathbf{w_2} = \mathbf{w}.(t-t_m- \Delta t/2)^n$}
+
+Si on choisi $\mathbf{w_2} = \mathbf{w}.(t-t_m- \Delta t/2)^n$ :
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \frac{d(t-t_m- \Delta t/2)^n}{dt}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t} \mathbf{w}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m- \Delta t/2)^n 	~dt 
+	\\
+	  &+ \mathbf{K} \mathbf{u}_m^+  \mathbf{w_2}(t_m)
+\end{array}
+\end{equation}
+
+donc :
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		&\left[ \displaystyle
+	 	  		\int_{t_m}^{t_{m+1}} \!\!\! 
+	 	  			n(t-t_m- \Delta t/2)^{(n-1)}(t_{m+1}-t) ~dt
+	 	  	\right.
+	 	\\&	& \displaystyle
+	 	 		-\int_{t_m}^{t_{m+1}} \!\!\!  (t-t_m- \Delta t/2)^n 	~dt
+	 	\\&	&\left. + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+En faisant un changement de variable $(t-t_m- \Delta t/2) \rightarrow t$
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		&\left[ \displaystyle
+	 	  		\int_{-\Delta t/2}^{\Delta t/2} \!\!\! 
+	 	  			n.t^{(n-1)}(\Delta t/2-t) ~dt
+	 	  	\right.
+	 	\\&	& \displaystyle
+	 	 		-\int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt
+	 	\\&	&\left. + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		&\left[ \displaystyle
+	 	  		n.\Delta t/2.\int_{-\Delta t/2}^{\Delta t/2} \!\!\! 
+	 	  			t^{(n-1)} ~dt
+	 	  	\right.
+	 	\\&	& \displaystyle
+	 	 		- n \int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt
+	 	\\&	& \displaystyle
+	 	 		-\int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt
+	 	\\&	&\left. + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\subsubsection{$n$ est impaire}
+Si $n$ est impaire alors la fonction $t^n$ est impaire, donc son intégrale sur un domaine centré en zéro est nulle
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		&\left[ \displaystyle
+	 	  		n.\Delta t/2.\int_{-\Delta t/2}^{\Delta t/2} \!\!\! 
+	 	  			t^{(n-1)} ~dt
+	 	  			 + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	  		n.\Delta t/2. 
+	 	  		\left(
+	 	  			\frac{\left( \displaystyle\frac{\Delta t}{2} \right)^n}{n} 
+	 	  			-\frac{\left(-\displaystyle\frac{\Delta t}{2}\right)^n}{n} 
+	 	  		\right)
+	 	  			 + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	  		n.\Delta t/2. 
+	 	  		\left(
+	 	  			\frac{\left( \displaystyle\frac{\Delta t}{2} \right)^n}{n} 
+	 	  			+\frac{\left(\displaystyle\frac{\Delta t}{2}\right)^n}{n} 
+	 	  		\right)
+	 	  			 - \Delta t .(\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	  		\Delta t/2. 
+	 	  		\left(
+	 	  			\left( \displaystyle\frac{\Delta t}{2} \right)^n
+	 	  			+\left(\displaystyle\frac{\Delta t}{2}\right)^n 
+	 	  		\right)
+	 	  			 - \Delta t .(\Delta t/2)^n
+	 	\right]~~~=0
+\end{array}
+\end{equation}
+
+\subsubsection{$n$ est paire}
+Si $n$ est paire alors la fonction $t^{n-1}$ est impaire, donc son intégrale sur un domaine centré en zéro est nulle
+
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	 		- n \int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt 	
+	 	 		-\int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt
+	 	 + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	 		- (n+1) \int_{-\Delta t/2}^{\Delta t/2} \!\!\!  t^n 	~dt
+	 	 + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	 		- \frac{n+1}{n+1} \left(\left( \displaystyle\frac{\Delta t}{2} \right)^{n+1} 
+	 	  		\!\!\!\!\!\!-\left(\displaystyle\frac{-\Delta t}{2}\right)^{n+1} \right)
+	 	 + \Delta t .(-\Delta t/2)^n
+	 	\right]
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l l}
+	\forall \mathbf{w}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} \mathbf{w}	 	
+	 		\left[ \displaystyle
+	 	 		- \left(\left( \displaystyle\frac{\Delta t}{2} \right)^{n+1} 
+	 	  		\!\!\!\!\!\!+\left(\displaystyle\frac{\Delta t}{2}\right)^{n+1} \right)
+	 	 + \Delta t .(\Delta t/2)^n
+	 	\right] = 0
+\end{array}
+\end{equation}
+
+\subsection{Fonction de poids : $\mathbf{w_2} = e^t$}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_2}
+	&\displaystyle
+	 \mathbf{K} \frac{\mathbf{u}_m^+}{\Delta t} 
+	 	\int_{t_m}^{t_{m+1}} \!\!\! \frac{d\mathbf{w_2}}{dt}		
+			(t_{m+1}-t) ~dt
+	\\
+	  &\displaystyle	
+	   - \mathbf{K} \frac{ \mathbf{u}_m^+ }{\Delta t}
+	   		\int_{t_m}^{t_{m+1}} \!\!\!  \mathbf{w_2} 	~dt 
+	\\
+	  &+ \mathbf{K} \mathbf{u}_m^+  \mathbf{w_2}(t_m)
+\end{array}
+\end{equation}
+
+\section{Abandon de l'hypothèse $\displaystyle \mathbf{w_1} = \frac{d\mathbf{w_2}}{dt}$}
+
+Retour en \ref{AvantHypotheseConst}.
+
+\begin{equation}
+\begin{array}{r l}
+	\forall \mathbf{w_1},\forall \mathbf{w_2}
+	&\displaystyle
+	 \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{M}\mathbf{\dot{v}} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{C}\mathbf{v} ~dt
+	 +\int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+		\mathbf{K}\mathbf{u} ~dt
+	\\
+	  &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	\mathbf{w_1}
+			\mathbf{f} ~dt		
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	\mathbf{w_2} \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ \mathbf{w_2}(t_m) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  \mathbf{w_1}(t_m) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	~~~~=0
+\end{array}
+\end{equation}
+
+\subsection{Hypothèse de fonctions de poids affine}
+
+
+\begin{equation}
+\begin{array}{r l}
+	\forall~a,~b,~c \text{ et }d
+	&\displaystyle
+		 \int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{M}\mathbf{\dot{v}} ~dt
+		 +\int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{C}\mathbf{v} ~dt
+	\\ &\displaystyle
+		 +\int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{K}\mathbf{u} ~dt
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{f} ~dt	
+	\\ &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(c.t+d) \mathbf{K}\mathbf{\dot{u}}~dt 
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(c.t+d) \mathbf{K}     \mathbf{v} ~dt
+	\\
+	  &+ (c.t_m+d) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  (a.t_m+b) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	\\&=0
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{r l}
+	\forall~a,b,c \text{ et }d
+	&\displaystyle
+		 \int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{M}\frac{\mathbf{v}^-_{m+1} - \mathbf{v}^+_m}
+							{\Delta t} ~dt
+	\\ &\displaystyle
+		 +\int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{C}
+				\left[
+				\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+				\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+				\right] ~dt
+	\\ &\displaystyle
+		 +\int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{K}
+				\left[
+				\frac{t_{m+1}-t}{\Delta t} \mathbf{u}_m^+ + 
+				\frac{t-t_m}{\Delta t} \mathbf{u}_{m+1}^- 
+				\right] ~dt
+	\\ &\displaystyle
+	   - \int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+				\left[
+				\frac{t_{m+1}-t}{\Delta t} \mathbf{f}_m + 
+				\frac{t-t_m}{\Delta t} \mathbf{f}_{m+1} 
+				\right] ~dt
+	\\ &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(c.t+d) \mathbf{K}\frac{\mathbf{u}^-_{m+1} - \mathbf{u}^+_m}
+	    							{\Delta t}~dt 
+	\\ &\displaystyle
+	    -\int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(c.t+d) \mathbf{K}
+				\left[
+				\frac{t_{m+1}-t}{\Delta t} \mathbf{v}_m^+ + 
+				\frac{t-t_m}{\Delta t} \mathbf{v}_{m+1}^- 
+				\right] ~dt
+	\\
+	  &+ (c.t_m+d) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  (a.t_m+b) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	\\&=0
+\end{array}
+\end{equation}
+
+On utilise le résultat obtenu précédemment :
+\begin{equation}
+\int_{t_m}^{t_{m+1}} \!\!\! 	
+	\left[
+		\frac{t_{m+1}-t}{\Delta t} A + 
+		\frac{t-t_m}{\Delta t} B 
+	\right] ~dt
+= \frac{\Delta t}{2} (A+B)
+\end{equation}
+
+Calculons :
+\begin{equation}
+\begin{array}{r l}
+&\displaystyle\int_{t_m}^{t_{m+1}} \!\!\! 	
+	t.\left[
+		\frac{t_{m+1}-t}{\Delta t} A + 
+		\frac{t-t_m}{\Delta t} B 
+	\right] ~dt
+\\ =&\displaystyle
+	\int_{0}^{\Delta t} \!\!\! 	
+		(t+t_m).\left[
+			\frac{\Delta t-t}{\Delta t} A + 
+			\frac{t}{\Delta t} B 
+		\right] ~dt
+\\ =&\displaystyle
+	\int_{0}^{\Delta t} \!\!\! 	
+		t.\left[
+			\frac{\Delta t-t}{\Delta t} A + 
+			\frac{t}{\Delta t} B 
+		\right] ~dt
+	+t_m\int_{0}^{\Delta t} \!\!\! 	
+		\left[
+			\frac{\Delta t-t}{\Delta t} A + 
+			\frac{t}{\Delta t} B 
+		\right] ~dt
+\\ =&\displaystyle
+	\int_{0}^{\Delta t} \!\!\! 	
+		t.\left[
+			\frac{\Delta t-t}{\Delta t} A + 
+			\frac{t}{\Delta t} B 
+		\right] ~dt
+	+t_m \frac{\Delta t}{2} (A+B)
+\\ =&\displaystyle
+	\int_{0}^{\Delta t} \!\! 	
+		\left[
+			\frac{t.\Delta t}{\Delta t} A -
+			\frac{t^2}{\Delta t} A + 
+			\frac{t^2}{\Delta t} B 
+		\right] dt
+	+t_m \frac{\Delta t}{2} (A+B)
+\\ =&\displaystyle
+		\left[
+			\frac{t^2.\Delta t}{2\Delta t} A -
+			\frac{t^3}{3\Delta t} A + 
+			\frac{t^3}{3\Delta t} B 
+		\right]_{0}^{\Delta t} 
+	+t_m \frac{\Delta t}{2} (A+B)
+\\ =&\displaystyle
+		\frac{(\Delta t)^2}{3}\left(
+			\frac{1}{2} A + B 
+		\right)
+	+t_m \frac{\Delta t}{2} (A+B)
+\end{array}
+\end{equation}
+
+Alors :
+\begin{equation}
+\begin{array}{r l}
+	\!\!\!\!\!\! \forall~a,b,c \text{ et }d
+	&\displaystyle
+		 \int_{t_m}^{t_{m+1}} \!\!\! 	(a.t+b)
+			\mathbf{M}\frac{\mathbf{v}^-_{m+1} - \mathbf{v}^+_m}
+							{\Delta t} ~dt
+	\\ &+\displaystyle
+		a ~\mathbf{C} \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{v}_m^+ + \mathbf{v}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-) 
+		\right]
+	\\ &+\displaystyle
+		 b~ \mathbf{C}~ 
+		 	\frac{\Delta t}{2}  (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-)
+	\\ &+\displaystyle
+		a ~\mathbf{K} 
+		\left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{u}_m^+ + \mathbf{u}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{u}_m^+ + \mathbf{u}_{m+1}^-) 
+		\right]
+	\\ &+\displaystyle
+		 b~ \mathbf{K}~ \frac{\Delta t}{2}  (\mathbf{u}_m^+ + \mathbf{u}_{m+1}^-)
+	\\ &-\displaystyle
+		a \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\ &-\displaystyle
+		 b~ \frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	\\ &\displaystyle	
+	   + \int_{t_m}^{t_{m+1}} \!\!\! 
+	    	(c.t+d) \mathbf{K}\frac{\mathbf{u}^-_{m+1} - \mathbf{u}^+_m}
+	    							{\Delta t}~dt 
+	\\ &-\displaystyle
+		c ~\mathbf{K} \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{v}_m^+ + \mathbf{v}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-) 
+		\right]
+	\\ &-\displaystyle
+		 d~ \mathbf{K}~ \frac{\Delta t}{2}  (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-)
+	\\
+	  &+ (c.t_m+d) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  (a.t_m+b) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	\\&=0
+\end{array}
+\end{equation}
+
+Et si on calcule les intégrales restantes :
+\begin{equation}
+\begin{array}{r l}
+	\!\!\!\!\!\! \forall~a,b,c \text{ et }d
+	&\displaystyle
+	\mathbf{M}\frac{\mathbf{v}_{m+1}^- - \mathbf{v}^+_m}{\Delta t}
+		\left[	a\frac{t_{m+1}^2 - t_m^2}{2} + b \Delta t
+		\right]
+	\\ &+\displaystyle
+		a ~\mathbf{C} \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{v}_m^+ + \mathbf{v}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-) 
+		\right]
+	\\ &+\displaystyle
+		 b~ \mathbf{C}~ \frac{\Delta t}{2}  (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-)
+	\\ &+\displaystyle
+		a ~\mathbf{K} \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{u}_m^+ + \mathbf{u}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{u}_m^+ + \mathbf{u}_{m+1}^-) 
+		\right]
+	\\ &+\displaystyle
+		 b~ \mathbf{K}~ \frac{\Delta t}{2}  (\mathbf{u}_m^+ + \mathbf{u}_{m+1}^-)
+	\\ &-\displaystyle
+		a \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\ &-\displaystyle
+		 b~ \frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	\\ &+\displaystyle	
+	\mathbf{K}\frac{\mathbf{u}^-_{m+1} - \mathbf{u}^+_m}{\Delta t}
+	    \left[	c\frac{t_{m+1}^2 - t_m^2}{2} + d \Delta t
+		\right]
+	\\ &-\displaystyle
+		c ~\mathbf{K} \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{v}_m^+ + \mathbf{v}_{m+1}^- \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-) 
+		\right]
+	\\ &-\displaystyle
+		 d~ \mathbf{K}~ \frac{\Delta t}{2}  (\mathbf{v}_m^+ + \mathbf{v}_{m+1}^-)
+	\\
+	  &+ (c.t_m+d) \mathbf{K} (\mathbf{u}_m^+ - \mathbf{u}_m^-)
+	   +  (a.t_m+b) \mathbf{M}(\mathbf{v}_m^+ - \mathbf{v}_m^-)
+	\\&=0
+\end{array}
+\end{equation}
+
+\section{Système complet}
+
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   0
+		   &0
+		   &-\frac{\mathbf{M}}{\Delta t}
+		   		\left[ a\frac{t_{m+1}^2 - t_m^2}{2} + b \Delta t \right]
+		   &\frac{\mathbf{M}}{\Delta t}
+		   		\left[ a\frac{t_{m+1}^2 - t_m^2}{2} + b \Delta t \right]
+		 \\    
+		   +0
+		   &+0
+		   &+a~\mathbf{C}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &+a~\mathbf{C}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		 \\    
+		   +0
+		   &+0
+		   &+b~\mathbf{C} \frac{\Delta t}{2}
+		   &+b~\mathbf{C} \frac{\Delta t}{2}
+		 \\    
+		   +a~\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &+a~\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   &+0
+		   &+0
+		 \\    
+		   +b~\mathbf{K} \frac{\Delta t}{2} 
+		   &+b~\mathbf{K} \frac{\Delta t}{2} 
+		   &+0
+		   &+0
+		 \\    
+		   -\frac{\mathbf{K}}{\Delta t}
+		   		\left[ c\frac{t_{m+1}^2 - t_m^2}{2} + d \Delta t \right]
+		   &+\frac{\mathbf{K}}{\Delta t}
+		   		\left[ c\frac{t_{m+1}^2 - t_m^2}{2} + d \Delta t \right]
+		   &+0
+		   &+0
+		 \\    
+		   +0
+		   &+0
+		   &-c~\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &-c~\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		 \\    
+		   +0
+		   &+0
+		   &-d~\mathbf{K} \frac{\Delta t}{2}
+		   &-d~\mathbf{K} \frac{\Delta t}{2}
+		 \\    
+		   +\mathbf{K} (c.t_m + d)
+		   &+0
+		   &+\mathbf{M} (a.t_m + b)
+		   &+0
+	\end{bmatrix}
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= 
+	     (c.t_m+d) \mathbf{K} \mathbf{u}_m^-
+	   + (a.t_m+b) \mathbf{M} \mathbf{v}_m^-
+	\\ \phantom{=} +\displaystyle
+		a \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\ \phantom{=} +\displaystyle
+		 b~ \frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	
+\end{array}
+\end{equation}
+
+
+
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K} \left[
+			   a \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   		\right)
+			   +b \frac{\Delta t}{2} 
+			   -\left( c\frac{t_{m+1}^2 - t_m^2}{2\Delta t} + d \right)
+			   + (c.t_m + d)
+			\right]
+		\\   
+		   \mathbf{K} \left[
+			   a \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   		\right)
+			   +b \frac{\Delta t}{2} 
+			   + \left( c\frac{t_{m+1}^2 - t_m^2}{2 \Delta t} + d \right)
+			\right]
+		\\   
+		   -\mathbf{M}
+		   		\left( a\frac{t_{m+1}^2 - t_m^2}{2\Delta t} + b \right)
+		   +a\mathbf{C}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   +b\mathbf{C} \frac{\Delta t}{2}
+		   -c\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   -d\mathbf{K} \frac{\Delta t}{2}
+		   +\mathbf{M} (a.t_m + b)
+		\\   
+		   \mathbf{M}
+		   		\left( a\frac{t_{m+1}^2 - t_m^2}{2\Delta t} + b \right)
+		   +a\mathbf{C}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   +b\mathbf{C} \frac{\Delta t}{2}
+		   -c\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   -d\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= 
+	     (c.t_m+d) \mathbf{K} \mathbf{u}_m^-
+	   + (a.t_m+b) \mathbf{M} \mathbf{v}_m^-
+	\\ \phantom{=} +\displaystyle
+		a \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\ \phantom{=} +\displaystyle
+		 b~ \frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	
+\end{array}
+\end{equation}
+
+
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K} \left[
+			   a \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   		\right)
+			   +b \frac{\Delta t}{2} 
+			   - c\frac{t_{m+1}^2 - t_m^2}{2\Delta t} 
+			   + c.t_m 
+			\right]
+		\\   
+		   \mathbf{K} \left[
+			   a \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   		\right)
+			   +b \frac{\Delta t}{2} 
+			   +\left( c\frac{t_{m+1}^2 - t_m^2}{2\Delta t} + d \right)
+			\right]
+		\\   
+		   -\mathbf{M} a\frac{t_{m+1}^2 - t_m^2}{2\Delta t} 
+		   +a\mathbf{C}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   +b\mathbf{C} \frac{\Delta t}{2}
+		   -c\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   -d\mathbf{K} \frac{\Delta t}{2}
+		   +\mathbf{M} a.t_m 
+		\\   
+		   \mathbf{M}
+		   		\left( a\frac{t_{m+1}^2 - t_m^2}{2\Delta t} + b \right)
+		   +a\mathbf{C}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   +b\mathbf{C} \frac{\Delta t}{2}
+		   -c\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   -d\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= 
+	     (c.t_m+d) \mathbf{K} \mathbf{u}_m^-
+	   + (a.t_m+b) \mathbf{M} \mathbf{v}_m^-
+	\\ \phantom{=} +\displaystyle
+		a \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\ \phantom{=} +\displaystyle
+		 b~ \frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	
+\end{array}
+\end{equation}
+
+\begin{equation}
+\frac{t_{m+1}^2 - t_m^2}{2 \Delta t}
+=\frac{(t_m + \Delta t)^2 - t_m^2}{2 \Delta t}
+=\frac{2\Delta t.t_m + (\Delta t)^2}{2 \Delta t}
+=\frac{2t_m + \Delta t}{2}
+\end{equation}
+
+\subsection{$a=1$, $b=0$, $c=0$ et $d=0$}
+\begin{equation}
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   \right)
+		\\   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   \right)
+		\\   
+		   -\mathbf{M}
+		   		\frac{\cancel{2t_m} + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} \right)  
+		   +\mathbf{M}.\cancel{t_m}
+		\\   
+		   \mathbf{M}
+		   		\frac{2t_m + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}\right)
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		=  t_m \mathbf{M} \mathbf{v}_m^-
+		 +\displaystyle
+		\left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	
+\end{array}
+\end{equation}
+
+\subsection{$a=0$, $b=1$, $c=0$ et $d=0$}
+\begin{equation}
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   \mathbf{K} \frac{\Delta t}{2} 
+		\\   
+		   \mathbf{C} \frac{\Delta t}{2}
+		\\   
+		   \mathbf{M} 
+		   +\mathbf{C} \frac{\Delta t}{2}
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= \mathbf{M} \mathbf{v}_m^-
+	     +\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	
+\end{array}
+\end{equation}
+
+\subsection{$a=0$, $b=0$, $c=1$ et $d=0$}
+\begin{equation}
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K} \left[
+			   - \frac{2t_m + \Delta t}{2} 
+			   + t_m 
+			\right]
+		\\   
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2}
+		\\   
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		\\
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= t_m \mathbf{K} \mathbf{u}_m^-
+	
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K} \left[
+			   - \frac{\Delta t}{2} 
+			\right]
+		\\   
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2}
+		\\   
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		\\
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= t_m \mathbf{K} \mathbf{u}_m^-
+	
+\end{array}
+\end{equation}
+
+\subsection{$a=0$, $b=0$, $c=0$ et $d=1$}
+\begin{equation}
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   0
+		\\   
+		   \mathbf{K}
+		\\   
+		   -\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   -\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}
+	.
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= \mathbf{K} \mathbf{u}_m^-
+\end{array}
+\end{equation}
+
+\subsection{Matrice complète}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2}
+		   &   
+		   - \mathbf{K} \frac{\Delta t}{2} 
+			&
+		   0
+		\\   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2} 
+		   &
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2} 
+			&
+		   \mathbf{K}
+		\\   
+		   -\mathbf{M}
+		   		\frac{\Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} \right)  
+		   & 
+		    \mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &
+		   -\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   \mathbf{M}
+		   		\frac{2t_m + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}\right)
+		   &
+		   \mathbf{M} 
+		   +\mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   		&
+		   -\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\\
+		= 
+		\begin{bmatrix}
+	   t_m \mathbf{M} \mathbf{v}_m^-
+	   + \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\
+		\mathbf{M} \mathbf{v}_m^-
+		     +\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	\\
+		t_m \mathbf{K} \mathbf{u}_m^-
+	\\
+		\mathbf{K} \mathbf{u}_m^-
+	\end{bmatrix}	
+\end{array}
+\end{equation}
+
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{l }
+	\begin{bmatrix}	   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2}
+		   &   
+		   - \mathbf{K} \frac{\Delta t}{2} 
+			&
+		   0
+		\\   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2} 
+		   &
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2}
+			&
+		   \mathbf{K}
+		\\   
+		   -\mathbf{M}
+		   		\frac{\Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} \right)  
+		   & 
+		    \mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &
+		   -\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   \mathbf{M}
+		   		\frac{2t_m + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}\right)
+		   &
+		   \mathbf{M} 
+		   +\mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   		&
+		   -\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T	=
+	\\
+	\\
+	\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+	\begin{bmatrix}	   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   \right)
+		&   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   \right)
+		&   
+		   -\mathbf{M}
+		   		\frac{\Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} \right)  
+		&   
+		   \mathbf{M}
+		   		\frac{2t_m + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}\right)
+	\\   
+		   \mathbf{K} \frac{\Delta t}{2}
+		&   
+		   \mathbf{K} \frac{\Delta t}{2} 
+		&   
+		   \mathbf{C} \frac{\Delta t}{2}
+		&   
+		   \mathbf{M} 
+		   +\mathbf{C} \frac{\Delta t}{2}
+	\\   
+		   - \mathbf{K} \frac{\Delta t}{2} 
+		&   
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2}
+		&  
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		&
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+	\\	   
+		   0
+		&   
+		   \mathbf{K}
+		&   
+		   -\mathbf{K} \frac{\Delta t}{2}
+		&   
+		   -\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\section{Amélioration du système}
+
+\subsection{système Initial}
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\L_3
+		\\L_4
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2}
+		   &   
+		   - \mathbf{K} \frac{\Delta t}{2} 
+			&
+		   0
+		\\   
+		   \mathbf{K}
+			   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+			   \right)
+			&
+		   \mathbf{K} \frac{\Delta t}{2} 
+		   &
+		   \mathbf{K}
+			   		\frac{2t_m + \Delta t}{2}
+			&
+		   \mathbf{K}
+		\\   
+		   -\mathbf{M}
+		   		\frac{\Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} \right)  
+		   & 
+		   \mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   &
+		   -\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   \mathbf{M}
+		   		\frac{2t_m + \Delta t}{2} 
+		   +\mathbf{C}
+		   		\left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}\right)
+		   &
+		   \mathbf{M} 
+		   +\mathbf{C} \frac{\Delta t}{2}
+		   &
+		   -\mathbf{K}
+		   		(\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   		&
+		   -\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+\subsection{combinaison 1}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\ L_3 + L_2
+		\\L_4
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} (t_m + \Delta t)
+			&
+		   		\mathbf{K}
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	-\mathbf{K}
+			   		(\frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2})
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} (\frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2})
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+\subsection{combinaison 2}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\L_4
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		\mathbf{K}
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	-\mathbf{K}
+			   		(\frac{(\Delta t)^2}{6} 
+			   			+ \frac{t_m.\Delta t}{2}
+			   			-\frac{\Delta t}{2}(t_m + \Delta t))
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} (\frac{(\Delta t)^2}{3} 
+		   						+ \frac{t_m.\Delta t}{2}
+		   						-\frac{\Delta t}{2}(t_m + \Delta t))
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\L_4
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		\mathbf{K}
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+\subsection{combinaison 3}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 + L_1
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		\mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		\mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+\subsection{combinaison 4}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ \displaystyle
+			-\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \frac{ \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} }
+				   { \frac{\Delta t}{2} }.L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		0
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} 
+		   			\left( \frac{2t_m + \Delta t}{2} 
+		   					-\frac{ \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} }{ \frac{\Delta t}{2} }
+		   					\right)
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\ L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\  -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		0
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} 
+		   			\left( \frac{2t_m + \Delta t}{2} 
+		   					-\frac{\Delta t}{3} - t_m 
+		   					\right)
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\ L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\  -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K}
+				   \left( \frac{(\Delta t)^2}{3} + \frac{t_m.\Delta t}{2}
+				   \right)
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		0
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{6} 
+			   				+ \frac{t_m.\Delta t}{2} \right)  
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		\\   
+			   \mathbf{M}
+			   		\frac{2t_m + \Delta t}{2} 
+			   +\mathbf{C}
+			   		\left( \frac{(\Delta t)^2}{3} 
+			   				+ \frac{t_m.\Delta t}{2}\right)
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+				+\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+\subsection{combinaison 5}
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1 - \frac{ \frac{(\Delta t)^2}{6} + \frac{t_m.\Delta t}{2} }
+				   { \frac{\Delta t}{2} }.L_2
+		\\ L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\  -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   0
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K} \frac{(\Delta t)^2}{6}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		0
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2}   
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		\\   
+			   \mathbf{M}
+			   		\left(	\frac{2t_m + \Delta t}{2} 
+			   		 		-\frac{\Delta t}{3} 
+			   		 		- t_m \right)
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+		\\ L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\  -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	   
+			   0
+			&
+		   		\mathbf{K} \frac{\Delta t}{2}
+		   	&   
+		   		0
+			&
+		   		0
+		\\   
+			   \mathbf{K} \frac{(\Delta t)^2}{6}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		0
+			&
+		   		0
+		\\   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2}   
+		   	& 
+		   		\mathbf{C} \frac{\Delta t}{2}
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		\\   
+			   \mathbf{M}	\frac{ \Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+		   	&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}^T
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+		\\ L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\  -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}	     
+			   0 
+			&
+			   \mathbf{K} \frac{(\Delta t)^2}{6}
+		   	&   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2}   
+			&
+			   \mathbf{M}	\frac{ \Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+		\\   
+		   		\mathbf{K} \frac{\Delta t}{2}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{C} \frac{\Delta t}{2}
+			&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Ou en permutant:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_2
+		\\ L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}   
+		   		\mathbf{K} \frac{\Delta t}{2}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{C} \frac{\Delta t}{2}
+			&
+			   \mathbf{M} 
+			   +\mathbf{C} \frac{\Delta t}{2}
+		\\ 	     
+			   0 
+			&
+			   \mathbf{K} \frac{(\Delta t)^2}{6}
+		   	&   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2}   
+			&
+			   \mathbf{M}	\frac{ \Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\subsection{combinaison 6}
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_2 - (L_3 + L_2 - (t_m+\Delta t).L_4)
+		\\L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}   
+		   		\mathbf{K} \frac{\Delta t}{2}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+			   	-\mathbf{K} \frac{(\Delta t)^2}{3} 
+		   	&
+		   		-\mathbf{K} \frac{(\Delta t)^2}{6} 
+		\\ 	     
+			   0 
+			&
+			   \mathbf{K} \frac{(\Delta t)^2}{6}
+		   	&   
+			   -\mathbf{M}
+			   		\frac{\Delta t}{2}   
+			&
+			   \mathbf{M}	\frac{ \Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+
+\subsection{combinaison 7}
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_2 - (L_3 + L_2 - (t_m+\Delta t).L_4)
+		\\L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+			+\frac{(\Delta t)^2}{6} L_4 
+			- L_1 
+			+ \left( \frac{\Delta t}{3} + t_m \right).L_2
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}   
+		   		\mathbf{K} \frac{\Delta t}{2}
+			&
+		   		\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+			   	-\mathbf{K} \frac{(\Delta t)^2}{3} 
+		   	&
+		   		-\mathbf{K} \frac{(\Delta t)^2}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} \frac{(\Delta t)^2}{6}
+		   	&
+		   		-\mathbf{K} \frac{(\Delta t)^3}{12}
+		   	&
+		   		-\mathbf{K} \frac{(\Delta t)^3}{12}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\subsection{combinaison 8}
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  \left( L_2 - (L_3 + L_2 - (t_m+\Delta t).L_4) \right)
+		  	.\frac{2}{\Delta t}
+		\\ \left( L_1 - \left( \frac{\Delta t}{3} + t_m \right).L_2
+					+\frac{(\Delta t)^2}{6} L_4 
+					- L_1 
+					+ \left( \frac{\Delta t}{3} + t_m \right).L_2
+			\right).\frac{6}{(\Delta t)^2}
+			= L_4
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		\mathbf{K}
+		   	&
+			   	-\mathbf{K} \frac{2\Delta t}{3} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{3} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  \left( - L_3 + (t_m+\Delta t).L_4 \right)
+		  	.\frac{2}{\Delta t}
+		\\ L_4
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	\\
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		\mathbf{K}
+		   	&
+			   	-\mathbf{K} \frac{2\Delta t}{3} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{3} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\section{Calcul du second membre}
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  L_1
+		\\ L_2
+		\\ L_3
+		\\ L_4
+	\end{bmatrix}
+	=\\
+	\begin{bmatrix}
+	   t_m \mathbf{M} \mathbf{v}_m^-
+	   + \left[
+			\frac{(\Delta t)^2}{3}
+				\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1} \right)
+			+t_m \frac{\Delta t}{2} (\mathbf{f}_m + \mathbf{f}_{m+1}) 
+		\right]
+	\\
+		\mathbf{M} \mathbf{v}_m^-
+		     +\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+	\\
+		t_m \mathbf{K} \mathbf{u}_m^-
+	\\
+		\mathbf{K} \mathbf{u}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\begin{equation}	
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	\begin{bmatrix}	
+		  \left( - L_3 + (t_m+\Delta t).L_4 \right)
+		  	.\frac{2}{\Delta t}
+		\\ L_4
+		\\ L_3 + L_2 - (t_m+\Delta t).L_4
+		\\ -\frac{(\Delta t)^2}{6} L_4 
+			+ L_1 
+			- \left( \frac{\Delta t}{3} + t_m \right).L_2
+	\end{bmatrix}
+	=\\
+	\begin{bmatrix}	
+		  	\left[
+		  		- \left( t_m \mathbf{K} \mathbf{u}_m^- \right)
+		  		+ (t_m+\Delta t).\left( \mathbf{K} \mathbf{u}_m^-
+		  		  \right)		  		
+		  	\right].\frac{2}{\Delta t}
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( t_m \mathbf{K} \mathbf{u}_m^-
+			  \right)
+			+\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-(t_m+\Delta t).
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6} \left( \mathbf{K} \mathbf{u}_m^- \right)			 
+			+ t_m \mathbf{M} \mathbf{v}_m^-
+				+ \left[
+					\frac{(\Delta t)^2}{3}
+						\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1}
+						\right)
+					+t_m \frac{\Delta t}{2} 
+						(\mathbf{f}_m + \mathbf{f}_{m+1}) 
+				\right]
+					  
+			- \left( \frac{\Delta t}{3} + t_m \right).
+				\left( \mathbf{M} \mathbf{v}_m^-
+		     				+\frac{\Delta t}{2}  
+		     					(\mathbf{f}_m + \mathbf{f}_{m+1})
+		     	\right)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  	\left[
+		  		\Delta t \mathbf{K} \mathbf{u}_m^-
+		  	\right].\frac{2}{\Delta t}
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6} \left( \mathbf{K} \mathbf{u}_m^- \right)
+			 
+			+ \left[
+				\frac{(\Delta t)^2}{3}
+					\left( \frac{1}{2} \mathbf{f}_m + \mathbf{f}_{m+1}
+					\right)
+			\right]
+					  
+			- \frac{\Delta t}{3} .
+				\left( \mathbf{M} \mathbf{v}_m^-
+		     				+\frac{\Delta t}{2}  
+		     					(\mathbf{f}_m + \mathbf{f}_{m+1})
+		     	\right)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  		2 \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6}
+				\mathbf{K} \mathbf{u}_m^- 
+			 
+			+ \frac{(\Delta t)^2}{3}
+					\left( \frac{1}{2} 
+								\mathbf{f}_m 
+							+ \frac{1}{2}\mathbf{f}_{m+1}
+					\right)
+			+ \frac{(\Delta t)^2}{3}  \frac{1}{2}\mathbf{f}_{m+1}
+					  
+			- \frac{\Delta t}{3} .
+				\left( \mathbf{M} \mathbf{v}_m^-
+		     				+\frac{\Delta t}{2}  
+		     					(\mathbf{f}_m + \mathbf{f}_{m+1})
+		     	\right)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  		2 \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6}
+				\mathbf{K} \mathbf{u}_m^- 
+				
+			+ \frac{(\Delta t)^2}{6} \mathbf{f}_{m+1}
+					  
+			- \frac{\Delta t}{3} .  \mathbf{M} \mathbf{v}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+Soit:
+\begin{equation}
+\begin{array}{c}
+	\begin{bmatrix}	
+		  		2 \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6}
+				\left( \mathbf{K} \mathbf{u}_m^- 
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{\Delta t}{3} . \mathbf{M} \mathbf{v}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\section{Système complet final}
+
+\begin{equation}
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		\mathbf{K}
+		   	&
+			   	-\mathbf{K} \frac{2\Delta t}{3} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{3} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		-\mathbf{M}
+			   		\frac{\Delta t}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^3}{12}
+		   		+\mathbf{M} \frac{\Delta t}{6} 
+			   +\mathbf{C} \frac{(\Delta t)^2}{6} 
+	\end{bmatrix}
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\
+	\begin{bmatrix}	
+		  		2 \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\ -\frac{(\Delta t)^2}{6}
+				\left( \mathbf{K} \mathbf{u}_m^- 
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{\Delta t}{3} .  \mathbf{M} \mathbf{v}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+Ou:
+\begin{equation}
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\ =
+	\begin{bmatrix}	
+		  \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K} \mathbf{u}_m^- 
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} \mathbf{v}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+
+\end{document}

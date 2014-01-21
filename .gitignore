@@ -1,3 +1,9 @@
 *~
 /Corbeille/*
 /Resultat*/*
+*.aux
+*.out
+*.gz
+*.toc
+*.log
+*.pdf
