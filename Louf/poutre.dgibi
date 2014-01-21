@@ -1,0 +1,114 @@
+OPTI DIME 3 ELEM SEG2 MODE TRID;
+
+*---------------------DONNEES---------------------*
+*Unites SI
+AMP1 = 100.0 ;
+LON1 = 0.1 ;
+SEC1 = 1.e-4 ;
+IY1 = 10.0 ;
+IZ1 = 10.0 ;
+NUP = 0.3 ;
+YOP = 2.1E11 ;
+RHOP = 7800.0 ;
+*--------------------GEOMETRIE--------------------*
+P1 = 0.   0. 0. ;
+P2 = LON1 0. 0. ;
+L1 = D 100 P1 P2 ; TRAC L1 ;
+*------DEFINITION DU MODELE ET DU MATERIAU--------*
+MOD1 = MODEL L1 MECANIQUE ELASTIQUE POUT ;
+MAT1 = MATER MOD1 YOUN YOP NU NUP RHO RHOP ;
+CAR1 = CARAC MOD1 SECT SEC1 INRY IY1 INRZ IZ1 
+       TORS 1. VECT (0. 1. 0.) ;
+MATTOT = MAT1 ET CAR1 ;
+*--------------CONDITIONS LIMITES-----------------*
+CL1 = BLOQ P1 UY UX RZ ;
+CL2 = BLOQ L1 UZ RX RY ;
+CLTOT= CL1 ET CL2 ;
+*-------MATRICES DE RIGIDITE ET DE MASSE----------*
+RIG1 = RIGI MOD1 MATTOT ;
+RIG1 = RIG1 ET CLTOT ;
+MAS1 = MASS MOD1 MATTOT ;
+*------------EVOLUTION TEMPORELLE-----------------*
+LIS1 = PROG 0. 1 ;
+LIS2 = PROG 0. 1.;
+EVT1 = EVOL MANU T LIS1 G(T) LIS2 ;
+*-----------------CHARGEMENT----------------------*
+FOR1 = FORCE FX AMP1 P2 ;
+CHA1 = CHAR FORC FOR1 EVT1 ;
+VEC1 = VECT FOR1 1.e-4 FX FY FZ ROUGE ;
+TRAC VEC1 L1 ; 
+*---------------TABLE DE DONNEES------------------*
+TAB2 = TABLE;
+TAB2.CHAR = CHA1 ;
+TAB2.RIGI = RIG1 ;
+TAB2.MASS = MAS1 ;
+TAB2.FREQ = 60000. ;
+DT = 1.25E-5;
+TAB2.INST = PROG 0. PAS DT 5E-4;
+TAB2.DEPL = MANU CHPO L1 3 UX 0. UY 0. UZ 0. ; 
+TAB2.VITE = MANU CHPO L1 3 UX 0. UY 0. UZ 0. ; 
+*-------------RESOLUTION PAS A PAS----------------*
+TAB1 = DYNAMIC TAB2 ;
+*-------------------RESULTATS---------------------*
+LT   = PROG ; LUY1 = PROG ; 
+LUY2 = PROG ; LUY3 = PROG ;
+P3 = L1 POIN 3 ; 
+I = 0 ;
+NBB = (DIME TAB2.INST) - 1 ;
+REPETER BOUC1 NBB ;
+  I = I + 1 ;
+  LT = LT ET (PROG (TAB1.I.TEMP)) ;
+  DEP1 = TAB1.I.DEPL ;
+  LUY1 = LUY1 ET (PROG (EXTR DEP1 UX P1));
+  LUY2 = LUY2 ET (PROG (EXTR DEP1 UX P2));
+  LUY3 = LUY3 ET (PROG (EXTR DEP1 UX P3));
+ FIN BOUC1 ;
+EVY1 = EVOL MANU 'TEMPS' LT 'UX(P1)' LUY1 ;
+EVY2 = EVOL MANU 'TEMPS' LT 'UX(P2)' LUY2 ;
+EVY3 = EVOL MANU 'TEMPS' LT 'UX(P3)' LUY3 ;
+DESS EVY1 TITR 'UX POINT P1' MIMA ;
+DESS EVY2 TITR 'UX POINT P2' MIMA ;
+DESS EVY3 TITR 'UX POINT P3' MIMA ;
+*-------------------DEFORMEE----------------------*
+DEP1 = TAB1. 8 .DEPL ;
+DEF0 = DEFO L1 DEP1 0. VERT ;
+DEF1 = DEFO L1 DEP1  ROUGE ;
+TITRE 'DEFORMEE TEMPS T=1 I=80 ' ;
+TRAC (DEF0 ET DEF1) ;
+*
+LREEL1   = PROG 0. 0. 0.;
+SOL1 = VIBRATION 'SIMULTANE' 0. 3 RIG1 MAS1 ;
+MESS ' MODES PROPRES';
+SAUT 2 LIGN;
+*
+FRE2 = TABLE;
+DEP = TABLE;  DEF = TABLE; EVO = TABLE;
+*
+I = 0;
+REPETER BLOC3 5;
+*
+  I = I + 1;
+  FRE2.I = TIRE SOL1 FREQ RANG I;
+  MESS ' MODE ' I;
+  MESS ' ----------';
+  MESS ' Frequence propre calculee  :' FRE2.I 'Hz';
+  SAUT 1 LIGN;
+*
+* Trace facultatif des modes propres
+*
+  SI (NEG GRAPH 'N');
+     DEP.I = TIRE SOL1 DEPL RANG I;
+     DEF0 = DEFO L1 DEP.I 0. ROUGE;
+     DEF.I = DEFO L1 DEP.I VERT;
+     TITR ' Mode propre : Deplacement radial';
+     TRAC (DEF0 ET DEF.I);
+     EVO.I = EVOL VERT CHPO DEP.I UX L1;
+     DESSIN EVO.I;
+  FINSI;
+*
+FIN BLOC3;
+
+
+
+
+*FIN;

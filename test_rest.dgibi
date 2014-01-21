@@ -1,0 +1,292 @@
+* exploitation du fichier de sauvegarde
+*
+fic1 = 'test_win32.sauv' ;
+fic2 = 'test_win64.sauv' ;
+fic3 = 'test_linux32.sauv' ;
+fic4 = 'test_linux64.sauv' ;
+
+****   fic_local  a modifier selon la plateforme à valider
+
+fic_loc = 'test_win64_local.sauv' ;
+
+
+opti rest fic_loc ;
+rest ;
+
+
+SI (NEG (type fic)( MOT 'MOT') )     ;
+     mess 'fic plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type d) (MOT 'POINT')  );
+     mess 'd plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type su) (MOT 'MAILLAGE')  );
+     mess 'su plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cl) (MOT 'RIGIDITE')  );
+     mess 'cl plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mo)  (MOT 'MMODEL')  );
+     mess 'mo plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mat1) (MOT 'MCHAML')  );
+     mess 'mat plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type li2) (MOT 'LISTREEL')  );
+     mess 'list plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type ev) (MOT 'EVOLUTIO')  );
+     mess 'evol plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cha1) (MOT 'CHARGEME')  );
+     mess 'cha plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type tab1) (MOT 'TABLE')  );
+     mess 'tab plante' ;
+     ERREUR 5 ; 
+FINSI;
+*
+
+opti echo 1 ;
+opti rest fic1 ;
+'MESS' 'test pour windows 32 reference' ;
+rest ;
+
+
+SI (NEG (type fic)( MOT 'MOT') )     ;
+     mess 'fic plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type d) (MOT 'POINT')  );
+     mess 'd plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type su) (MOT 'MAILLAGE')  );
+     mess 'su plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cl) (MOT 'RIGIDITE')  );
+     mess 'cl plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mo)  (MOT 'MMODEL')  );
+     mess 'mo plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mat1) (MOT 'MCHAML')  );
+     mess 'mat plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type li2) (MOT 'LISTREEL')  );
+     mess 'list plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type ev) (MOT 'EVOLUTIO')  );
+     mess 'evol plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cha1) (MOT 'CHARGEME')  );
+     mess 'cha plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type tab1) (MOT 'TABLE')  );
+     mess 'tab plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+opti rest fic2 ;
+'MESS' 'test pour windows 64 reference' ;
+rest ;
+
+
+SI (NEG (type fic)( MOT 'MOT') )     ;
+     mess 'fic plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type d) (MOT 'POINT')  );
+     mess 'd plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type su) (MOT 'MAILLAGE')  );
+     mess 'su plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cl) (MOT 'RIGIDITE')  );
+     mess 'cl plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mo)  (MOT 'MMODEL')  );
+     mess 'mo plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mat1) (MOT 'MCHAML')  );
+     mess 'mat plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type li2) (MOT 'LISTREEL')  );
+     mess 'list plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type ev) (MOT 'EVOLUTIO')  );
+     mess 'evol plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cha1) (MOT 'CHARGEME')  );
+     mess 'cha plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type tab1) (MOT 'TABLE')  );
+     mess 'tab plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+opti rest fic3 ;
+'MESS' 'test pour linux32 reference' ;
+rest ;
+
+
+SI (NEG (type fic)( MOT 'MOT') )     ;
+     mess 'fic plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type d) (MOT 'POINT')  );
+     mess 'd plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type su) (MOT 'MAILLAGE')  );
+     mess 'su plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cl) (MOT 'RIGIDITE')  );
+     mess 'cl plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mo)  (MOT 'MMODEL')  );
+     mess 'mo plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mat1) (MOT 'MCHAML')  );
+     mess 'mat plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type li2) (MOT 'LISTREEL')  );
+     mess 'list plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type ev) (MOT 'EVOLUTIO')  );
+     mess 'evol plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cha1) (MOT 'CHARGEME')  );
+     mess 'cha plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type tab1) (MOT 'TABLE')  );
+     mess 'tab plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+opti rest fic4 ;
+'MESS' 'test pour linux 64 reference' ;
+rest ;
+
+
+SI (NEG (type fic)( MOT 'MOT') )     ;
+     mess 'fic plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type d) (MOT 'POINT')  );
+     mess 'd plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type su) (MOT 'MAILLAGE')  );
+     mess 'su plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cl) (MOT 'RIGIDITE')  );
+     mess 'cl plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mo)  (MOT 'MMODEL')  );
+     mess 'mo plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type mat1) (MOT 'MCHAML')  );
+     mess 'mat plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type li2) (MOT 'LISTREEL')  );
+     mess 'list plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type ev) (MOT 'EVOLUTIO')  );
+     mess 'evol plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type cha1) (MOT 'CHARGEME')  );
+     mess 'cha plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+SI (NEG (type tab1) (MOT 'TABLE')  );
+     mess 'tab plante' ;
+     ERREUR 5 ; 
+FINSI;
+
+fin;
+
+
+

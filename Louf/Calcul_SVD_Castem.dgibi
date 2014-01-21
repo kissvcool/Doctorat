@@ -1,0 +1,176 @@
+* ----------------------------------------------------------
+* 
+* Procedure permettant la selection des modes 
+* non colineaires dans la base
+* 
+* F. Louf
+* Le 29/03/10 : création
+* 
+* ----------------------------------------------------------
+* 
+* Entree : 
+*           
+*           SS1 = Table des matrices assemblees ou non du modele pour extraire 
+*                   - le maillage
+*                   - les noms des inconnues primales
+*          BAS1 = Table contenant les modes dynamiques et statiques eventuellement 
+*                 redondants 
+*           N1D = Nombre de modes dynamiques 
+*           N1S = Nombre de modes statiques
+* 
+* Sortie : 
+*          BAS0 = Table contenant les modes  orthogonaux au sens de K
+* 
+DEBPROC CALSVD SS1 BAS1 N1D N1S ; 
+* 
+  MESSAGE ' ============== DEBUT DE CALSVD =================' ;
+* 
+* On teste s'il existe des modes statiques
+* 
+SI (N1S EGA 0) ; 
+  MESSAGE ' ================ FIN DE CALSVD =================' ;
+  QUIT CALSVD ;
+FINSI ; 
+* 
+* Matrice de rigidite complete
+* 
+K1 = SS1 . 0 . 'K' ;
+* 
+* Initialisation de la matrice P a 0
+* Et de la matrice T(P).P
+* 
+MAT1P = TABLE ;
+MAT1PP = TABLE ; 
+REPE BCL1M (N1S+N1D) ;
+* 
+  MAT1P . &BCL1M = TABLE ;
+  MAT1PP . &BCL1M = TABLE ; 
+  REPE BCL2M (N1S+N1D) ;
+    MAT1P . &BCL1M . &BCL2M = 0. ;
+    MAT1PP . &BCL1M . &BCL2M = 0. ;
+  FIN BCL2M ;
+  
+FIN BCL1M ;  
+* 
+* Calcul des raideurs modales Phi.K.Phi 
+* 
+REPE BCL1M N1D ;
+* 
+  U1 = BAS1 . 'MODES' . &BCL1M . 'DEFORMEE_MODALE' ;
+  MAT1P . &BCL1M . &BCL1M = XTMX U1 K1 ;
+* 
+FIN BCL1M ;
+* 
+* Calcul des raideurs modales (non diag) Psi.K.Psi
+* 
+REPE BCL1M N1S ;
+* 
+  NUM1 = &BCL1M + N1D ;
+  U1 = BAS1 . 'MODES' . NUM1 . 'DEFORMEE_MODALE' ;
+  N2S = N1S - &BCL1M + 1; 
+* 
+  REPE BCL2M N2S ; 
+* 
+    NUM2 = NUM1 + &BCL2M - 1 ;
+    U2 = BAS1 . 'MODES' . NUM2 . 'DEFORMEE_MODALE' ;
+    MAT1P . NUM1 . NUM2 = YTMX U1 U2 K1 ;
+    MAT1P . NUM2 . NUM1 = MAT1P . NUM1 . NUM2 ;
+* 
+  FIN BCL2M ;
+* 
+FIN BCL1M ;
+* 
+* Calcul des raideurs modales (non carre) Phi.K.Psi
+* 
+REPE BCL1M N1D ;
+* 
+  U1 = BAS1 . 'MODES' . &BCL1M . 'DEFORMEE_MODALE' ; 
+* 
+  REPE BCL2M N1S ; 
+* 
+    NUM2 = N1D + &BCL2M  ;
+    U2 = BAS1 . 'MODES' . NUM2 . 'DEFORMEE_MODALE' ;
+    MAT1P . &BCL1M . NUM2   = YTMX U1 U2 K1 ;
+    MAT1P . NUM2 . &BCL1M = MAT1P .  &BCL1M . NUM2 ;
+* 
+  FIN BCL2M ;
+* 
+FIN BCL1M ;
+* 
+* Remplissage de la matrice T(P).P
+* Construction de la liste LIS1K en même temps
+* 
+LIS1K = PROG ;
+* 
+REPE BCL1M (N1S+N1D) ;
+* 
+  REPE BCL2M (N1S+N1D) ;
+*   
+    REPE BCL3M (N1S+N1D) ;
+*    
+      MAT1PP . &BCL1M . &BCL2M  = 
+      MAT1PP . &BCL1M . &BCL2M + 
+     ((MAT1P . &BCL1M . &BCL3M)*(MAT1P . &BCL3M . &BCL2M)) ;
+* 
+    FIN BCL3M ;
+* 
+    LIS1K = LIS1K ET (PROG MAT1PP . &BCL1M . &BCL2M) ;
+* 
+  FIN BCL2M ;
+*   
+FIN BCL1M ; 
+* 
+* Construction de la liste LIS1M (pour M diagonale unitaire)
+* 
+NUM1 = ((N1S+N1D)**2)-(N1S+N1D) ;
+LIS1M = PROG NUM1*0. ;
+REPE BCL1M (N1S+N1D) ;
+* 
+  POS1 = (&BCL1M-1)*(N1S+N1D) + &BCL1M  ;
+  LIS1M = INSE LIS1M POS1 1.0 ;
+* 
+FIN BCL1M ;
+LIST LIS1M ;
+LIST LIS1K ;
+* 
+* Definition des matrices M et K
+* 
+SI ((VALE 'DIME') > 2) ;
+  MAI1 = 0. 0. 0. ;
+SINON ;
+  MAI1 = 0. 0. ;
+FINSI ;
+MAI1 = MANU POI1 MAI1  ;
+* 
+LIS1U = MOTS ;
+LIS1F = MOTS ;
+REPE BCL1M (N1D+N1S) ;
+  COU1 = CHAIN 'U' &BCL1M ;
+  COF1 = CHAIN 'F' &BCL1M ;
+  LIS1U = LIS1U ET (MOTS COU1) ;
+  LIS1F = LIS1F ET (MOTS COF1) ;
+FIN BCL1M ;
+* 
+RIG1 = MANU 'RIGIDITE' 'TYPE' 'RIGIDITE' MAI1 LIS1U 
+'DUAL' LIS1F LIS1K ; 
+* 
+MAS1 = MANU 'RIGIDITE' 'TYPE' 'MASSE'    MAI1 LIS1U 
+'DUAL' LIS1F LIS1M ;  
+* 
+* Calcul des valeurs propres de K 
+* 
+BAS0 = VIBR 'INTERVALLE' 1E-15 1E15 'BASSE' (N1D+N1S) RIG1 MAS1 'MULT' 'TBAS' ; 
+* 
+LIST BAS0 . 'MODES' ;
+N0 = (DIME BAS0 . 'MODES') - 2 ;
+MESS 'On a calcule ' N0 'modes' ;
+REPE BCL1M N0 ;
+* 
+  LIST BAS0 . 'MODES' . &BCL1M . 'FREQUENCE' ; 
+* 
+FIN BCL1M ;
+* 
+MESSAGE ' ================ FIN DE CALSVD =================' ;
+* 
+FINPROC BAS1  ; 
+* 

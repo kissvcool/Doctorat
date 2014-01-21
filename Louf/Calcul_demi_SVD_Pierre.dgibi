@@ -1,0 +1,164 @@
+* ----------------------------------------------------------
+* 
+* Procedure permettant la selection des modes 
+* non colineaires dans la base
+* 
+* F. Louf
+* Le 29/03/10 : création
+* 
+* ----------------------------------------------------------
+* 
+* Entree : 
+*           
+*           A = Matrice sous forme de liste
+*           n = nombre de lignes de A / Nombre de noeuds
+*           m = nombre de colonnes de A / Nombre de pas temps
+*			ModHaut = Borne haute de l'intervalle de recherche de mode
+*			ModBas  = Borne basse de l'intervalle de recherche de mode
+*	    avec n <EG m (au pire utiliser la transposee)
+* 
+* Sortie : 
+*      	SVD = Table contenant les modes 
+*	   	SVD.V = Table des vecteurs singuliers a droite
+*	   	SVD.U = Table des vecteurs singuliers a gauche
+*	   	SVD.S = Liste des valeurs singulières
+* 
+DEBPROC SVD LIS1A n m ModHaut ModBas; 
+* 
+MESSAGE ' ============== DEBUT DE SVD =================' ;
+
+* Verification longueur de A = n*m
+	SI ((DIME LIS1A) EGA (n*m)) ; 
+	SINON ;
+	MESSAGE ' ===== FIN DE SVD ======== MAUVAISES DIM =====' ;
+	QUIT SVD ;
+	FINSI ; 
+* Calcul de AAT
+	AAT= PROG;
+	REPE PROD1 n;
+		REPE PROD2 n;
+			SUM=0;
+			REPE ADDI m;
+				INTER1= EXTR LIS1A ((&PROD1-1)*m + &ADDI);
+				INTER2= EXTR LIS1A ((&PROD2-1)*m + &ADDI);
+				SUM= SUM + (INTER1 * INTER2);
+			FIN ADDI;
+			AAT= AAT et (PROG SUM);
+		FIN PROD2;
+	FIN PROD1;
+	LIS1K = PROG;
+	LIS1K= AAT;
+* Construction de la liste LIS1M (pour M diagonale unitaire)
+	NbMode = n;	
+	NUM1 = (NbMode**2)-NbMode ;
+	LIS1M = PROG NUM1*0. ;
+	REPE BCL1M NbMode ;
+		POS1 = (&BCL1M-1)*(NbMode) + &BCL1M  ;
+		LIS1M = INSE LIS1M POS1 1.0 ;
+	FIN BCL1M ;
+* Definition des matrices M et K
+	SI ((VALE 'DIME') > 2) ;
+		MAI1 = 0. 0. 0. ;
+	SINON ;
+		MAI1 = 0. 0. ;
+	FINSI ;
+	MAI1 = MANU 'POI1' MAI1 ;
+
+	LIS1U = MOTS ;
+	LIS1F = MOTS ;
+	REPE BCL1M NbMode ;
+		COU1 = CHAIN 'U' &BCL1M ;
+		COF1 = CHAIN 'F' &BCL1M ;
+		LIS1U = LIS1U ET (MOTS COU1) ;
+		LIS1F = LIS1F ET (MOTS COF1) ;
+	FIN BCL1M ;
+
+	RIG1 = MANU 'RIGIDITE' 'TYPE' 'RIGIDITE' MAI1 LIS1U 
+		   'DUAL' LIS1F LIS1K ;
+	MAS1 = MANU 'RIGIDITE' 'TYPE' 'MASSE'    MAI1 LIS1U 
+		   'DUAL' LIS1F LIS1M ;
+* Calcul des valeurs propres de K=AA' 
+	SI ( n < m );
+		NbMode= n;
+	SINON ;
+		NbMode= m;
+	FINSI;
+	*LISMOD = PROG 1. 1. 1. ;
+	BAS0 = VIBR 'INTERVALLE' ModBas ModHaut 'HAUTE' 
+		   NbMode  RIG1 MAS1 'TBAS';
+
+	LIST BAS0 . 'MODES' ;
+	NbMode=(DIME BAS0 . 'MODES' - 2);
+
+	MESS 'On a calcule ' NbMode 'modes' ;
+	REPE BCL1M NbMode ;
+		LIST BAS0 . 'MODES' . &BCL1M . 'FREQUENCE' ;
+	FIN BCL1M ;
+* Enregistrement
+	SVD = TABLE;
+	SVD.S = TABLE;
+	SVD.U = TABLE;
+	REPE VSING NbMode ;
+		SVD.S.&VSING = (BAS0 . 'MODES' . &VSING . 'FREQUENCE')*(2*PI);
+		SVD.U.&VSING = (BAS0 . 'MODES' . &VSING . 'DEFORMEE_MODALE');
+	FIN VSING ;
+
+MESSAGE ' ================= FIN DE SVD ===================' ;
+* 
+FINPROC SVD ;
+*
+*
+* 
+OPTI DIME 3 ;
+*
+LISA= PROG 1 3 0;
+LISA= LISA ET (PROG 0 0 5);
+LISA= LISA ET (PROG 0 5 0);
+LISA= LISA ET (PROG 1 0 1);
+* 
+SIG=SVD LISA 4 3 0.01 15.0;
+*
+* Ecrire dans un fichier
+*
+*OPTI IMPR 'toto';
+*
+MESS 'ValeursSingulieres';
+*
+REPE VSING (DIME SIG . S) ;
+LIST SIG . S . &VSING;
+FIN VSING ;
+*
+MESS 'VecteursSingulieres';
+*
+REPE VSING (DIME SIG . S) ;
+*
+MESS 'V' &VSING;
+POI1 = EXTR ( SIG . U . &VSING ) 'MAIL' ;
+POI2 = POI1 POINT 1 ;
+*REPE JTER (DIME SIG.U.&VSING )
+REPE JTER 4;
+*
+LETR= CHAINE 'U' &JTER;
+VAL1 = EXTR (SIG . U . &VSING) LETR POI2 ;
+LIST VAL1;
+*
+FIN JTER;
+*
+FIN VSING ;
+MESS 'FinFichier';
+*FIN;
+*
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,120 @@
+OPTI ECHO 1;                                                                                                                 
+OPTION DIME 2 ELEM QUA4 MODE AXIS ;
+
+fic='test_win64_local.sauv' ;
+
+opti sauv fic ;
+
+*
+*------------- Définition de la géométrie -------------
+*
+O = 0 0 ;
+A = 1E-3 0 ;
+B = 2E-3 0 ;
+C = 0 2E-3 ;
+D = 0 1E-3 ;
+*
+*------------------------------------------------------
+* La peau interne est maillée de façon plus fine pour 
+* un meilleur calcul des contraintes radiales, les 
+* points X et Y sont introduits à cet effet.
+*------------------------------------------------------
+*
+X = 1.1E-3 0 ;
+Y = 0 1.1E-3 ;
+*
+L1 = A DROIT 5 X ;
+L2 = X DROIT 9 B ;
+LR = L1 ET L2 ;
+CE = CERC 16 B O C ;
+L3 = C DROIT 9 Y ;
+L4 = Y DROIT 5 D ;
+LZ = L3 ET L4 ;
+CI = CERC 16 D O A ;
+*
+SU = LR CE LZ CI DALL PLAN ;
+*
+*------ Définition des conditions aux limites  --------
+*----------- (conditions de symétrie) -----------------
+*
+CL1 = BLOQ LR UZ ;
+CL2 = BLOQ LZ UR ;
+CL = CL1 ET CL2 ;
+*
+*--------- Utilisation de la procedure PASAPAS --------
+*-- Les objets utilisés par la procédure PASAPAS sont -
+*--------- définis dans les lignes qui suivent --------
+*
+MO= MODL SU MECANIQUE ELASTIQUE PLASTIQUE PARFAIT QUA4;
+*
+*-----------------------------
+* SIGY est la limite élastique
+*-----------------------------
+*
+*------------- Définition du matériau -----------------
+*
+MAT1 = MATR MO YOUN 2E11 SIGY 300E6 NU 0.3;
+*
+*------ Définition en Pa de la pression unitaire ------
+*
+FO = PRES MASS MO 1E6 CI ;
+*
+*---------- au pas de temps T, la pression vaut F(T)*FO
+*
+LI1 = PROG 0. 1000. ;
+LI2 = PROG 0. 1000. ;
+EV = EVOL MANU T LI1 F(T) LI2 ;
+CHA1 = CHAR MECA FO EV ;
+*
+*-- Liste des pas de calcul, 100. MPa est la pression -
+*--- de début de plastification, 358.9 MPa engendre  --
+*----- un comportement plastique jusqu'en R=1.5 mm ----
+*
+LIS1 = PROG 100. 358.9 ;
+TAB1 = TABLE ;
+TAB1.'BLOCAGES_MECANIQUES' = CL;
+TAB1.'MODELE' = MO;
+TAB1.'CARACTERISTIQUES' = MAT1;
+TAB1.'CHARGEMENT' = CHA1;
+TAB1.'TEMPS_CALCULES' = LIS1;
+PASAPAS TAB1 ;
+*
+*-------- Calcul et impression des résultats ----------
+*
+RE1 = (TAB1.DEPLACEMENTS.1) ;
+RE2 = (TAB1.DEPLACEMENTS.2) ;
+*
+V1 = EXTR RE1 UR A ;
+V1 = 1E6*V1 ;
+V2 = EXTR RE2 UR A ;
+V2 = 1E6*V2 ;
+*
+SAUT PAGE ; SAUT 2 LIGN ;
+*
+MESS '           EN R=1MM  :  DEPLACEMENT THEORIQUE     
+ CALCULE' ;
+SAUT 2 LIGN ;
+MESS 'INCREMENT ELASTIQUE        UR= 0.40 MICRONS      
+UR= 'V1 'MICRON';
+SAUT 1 LIGN ;
+MESS 'INCREMENT PLASTIQUE        UR= 2.83 MICRONS      
+UR= 'V2 'MICRON';
+TEMPS ;
+*------------ Code de fonctionnement ------------------
+
+ERR1=100*(ABS(0.4 - V1)/0.4);
+ERR2=100*(ABS(2.83 - V2)/2.83);
+LIST1=PROG ERR1 ERR2;
+ERRMAX=MAXI (PROG ERR1 ERR2);
+SI (ERRMAX < 5);
+ERRE 0;
+SINON;
+ERRE 5;
+FINSI;
+sauv ;
+FIN;
+
+
+
+ 
+

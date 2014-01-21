@@ -1,0 +1,124 @@
+* ----------------------------------------------------------
+* 
+* Procedure permettant la selection des modes 
+* non colineaires dans la base
+* 
+* F. Louf
+* Le 29/03/10 : création
+* 
+* ----------------------------------------------------------
+* 
+* Entree : 
+*           
+*           A = Matrice sous forme de liste
+*           n = nombre de lignes de A
+*           m = nombre de colonnes de A
+*	    avec n <EG m (au pire utiliser la transposee)
+* 
+* Sortie : 
+*      	SVD = Table contenant les modes 
+*	   	SVD.V = Table des vecteurs singuliers a droite
+*	   	SVD.U = Table des vecteurs singuliers a gauche
+*	   	SVD.S = Liste des valeurs singulières
+* 
+DEBPROC SVD LK ; 
+* 
+  MESSAGE ' ============== DEBUT DE SVD =================' ;
+*
+* ? Verification longueur de A = n*m
+SI ((DIME A) EGA (n*m)) ; 
+SINON ;
+  MESSAGE ' ===== FIN DE SVD ======== MAUVAISES DIM =====' ;
+  QUIT SVD ;
+FINSI ; 
+*
+* ? comment faire A*A' et A'*A
+* ? comment dire a castem d'utiliser ce fichier
+*
+REPE LIGNE n;
+FIN LIGNE ;
+LIS1K = PROG;
+*
+* Calcul des valeur propre de A'A et AA'
+*
+REPE PROPRE 2;
+*
+SI (&PROPRE EGA 1) ;
+NbMode = n;
+* 	  Calcul de AA' de taille n*n
+LIS1K= AAT;
+SINON ;
+NbMode = m;
+* 	  Calcul de A'A de taille m*m
+LIS1K= ATA;
+FINSI ;
+*
+* 	Construction de la liste LIS1M (pour M diagonale unitaire)
+* 
+	NUM1 = (NbMode**2)-NbMode ;
+	LIS1M = PROG NUM1*0. ;
+	REPE BCL1M NbMode ;
+	  POS1 = (&BCL1M-1)*(NbMode) + &BCL1M  ;
+	  LIS1M = INSE LIS1M POS1 1.0 ;
+	FIN BCL1M ;
+	LIST LIS1M ;
+	LIST LIS1K ;
+* 
+* 	Definition des matrices M et K
+*
+	SI ((VALE 'DIME') > 2) ;
+	  MAI1 = 0. 0. 0. ;
+	SINON ;
+	  MAI1 = 0. 0. ;
+	FINSI ;
+	MAI1 = MANU POI1 MAI1  ;
+* 
+	LIS1U = MOTS ;
+	LIS1F = MOTS ;
+	REPE BCL1M NbMode ;
+	  COU1 = CHAIN 'U' &BCL1M ;
+	  COF1 = CHAIN 'F' &BCL1M ;
+	  LIS1U = LIS1U ET (MOTS COU1) ;
+	  LIS1F = LIS1F ET (MOTS COF1) ;
+	FIN BCL1M ;
+* 
+	RIG1 = MANU 'RIGIDITE' 'TYPE' 'RIGIDITE' MAI1 LIS1U 
+	'DUAL' LIS1F LIS1K ; 
+* 
+	MAS1 = MANU 'RIGIDITE' 'TYPE' 'MASSE'    MAI1 LIS1U 
+	'DUAL' LIS1F LIS1M ;  
+* 
+* 	Calcul des valeurs propres de K 
+*
+	BAS0 = VIBR 'INTERVALLE' 1E-15 1E15 'BASSE' NbMode
+		         RIG1 MAS1 ; 
+* 
+	LIST BAS0 . 'MODES' ;
+	N0 = (DIME BAS0 . 'MODES') - 2 ;
+	MESS 'On a calcule ' N0 'modes' ;
+	REPE BCL1M N0 ;
+* 
+	  LIST BAS0 . 'MODES' . &BCL1M . 'FREQUENCE' ; 
+* 
+	FIN BCL1M ;
+*
+* 	Ici (n <EG m) a son importance
+*
+	SI (&PROPRE EGA 1) ;
+	  SVD = TABLE;
+	  REPE VSINGUL n;
+		SVD.S = sqrt(BAS0 . 'MODES' . &VSINGUL . 'FREQUENCE');
+		SVD.U = BAS0 . 'MODES' . &VSINGUL . 'DEFORMEE_MODALE';		
+	  FIN VSINGUL;
+	SINON ;
+	  REPE VSINGUL m;
+		SVD.V = BAS0 . 'MODES' . &VSINGUL . 'DEFORMEE_MODALE';		
+	  FIN VSINGUL;
+	FINSI ;
+*
+FIN PROPRE
+* 
+  MESSAGE ' ================= FIN DE SVD ===================' ;
+* 
+FINPROC SVD  ; 
+* 

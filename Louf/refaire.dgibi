@@ -1,0 +1,318 @@
+* ----------------------------------------------------------
+* 
+* Procedure permettant la selection des modes 
+* non colineaires dans la base
+* 
+* F. Louf
+* Le 29/03/10 : création
+* 
+* ----------------------------------------------------------
+* 
+* Entree : 
+*           
+*           A = Matrice sous forme de liste
+*           n = nombre de lignes de A / Nombre de noeuds
+*           m = nombre de colonnes de A / Nombre de pas temps
+*			ModHaut = Borne haute de l'intervalle de recherche de mode
+*			ModBas  = Borne basse de l'intervalle de recherche de mode
+*	    avec n <EG m (au pire utiliser la transposee)
+* 
+* Sortie : 
+*      	SVD = Table contenant les modes 
+*	   	SVD.V = Table des vecteurs singuliers a droite
+*	   	SVD.U = Table des vecteurs singuliers a gauche
+*	   	SVD.S = Liste des valeurs singulières
+* 
+DEBPROC SVD LIS1A n m ModHaut ModBas; 
+* 
+MESSAGE ' ============== DEBUT DE SVD =================' ;
+
+* Verification longueur de A = n*m
+	SI ((DIME LIS1A) EGA (n*m)) ; 
+	SINON ;
+	MESSAGE ' ===== FIN DE SVD ======== MAUVAISES DIM =====' ;
+	QUIT SVD ;
+	FINSI ; 
+* Calcul de AAT
+	AAT= PROG;
+	REPE PROD1 n;
+		REPE PROD2 n;
+			SUM=0;
+			REPE ADDI m;
+				INTER1= EXTR LIS1A ((&PROD1-1)*m + &ADDI);
+				INTER2= EXTR LIS1A ((&PROD2-1)*m + &ADDI);
+				SUM= SUM + (INTER1 * INTER2);
+			FIN ADDI;
+			AAT= AAT et (PROG SUM);
+		FIN PROD2;
+	FIN PROD1;
+	LIS1K = PROG;
+	LIS1K= AAT;
+* Construction de la liste LIS1M (pour M diagonale unitaire)
+	NbMode = n;	
+	NUM1 = (NbMode**2)-NbMode ;
+	LIS1M = PROG NUM1*0. ;
+	REPE BCL1M NbMode ;
+		POS1 = (&BCL1M-1)*(NbMode) + &BCL1M  ;
+		LIS1M = INSE LIS1M POS1 1.0 ;
+	FIN BCL1M ;
+* Definition des matrices M et K
+	SI ((VALE 'DIME') > 2) ;
+		MAI1 = 0. 0. 0. ;
+	SINON ;
+		MAI1 = 0. 0. ;
+	FINSI ;
+	*MESS 'MAI1 avant:';
+	*LIST MAI1;
+	MAI1 = MANU 'POI1' MAI1 ;
+	*MESS 'MAI1 apres:';
+	*MAI1 = CHAN POI1 MAI1 ;
+
+	LIS1U = MOTS ;
+	LIS1F = MOTS ;
+	REPE BCL1M NbMode ;
+		COU1 = CHAIN 'U' &BCL1M ;
+		COF1 = CHAIN 'F' &BCL1M ;
+		LIS1U = LIS1U ET (MOTS COU1) ;
+		LIS1F = LIS1F ET (MOTS COF1) ;
+	FIN BCL1M ;
+
+	RIG1 = MANU 'RIGIDITE' 'TYPE' 'RIGIDITE' MAI1 LIS1U 
+		   'DUAL' LIS1F LIS1K ;
+	MAS1 = MANU 'RIGIDITE' 'TYPE' 'MASSE'    MAI1 LIS1U 
+		   'DUAL' LIS1F LIS1M ;
+* Calcul des valeurs propres de K=AA' 
+	SI ( n < m );
+		NbMode= n;
+	SINON ;
+		NbMode= m;
+	FINSI;
+	*LISMOD = PROG 1. 1. 1. ;
+	BAS0 = VIBR 'INTERVALLE' ModBas ModHaut 'HAUTE' 
+		   NbMode  RIG1 MAS1 'TBAS';
+	LIST BAS0 . 'MODES' ;
+	NbMode=(DIME BAS0 . 'MODES' - 2);
+
+	MESS 'On a calcule ' NbMode 'modes' ;
+	REPE BCL1M NbMode ;
+		LIST BAS0 . 'MODES' . &BCL1M . 'FREQUENCE' ;
+	FIN BCL1M ;
+* Enregistrement
+	SVD = TABLE;
+	SVD.S = TABLE;
+	SVD.U = TABLE;
+	REPE VSING NbMode ;
+		SVD.S.&VSING = (BAS0 . 'MODES' . &VSING . 'FREQUENCE')*(2*PI);
+		SVD.U.&VSING = (BAS0 . 'MODES' . &VSING . 'DEFORMEE_MODALE');
+	FIN VSING ;
+
+MESSAGE ' ================= FIN DE SVD ===================' ;
+* 
+FINPROC SVD ;
+*
+*
+*
+OPTI DIME 2 ELEM SEG2 MODE TRID;
+*---------------------DONNEES---------------------*
+*Unites SI
+	AMP1 = 100.0 ;
+	LON1 = 0.5 ;
+	SEC1 = 1.e-4 ;
+	IY1 = 0.0 ;
+	IZ1 = 0.0 ;
+	NUP = 0.0 ;
+	YOP = 2.1E11 ;
+	RHOP = 7800.0 ;
+*--------------------GEOMETRIE--------------------*
+	P1 = 0.   0. ;
+	P2 = LON1 0. ;
+	NbElem = 10;
+	L1 = D NbElem P1 P2 ; 
+	*TRAC L1 ;
+*------DEFINITION DU MODELE ET DU MATERIAU--------*
+	MOD1 = MODEL L1 MECANIQUE ELASTIQUE POUT ;
+	MAT1 = MATER MOD1 YOUN YOP NU NUP RHO RHOP ;
+	CAR1 = CARAC MOD1 SECT SEC1 INRY IY1 INRZ IZ1 
+		   TORS 0. VECT (0. 1.) ;
+	MATTOT = MAT1 ET CAR1 ;
+*--------------CONDITIONS LIMITES-----------------*
+	CL1 = BLOQ P1 UX ;
+	CL2 = BLOQ L1 UY RZ UZ RX RY ;
+	CLTOT= CL1 ET CL2 ;
+*-------MATRICES DE RIGIDITE ET DE MASSE----------*
+	RIG1  = RIGI MOD1 MATTOT ;
+	RIGT1 = RIG1 ET CLTOT ;
+	MAS1 = MASS MOD1 MATTOT ;
+*------------EVOLUTION TEMPORELLE-----------------*
+	LIS1 = PROG 0. 1 ;
+	LIS2 = PROG 0. 1.;
+	EVT1 = EVOL MANU T LIS1 G(T) LIS2 ;
+*-----------------CHARGEMENT----------------------*
+	FOR1 = FORCE FX AMP1 P2 ;
+	CHA1 = CHAR FORC FOR1 EVT1 ;
+	VEC1 = VECT FOR1 1.e-4 FX FY ROUGE ;
+	*TRAC VEC1 L1 ; 
+* 
+* ----------------> Schema d'integration <---------------------
+* 
+* Parametres du schema
+* 
+	N1PAS = 10 ; 
+	C1 = ( YOP*(1-NUP) / (RHOP*(1+NUP)*(1-(2*NUP))) )**0.5 ;
+	DT = 0.025*LON1/(NbElem*C1) ;
+	DT = 7.5E-09;
+
+	ALPHA = 0.0;
+	BETA  = 1.0/4;
+	GAMMA = 1.0/2;
+* 
+* Initialisation 
+* 
+	U = MANU CHPO L1 3 UX  0.0 UY 0. UZ 0. NATURE DISCRET ; 
+	U = U + (MANU CHPO P2 3 UX  0.001 UY 0. UZ 0. NATURE DISCRET) ; 
+	V = MANU CHPO L1 3 UX  0.00 UY 0. UZ 0. NATURE DISCRET ; 
+
+	***S= (M + C*gamma*dt + K*beta*dt^2); MANQUE C
+	SM = MAS1 ET (RIG1*BETA*(DT**2));
+
+	HIST = TABL;
+	HIST . Ut = TABL;
+	HIST . Vt = TABL;
+	HIST . At = TABL;
+	HIST . Ft = TABL;
+
+	LT   = PROG ; LUY1 = PROG ; 
+	LUY2 = PROG ;
+* 
+* Iteration sur les pas 
+* 
+	REPE SCHEMA1 N1PAS ; 
+		SI (&SCHEMA1 > 1) ;
+			*   **F = (1+alpha)*HistF(:,t+1) - alpha*HistF(:,t);
+			*   **Vp = V + ( 1+alpha )*dt*(1-gamma)*A;
+			*   **Up = U + ( 1+alpha )*( dt*V + (dt^2)*(1/2 - beta)*A ); 
+			*   Les effort aux cours du temps ?? et initialement
+			VP= V + ( (1+ALPHA)*DT*(1-GAMMA)*A);
+			UP= U + ( (1+ALPHA)*( (DT*V) + ((DT**2)*(0.5-BETA)*A) ) );
+		SINON;
+			VP= V ;
+			UP= U ;
+		FINSI;
+
+		SI (&SCHEMA1 EGA 1) ;
+			*   **A = M\(F-C*V-K*U);
+			A = RESO (MAS1 ET CLTOT) ((-1.)*RIG1*UP ) ; 
+		SINON;
+			*   **A = S\( F - C*Vp - K*Up );
+			A = RESO (SM ET CLTOT) ((-1.)*RIG1*UP ) ; 
+		FINSI;
+		A = ENLE A 'LX';
+		A = ENLE A 'LY';
+		A = ENLE A 'LZ';
+		SI (&SCHEMA1 > 1) ;
+			* **V = V + ( 1+alpha )*dt*(1-gamma)*HistA(:,end) + dt*gamma*A;
+			* **U = U + ( 1+alpha )*( dt*HistV(:,end) 
+			* **    + (dt^2)*(1/2 - beta)*HistA(:,end) ) + beta*(dt^2)*A;
+			* !!!!!!! ATTENTION LES expressions suivante sont fausse si alpha=/=0
+			V = VP + (DT*GAMMA*A);
+			U = UP + ((DT**2)*BETA*A);
+		SINON;
+		FINSI;
+		*
+		* Ici Enregistrer le resultat a l'instant &SCHEMA1
+		*
+		HIST . Ut . &SCHEMA1 = U;
+		HIST . Vt . &SCHEMA1 = V;
+		HIST . At . &SCHEMA1 = A;
+		*
+		LUY1 = LUY1 ET (PROG (EXTR U UX P1));
+		LUY2 = LUY2 ET (PROG (EXTR U UX P2));
+		LT = LT ET (PROG (&SCHEMA1*DT)) ;
+		*
+		DEF0 = DEFO L1 U 0. ROUGE;
+		DEF1 = DEFO L1 U VERT;
+		*TRAC (DEF0 ET DEF1);
+	FIN SCHEMA1 ; 
+*
+* Calcul du deplacement final en bout de poutre
+*
+	FL1 = EXTR LUY2 1;
+	FL2 = EXTR LUY2 N1PAS;
+	FL  = FL1 - FL2;
+	LIST FL;
+*
+* Affichage du deplacement d P2 au cours du temps
+*
+	*EVY1 = EVOL MANU 'TEMPS' LT 'UX(P1)' LUY1 ;
+	*DESS EVY1 TITR 'UX POINT P1' MIMA ;
+	EVY2 = EVOL MANU 'TEMPS' LT 'UX(P2)' LUY2 ;
+	DESS EVY2 TITR 'UX POINT P2' MIMA ;
+*
+* Cacul de la SVD
+*
+
+* Creation de la liste/matrice, a paritr du resultat
+	POI1 = EXTR ( Hist . Ut . 1 ) 'MAIL';                                  
+	POI2 = POI1 POINT 2 ;                                    
+	VAL1 = EXTR (Hist . Ut . 1 ) 'UX' POI2 ;                               
+	list VAL1;                             
+	list (Hist . Ut . 1);
+	*
+	N1PAS = (DIME Hist . Ut);
+	NbPoint = NBNO (EXTR ( Hist . Ut . 1 ) 'MAIL' 'NOMU');
+	*
+	LISMAT = PROG;
+	REPE NumPoin NbPoint;
+		PO1 = EXTR ( Hist . Ut . 1 ) 'MAIL' ;
+		PO2 = PO1 POINT &NumPoin ;
+		LIS1U = EXTR (Hist . Ut . 1) 'COMP';
+		NbComp = (DIME LIS1U);
+		REPE Comp NbComp;
+			Compo = EXTR LIS1U &Comp;
+			REPE POST N1PAS;
+				VAL1 = EXTR (Hist . Ut . &POST) Compo PO2 ;
+				LISMAT = LISMAT ET (PROG VAL1);
+			FIN POST;
+			* a la ligne (de la matrice)
+		FIN Comp;
+	FIN NumPoin;
+
+	NbLign = NbComp*NbPoint;
+	NbColon = N1PAS;
+
+* Appel de la procedure
+	BAS1 = SVD LISMAT NbLign NbColon 0.0001 10;
+
+
+
+
+V1 = BAS1 . U . 1
+U01 = MANU CHPO MAI1 3 'UX' 0 'UY' 0 'UZ' 0;
+num1 = 1;
+REPE B1M (NBNO MAI1);
+	PT1 = MAI1 POIN &B1M;
+	UPT1 = REDU (Hist . Ut . 1) PT1 ;
+	LIS1U = EXTR UPT1 'COMP';
+	NbComp = (DIME LIS1U);
+	REPE Comp NbComp;
+		Compo = EXTR LIS1U &Comp;
+		COU1 = CHAI 'U' num1;
+		VI1 = MAXI(EXCO V1 COU1);
+		U01 = U01 ET (MANU CHPO PT1 1 Compo VI1;
+		num1 = num1 +1;
+	FIN Comp;
+FIN B1M;
+
+TAB1 = TABL;
+REPE NumPoin NbPoint;
+	TAB1 . &NumPoin = EXTR (Hist . Ut . 1) 'COMP';
+FIN NumPoin;
+
+
+
+dfbhrtetzhe
+
+FIN;
+
+
+

@@ -1,0 +1,45 @@
+* fichier : cas_test_trac.dgibi
+*** essai de traction simple
+*** Cas test 
+
+* Type & Elements de representation *
+opti dime 3 elem cub8 ;
+* Caracteristiques geometriques *
+la=1.;
+mla=1. ; 
+crit = 0.00002 ;
+
+* Defintion des noeuds * 
+P1 = 0. 0.   0.  ;
+P2 = 0. la   0.   ;
+
+* Definition des contours *
+L1 = droit 1 P1 P2 ;
+
+* Generation de contours *
+coteg = L1 TRAN (0. 0. la) DINI mla DFIN mla;
+
+* Creation du volume *
+geom = VOLU coteg  TRAN (la 0. 0.)  DINI la DFIN la ; 
+
+
+* Test du trace avec option OPEN
+
+opti trac open ;
+trac geom ;
+
+
+* Test du trace avec option X 
+opti trac X ;
+trac geom ;
+
+
+* Test du trace avec option PS
+opti trac PS ftra 'cas_test_trac.ps' ;
+trac geom ;
+
+* Test du trace avec option PSC
+opti trac PSC ftra 'cas_test_trac.psc' ;
+trac geom ;
+
+fin ;

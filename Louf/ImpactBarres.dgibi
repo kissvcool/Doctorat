@@ -1,0 +1,219 @@
+* 
+* Impact de deux barres elastique lancees a vitesses intiales non nulles 
+* Axe de revolution X
+* 
+* 
+OPTI DIME 3 ;
+OPTI ELEM CUB8 ;
+* 
+* --------------------------------------> Geometrie <---
+* 
+* Rayon des barres
+R1 = 10 ; 
+* 
+* Angle de revlolution 
+ANG1 = 90. ; 
+* 
+* Jeu initial 
+J1 = 0.05 ;
+* 
+* Nombre d'elements 
+N1 =  4 ;
+N2 = 20 ;
+N3 =  6 ;
+* 
+* Premiere barre
+* 
+L0 = 0.   ;
+L1 = 100. ;
+* 
+* Points
+P11 =  L0 0. 0. ;
+P21 =  L0 R1 0. ;
+P31 =  L1 R1 0. ;
+P41 =  L1 0. 0. ;
+* 
+* Contour
+L121 = DROI N1 P11 P21 ;
+L231 = DROI N2 P21 P31 ;
+L341 = DROI N1 P31 P41 ;
+L411 = DROI N2 P41 P11 ;
+* 
+* Surface et volume engendre par rotation
+MAI1 = DALL L121 L231 L341 L411 ; 
+VOL1 = MAI1 VOLU N3 'ROTA' ANG1 (0. 0. 0.) (1. 0. 0.) ; 
+* ELIM 0.01 VOL1  ; 
+* 
+* Seconde barre
+* 
+L2 = L1 + J1 ;
+L3 = L2 + L1 - L0 ;
+* 
+* Points 
+P12 =  L2 0. 0. ; 
+P22 =  L2 R1 0. ;
+P32 =  L3 R1 0. ;
+P42 =  L3 0. 0. ;
+* 
+* Contour
+L122 = DROI N1 P12 P22 ;
+L232 = DROI N2 P22 P32 ;
+L342 = DROI N1 P32 P42 ;
+L412 = DROI N2 P42 P12 ;
+* 
+* Surface et volume engendre par rotation
+MAI2 = DALL L122 L232 L342 L412 ; 
+VOL2 = MAI2 VOLU N3 'ROTA' ANG1 (0. 0. 0.) (1. 0. 0.) ; 
+* ELIM 0.01 VOL2  ; 
+* 
+* 
+TRAC (VOL1 ET VOL2) ;
+* 
+* 
+* ----------------------> Modeles, materiaux, rigidites <---
+* 
+* Parametres materiaux 
+YOU1 = 2.1E+5 ;
+YOU2 = 2.1E+5 ;
+RH1 = 7.8E-6 ;
+RH2 = 7.8E-6 ;
+NU1 = 0.3 ; 
+NU2 = 0.3 ;
+* 
+* Modeles 
+MOD1 = MODE VOL1 MECANIQUE ELASTIQUE ISOTROPE ;
+MOD2 = MODE VOL2 MECANIQUE ELASTIQUE ISOTROPE ;
+* 
+* Materiaux
+MAT1 = MATE MOD1 YOUNG YOU1 NU NU1 RHO RH1 ; 
+MAT2 = MATE MOD2 YOUNG YOU2 NU NU2 RHO RH2 ; 
+* 
+* Rigidites
+RIG1 = RIGI MOD1 MAT1 ;
+RIG2 = RIGI MOD2 MAT2 ;
+* 
+* Masses
+MAS1 = MASS MOD1 MAT1 ;
+MAS2 = MASS MOD2 MAT2 ;
+* 
+* ----------------------------> Conditions aux limites <--- 
+* 
+SI (ANG1 < 360.) ; 
+* 
+  ENV1 = ENVE (VOL1 ET VOL2) ;
+  FAC1 = ENV1 POIN 'PLAN' (0. 0. 0.) (0. 1. 0.) 
+                          (1. 0. 0.)  0.1 ; 
+  FAC1 = ENV1 ELEM APPUYE FAC1 ;
+* 
+  ENV1 = ENVE (VOL1 ET VOL2) ;
+  FAC2 = ENV1 POIN 'PLAN' 
+        (0. 0. 0.) ((COS ANG1) (SIN ANG1) 0.) 
+        (1. 0. 0.)  0.1 ; 
+  FAC2 = ENV1 ELEM APPUYE FAC2 ;  
+* 
+  BLO1 = BLOQ UZ FAC1 ; 
+  BLO2 = BLOQ DEPL DIRECTION 
+         (0. ((-1.)*(SIN ANG1)) (COS ANG1)) FAC2 ; 
+* 
+  MAS1TOT = MAS1 ET MAS2 ET BLO1 ET BLO2 ;
+  RIG1TOT = RIG1 ET RIG2 ;
+* 
+SINON ;
+*     
+  MAS1TOT = MAS1 ET MAS2 ;
+  RIG1TOT = RIG1 ET RIG2 ;
+*     
+FINSI ; 
+* 
+* -----------------------------> Conditions de contact <--- 
+* 
+* Face en contact du volume 1
+ENV1 = ENVE VOL1 ;
+FAC3 = ENV1 POIN 'PLAN' P31 P41 (L1 0. R1)  0.1 ; 
+FAC3 = ENV1 ELEM APPUYE FAC3 ;
+* 
+* Face en contact du volume 2
+ENV1 = ENVE VOL2 ;
+FAC4 = ENV1 POIN 'PLAN' P12 P22 (L2 0. R1)  0.1 ;  
+FAC4 = ENV1 ELEM APPUYE FAC4 ;
+* 
+* Ecriture des conditions de contact
+FAC3P = CHAN POI1 FAC3 ;
+* 
+REPE BCL1 (NBNO FAC3) ;
+  PI3 = FAC3 POIN PROC (POIN &BCL1 FAC3P);
+  PI4 = FAC4 POIN PROC PI3 ;  
+  REL1 = RELA MAXI UX PI3 - UX PI4 ; 
+  SI (&BCL1 EGA 1) ;
+    BLO1CON = REL1 ;
+  SINON ;
+    BLO1CON = BLO1CON ET REL1 ; 
+  FINSI ;
+FIN BCL1 ; 
+* 
+JEU1CON = DEPI BLO1CON J1 ;
+* 
+* 
+* ------------------------------> Schema d'integration <---
+* 
+* Parametres du schema
+* 
+N1PAS = 400 ; 
+C1 = (YOU1/RH1)**0.5 ;
+DT1 = 0.025*(L1-L0)/(N2*C1) ;
+* 
+* Initialisation 
+* 
+U10 = MANU CHPO VOL1 3 UX     0. UY 0. UZ 0. NATURE DISCRET ; 
+U20 = MANU CHPO VOL2 3 UX     0. UY 0. UZ 0. NATURE DISCRET ; 
+V10 = MANU CHPO VOL1 3 UX  10000. UY 0. UZ 0. NATURE DISCRET ; 
+V20 = MANU CHPO VOL2 3 UX -10000. UY 0. UZ 0. NATURE DISCRET ; 
+* 
+UN1 = U10 ET U20 ; 
+VN1 = V10 ET V20 ; 
+A0 = RESO MAS1TOT ((-1.)*RIG1TOT*UN1) ; 
+UNM1 = UN1 - (DT1*VN1) + (A0*(DT1**2)/2.) ; 
+* 
+* Iteration sur les pas 
+* 
+S1MAX = 3.E+3 ; 
+S1MIN = (MAXI V10)*(-1.)*YOU1/C1 ; 
+PAS1S = (S1MAX-S1MIN)/13. ; 
+L1COUL = PROG S1MIN PAS PAS1S S1MAX ; 
+* 
+* 
+OPTI TRAC PSC ;
+* 
+REPE SCHEMA1 N1PAS ; 
+* 
+  SM1  = ((-1.)*RIG1TOT*UN1) +  
+         ((MAS1TOT*( (2*UN1) - UNM1 ) )/(DT1**2)) ;
+  UNP1 = RESO ((MAS1TOT/(DT1**2)) ET BLO1CON) (SM1 ET JEU1CON) ; 
+* 
+  UNM1 = UN1  ; 
+  UN1  = UNP1 ; 
+* 
+  DEF1 = DEFO (VOL1 ET VOL2) 1. UN1 ; 
+* 
+  SIG1 = SIGM (MOD1 ET MOD2) (MAT1 ET MAT2) UN1 ; 
+  S1XX = EXCO SIG1 SMXX ; 
+* 
+  TRAC (-100 200 100) L1COUL S1XX DEF1 (MOD1 ET MOD2) NCLK ; 
+*   TRAC DEF1 NCLK ; 
+* 
+FIN SCHEMA1 ; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,154 @@
+*
+*
+*
+OPTI DIME 3 ;
+n=3;
+m=4;
+LIS1A= PROG 1 0 0 1;
+LIS1A= LIS1A ET (PROG 3 0 5 0);
+LIS1A= LIS1A ET (PROG 0 5 0 1);
+* 
+MESSAGE ' ============== DEBUT DE SVD =================' ;
+*
+* Verification longueur de A = n*m
+SI ((DIME LIS1A) EGA (n*m)) ;
+SINON ;
+MESSAGE ' ===== FIN DE SVD ======== MAUVAISES DIM =====' ;
+QUIT SVD ;
+FINSI ;
+*
+AAT= PROG;
+ATA= PROG;
+*
+* Calcul de AAT
+* 
+REPE PROD1 n;
+REPE PROD2 n;
+*
+SUM=0;
+REPE ADDI m;
+*
+INTER1= EXTR LIS1A ((&PROD1-1)*m + &ADDI);
+INTER2= EXTR LIS1A ((&PROD2-1)*m + &ADDI);
+SUM= SUM + (INTER1 * INTER2);
+*
+FIN ADDI;
+AAT= AAT et (PROG SUM);
+*
+FIN PROD2;
+FIN PROD1;
+*
+* Calcul de ATA
+*
+REPE PROD1 m;
+REPE PROD2 m;
+*
+SUM=0;
+REPE ADDI n;
+*
+INTER1= EXTR LIS1A (&PROD1 + ((&ADDI-1)*m));
+INTER2= EXTR LIS1A (&PROD2 + ((&ADDI-1)*m));
+SUM= SUM + (INTER1 * INTER2);
+*
+FIN ADDI;
+ATA= ATA et (PROG SUM);
+*
+FIN PROD2;
+FIN PROD1;
+*
+*
+*
+LIS1K = PROG;
+*
+* Calcul des valeur propre de A'A et AA'
+*
+REPE PROPRE 2 ;
+*
+SI ((&PROPRE) < 2) ;
+NbMode = n;
+*   Calcul de AA' de taille n*n
+LIS1K= AAT;
+SINON ;
+NbMode = m;
+*   Calcul de A'A de taille m*m
+LIS1K= ATA;
+FINSI ;
+*
+* Construction de la liste LIS1M (pour M diagonale unitaire)
+* 
+NUM1 = (NbMode**2)-NbMode ;
+LIS1M = PROG NUM1*0. ;
+REPE BCL1M NbMode ;
+POS1 = (&BCL1M-1)*(NbMode) + &BCL1M  ;
+LIS1M = INSE LIS1M POS1 1.0 ;
+FIN BCL1M ;
+LIST LIS1M ;
+LIST LIS1K ;
+* 
+* Definition des matrices M et K
+*
+SI ((VALE 'DIME') > 2) ;
+MAI1 = 0. 0. 0. ;
+SINON ;
+MAI1 = 0. 0. ;
+FINSI ;
+MAI1 = MANU POI1 MAI1  ;
+* 
+LIS1U = MOTS ;
+LIS1F = MOTS ;
+REPE BCL1M NbMode ;
+COU1 = CHAIN 'U' &BCL1M ;
+COF1 = CHAIN 'F' &BCL1M ;
+LIS1U = LIS1U ET (MOTS COU1) ;
+LIS1F = LIS1F ET (MOTS COF1) ;
+FIN BCL1M ;
+* 
+RIG1 = MANU 'RIGIDITE' 'TYPE' 'RIGIDITE' MAI1 LIS1U 
+'DUAL' LIS1F LIS1K ;
+* 
+MAS1 = MANU 'RIGIDITE' 'TYPE' 'MASSE'    MAI1 LIS1U 
+'DUAL' LIS1F LIS1M ;
+* 
+* Calcul des valeurs propres de K 
+*
+SI ( n < m );
+NbMode= n;
+SINON ;
+NbMode= m;
+FINSI;
+LISMOD = PROG 1. 1. 1. ;
+BAS0 = VIBR 'INTERVALLE'  0.01 15. 'HAUTE' NbMode  RIG1 MAS1 'TBAS';
+* 
+LIST BAS0 . 'MODES' ;
+*
+MESS 'On a calcule ' NbMode 'modes' ;
+REPE BCL1M NbMode ;
+* 
+LIST NbMode;
+LIST BAS0 . 'MODES' . &BCL1M . 'FREQUENCE' ;
+* 
+FIN BCL1M ;
+*
+* 	Ici (n <EG m) a son importance
+*
+SI (&PROPRE < 2) ;
+SVD = TABLE;
+REPE VSING NbMode ;
+SVD.&VSING = TABLE;
+SVD.&VSING.S = (BAS0 . 'MODES' . &VSING . 'FREQUENCE')*(2*PI);
+SVD.&VSING.U = (BAS0 . 'MODES' . &VSING . 'DEFORMEE_MODALE');
+FIN VSING ;
+*
+SINON ;
+*
+REPE VSING NbMode ;
+SVD.&VSING.V = BAS0 . 'MODES' . &VSING . 'DEFORMEE_MODALE';
+FIN VSING ;
+*
+FINSI ;
+*
+FIN PROPRE;
+* 
+MESSAGE ' ================= FIN DE SVD ===================' ;
+* 
+* 
