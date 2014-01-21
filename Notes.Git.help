@@ -1,0 +1,31 @@
+Creer un dossier remote local
+	-Dans le dossier serveur faire
+		~: git init --bare
+
+	-Dans un dossier local cloner le server
+		~: git clone [url]
+
+		-Ajouter par Copier coller les fichier du projet au dossier local
+			~: cp
+		-Puis
+			~: git add *
+			~: git commit
+			~: git push
+
+	checkout branch This operation must be run in a work tree
+
+Comment copier plusieurs branches depuis un dépot distant :
+
+	à partir du dépot distant (https://github.com/kissvcool/Doctorat.git), 
+		on se place dans le dossier ou l'on veut travailler sur une copie. 
+		Le dossier devrait être vide au préalable (ne pas faire 'git init')
+	-On tape la commande :
+		~: git clone https://github.com/kissvcool/Doctorat.git
+			-Ce qui copie la branche "master" du dépot distant
+				 dans la branche "master" locale.
+			-Cela fixe aussi le dépot distant comme étant "origin"
+	-Puis pour les éventuelles autre branche ditantes, il faut 
+		les copier une par une, comme ici la branch "Galer" :
+		~: git checkout -b Galer origin/Galer
+				-La commande générale étant 
+					~: git checkout -b [branch] [remotename]/[branch]

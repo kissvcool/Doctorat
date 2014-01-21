@@ -64,7 +64,7 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 4;
+        cas = 0;
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
@@ -75,7 +75,7 @@ for program=0:(IterProgram-1)
         % 7 Vitesse initiale
 
     % schema d integration :
-        schem = 6;
+        schem = 0;
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -190,8 +190,8 @@ for PGD = 1
 
         OthoIntern = 0;
 
-        Mmax=10;        % Nombre de modes maximum
-        Kmax=40;        % Nombre d'iterations max pour obtenir un mode
+        Mmax=0;        % Nombre de modes maximum
+        Kmax=0;        % Nombre d'iterations max pour obtenir un mode
         epsilon = 10^-6;
 
         [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif);
