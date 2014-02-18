@@ -9,3 +9,6 @@ do
 	git branch -d master
 	cd ..
 done
+
+cd Autres
+chmod a+x Installation.sh push.sh pull.sh Cluster/scripctJobs.sh
