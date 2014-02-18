@@ -1,25 +1,20 @@
-function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif)
+function [sortie] = resolutionTemporelle(schem,alpha,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif)
 %%  Schemas d'integration
 
     if (schem == 1)             % Newmark - Difference centree
-        alpha = 0;
         beta = 0;
         gamma = 1/2;
     elseif (schem == 2)         % Newmark - Acceleration lineaire
-        alpha = 0;
         beta = 1/12;
         gamma = 1/2; 
     elseif (schem == 3)         % Newmark - Acceleration moyenne
-        alpha = 0;
         beta = 1/4;
         gamma = 1/2;
     elseif (schem == 4)        % Newmark - Acceleration moyenne modifiee
-        alpha = -1/9;      % -1/3 <= alpha <= 0 
         gamma = 1/2 - alpha;
         beta  = ((1-alpha)^2)/4;  
         alpha = 0;
     elseif (schem == 5)         % HHT-alpha
-        alpha = -1/3;      % -1/3 <= alpha <= 0 
         gamma = 1/2 - alpha;        % alpha = -1/3 -> amortissement maximal
         beta  = ((1-alpha)^2)/4;
     elseif (schem == 6)
@@ -45,11 +40,13 @@ function [sortie] = resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,condit
     Eu =0;
     
 %% Conditions Initiales
+disp(['size(M,1)= ' num2str(size(M,1)) ]);
     
     if norm(U0)
         if (verif)
             [i,~]=find(D');
             U0(i,1) = conditionU(:,1);
+        elseif (norm(D) == 0)            
         else
             ErreurVerifConditionInitialNonPriseEnCompte;
         end     

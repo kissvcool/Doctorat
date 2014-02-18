@@ -1,4 +1,4 @@
-function [MR,CR,K0R,U0R,V0R,DR,HistFR,nonLineariteR] = Projection(PRT,M,C,K0,U0,V0,D,HistF,nonLine,nonLinearite)
+function [MR,CR,K0R,U0R,V0R,DR,HistFR,nonLineariteR,PresenceNan] = Projection(PRT,M,C,K0,U0,V0,D,HistF,nonLine,nonLinearite)
 
 
         MR  = PRT'*M*PRT;
@@ -17,7 +17,8 @@ function [MR,CR,K0R,U0R,V0R,DR,HistFR,nonLineariteR] = Projection(PRT,M,C,K0,U0,
         HistFR  = PRT'*HistF;
         U0R     = PRT'*U0;
         V0R     = PRT'*V0;
-
+        test = isnan(U0R);
+        PresenceNan = sum(test);
         if (size(D,1))
             DR=D*PRT;
         else    

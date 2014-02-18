@@ -1,4 +1,4 @@
-function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q,erreur] = PointFixePGD(Kmax,M, C, K0, HistF, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot)
+function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_q,gp_q,gpp_q,erreur] = PointFixePGD(Kmax,M, C, K0, HistF, D, conditionU, m, dt, HistMf, HistMg, HistMgp, HistMgpp,OthoIntern,VectL,epsilon,Ttot,schem)
 
     erreur = 0;
     
@@ -19,8 +19,8 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
     for k=1:Kmax
         [f_q,condi,erreur] = ProblemEspace(M, C, K0, HistF, D, conditionU, g_q, gp_q,gpp_q, m, dt, HistMf, HistMg, HistMgp, HistMgpp);
         if (erreur) 
-            disp(['m = ' num2str(m) ' , k = ' num2str(k)]);
-            return;
+            disp(['Erreur PGD a   m = ' num2str(m) ' , k = ' num2str(k)]);
+            break;
         end
         if OthoIntern
             for i=1:(m-1)
@@ -38,7 +38,7 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
             HistMfg=HistMf;
         end
         %disp(['---------Probleme en temps------------']);
-        [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, f_q(1:size(VectL,2),:), m, dt, HistMfg, HistMg, HistMgp, HistMgpp, 3);
+        [g_q,gp_q,gpp_q] = ProblemTemps(M, C, K0, HistF, f_q(1:size(VectL,2),:), m, dt, HistMfg, HistMg, HistMgp, HistMgpp, schem);
 
         HistKg(:,k)   = g_q  ;
         HistKgp(:,k)  = gp_q ;
@@ -55,9 +55,9 @@ function [HistKf,HistKg,HistKgp,HistKgpp,ConvergPointFixe,Conditionnement,f_q,g_
                 end
             end
         end
-    end
-    if k==Kmax        
-        disp(['ne convergence pas apres ' num2str(k) ' iterations']);
+        if k==Kmax        
+            disp(['ne convergence pas apres ' num2str(k) ' iterations']);
+        end
     end
     
     HistKf   = HistKf(:,1:k);

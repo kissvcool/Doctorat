@@ -23,6 +23,7 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
         if (verif)
             [i,~]=find(D');
             U0(i,1) = conditionU(:,1);
+        elseif (norm(D) == 0)            
         else
             ErreurVerifConditionInitialNonPriseEnCompte;
         end     
@@ -33,7 +34,7 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
     V_p = V0;
 %     A = zeros(size(M,1),1);     % accelerations
     
-    nombrePasTemps=round(Ttot/dt) % Attention doit etre entier car ceil pose des problemes
+    nombrePasTemps=round(Ttot/dt); % Attention doit etre entier car ceil pose des problemes
     
 %     if (nonLine==1)
 %         % Ajout du ressort
@@ -79,9 +80,10 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
             HistV_m(:,t+1)  = V_m;
             HistV_p(:,t  )  = V_p;
             
-            if mod(t,round(nombrePasTemps/100)) == 0
-                fait = round(100*t/nombrePasTemps);
-            end
+%             if mod(t,round(nombrePasTemps/100)) == 0
+%                 fait = round(100*t/nombrePasTemps);
+%                 disp(['fait = ' num2str(fait) '%']);
+%             end
         end
     
     end
@@ -91,7 +93,10 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
     sortie.HistV_m= HistV_m;
     sortie.HistV_p= HistV_p;
     
-    
+					   
+	sortie.HistU= HistU_m;
+	sortie.HistV= HistV_m;
+
     
     
     

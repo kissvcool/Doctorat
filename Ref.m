@@ -20,6 +20,7 @@ addpath('Afficher','POD','PGD')
 
 clear all
 clc
+diary FichierLog
 
 IterProgram=1;
 
@@ -53,6 +54,7 @@ for program=0:(IterProgram-1)
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
         LElement = L/nombreElements;
+        disp(['nombreElementsParPartie = ' num2str(nombreElementsParPartie)]);
 
     % temps
         dt=  4e-6 ; %*0.5^program;
@@ -64,18 +66,21 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 4;
+        cas = 0;
+        disp(['cas = ' num2str(cas)]);
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
         % 4 Effort continue en bout de poutre
         % 5 Effort augmentant lineairement en bout de poutre
         % 6 Effort continue en bout de poutre les 50 premiers pas de temps
-            NbPas6 = 50;    % Pourrait être calcule en fonction d'un temps
+            NbPas6 = round(2e-4/dt);
         % 7 Vitesse initiale
 
     % schema d integration :
-        schem = 6;
+        schem = 0;
+        disp(['schem = ' num2str(schem)]);
+        alpha=0;    % -1/3 <= alpha <= 0 
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -84,7 +89,8 @@ for program=0:(IterProgram-1)
         % 6 Galerkin Discontinu
 
     % Application des conditions limites :
-        CL=2;
+        CL=1;
+        disp(['CL = ' num2str(CL)]);
         % 1 Multiplicateur de Lagrange
         % 2 Substitution
 
@@ -112,12 +118,12 @@ for program=0:(IterProgram-1)
 %% Resolution Temporelle
 
     tic;
-    sortie(1).f =resolutionTemporelle(schem,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
+    sortie(1).f =resolutionTemporelle(schem,alpha,M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,conditionV,conditionA,D,nonLine,nonLinearite,verif);
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
     figure('Name','Calcul sur base complete','NumberTitle','off')
-     surf(0:dt:Ttot,VectL,sortie(1).f.HistU_m,'EdgeColor','none');
+     surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
      
 %     figure('Name','Difference entre U_m et U_p','NumberTitle','off')
 %      surf(0:dt:Ttot,VectL,(sortie(1).f.HistU_m - sortie(1).f.HistU_p),'EdgeColor','none');
@@ -131,37 +137,46 @@ for program=0:(IterProgram-1)
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VectN = 4;
+VectN = 1:(size(M,1)-size(D,1));
+reduc = 1;
+% 1 POD
+% 2 Rayleigh
+% 3 PGD
 for n = VectN  % taille de la base modale
     %% Creation de la base reduite d une matrice de passage
 
-        reduc = 1;
-        % 1 POD
-        % 2 Rayleigh
-        % 3 PGD
         
-        [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU_m');
+        [PRT] = BaseReduite (reduc,n,M,K0,D,conditionU,VectL,sortie(1).f.HistU');
         sortie(1+n).p = PRT;
 
     %% Projection
 
-        [MR,CR,K0R,U0R,V0R,DR,HistFR,nonLineariteR] = Projection(PRT,M,C,K0,U0,V0,D,HistF,nonLine,nonLinearite);
-
+        [MR,CR,K0R,U0R,V0R,DR,HistFR,nonLineariteR,PresenceNan] = Projection(PRT,M,C,K0,U0,V0,D,HistF,nonLine,nonLinearite);
+        if PresenceNan           
+            break;
+        end
+        
     %% Resolution Temporelle sur base Reduite
 
         tic;
         Ttot;
-        sortie(1+n).f=resolutionTemporelle(schem,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR,verif);
+        sortie(1+n).f=resolutionTemporelle(schem,alpha,MR,CR,K0R,dt,Ttot,HistFR,U0R,V0R,conditionU,conditionV,conditionA,DR,nonLine,nonLineariteR,verif);
         Tcalcul= toc;
         disp(['Estimation du temps de calcul sur base reduite ' num2str(Tcalcul, '%10.1e\n') 's']);
 end
 
+if (n~=VectN(end))
+            n=n-1;
+            disp(['Arret des resolution POD au mode= ' num2str(n) ' sur ' num2str(VectN(end))]);
+            VectN=1:n;
+end
+
     
 %% Animation
-    for i=VectN
-        Reference1 = sortie(1).f.HistV_m;
+    for i=VectN % Animation
+        Reference1 = sortie(1).f.HistV;
         Reference2 = HistVExact;
-        Resultat = sortie(1+i).p*sortie(1+i).f.HistV_m;
+        Resultat = sortie(1+i).p*sortie(1+i).f.HistV;
 
         AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
     end
@@ -177,7 +192,7 @@ end
     NoDisplayErreur = 1;
     Methode = 1; % POD
 
-    AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+    [ErrMaxPOD,ErrCarrePOD,ErrAmpTotalePOD] = AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
     
 
                             %% PGD %%
@@ -190,11 +205,11 @@ for PGD = 1
 
         OthoIntern = 0;
 
-        Mmax=10;        % Nombre de modes maximum
-        Kmax=40;        % Nombre d'iterations max pour obtenir un mode
+        Mmax=0;        % Nombre de modes maximum
+        Kmax=0;        % Nombre d'iterations max pour obtenir un mode
         epsilon = 10^-6;
 
-        [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif);
+        [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif,schem);
 
     %% Affichage Complet
 
@@ -208,7 +223,7 @@ for PGD = 1
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
-            AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+            [ErrMaxPGD,ErrCarrePGD,ErrAmpTotalePGD] = AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
 
         % Convergence du point fixe
             for i=1:0 % 1:NombreResultat
