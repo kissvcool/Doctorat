@@ -56,18 +56,18 @@ function [sortie] = resolutionGDTemp(M,C,K0,dt,Ttot,HistF,U0,V0,conditionU,condi
             HistV_p(:,t+1)  = V_p;
         else       
             % % Gravouil 
-                % Mp= (1/2)*M + (5/36)*(dt^2)*K;
-                % F1 = dt*( (1/3)*HistF(:,t) + (1/6)*HistF(:,t+1) );
-                % F2 = dt*( (1/6)*HistF(:,t) + (1/3)*HistF(:,t+1) );
-                % F1p=        -(1/2)*dt*K*U_m + F2;
-                % F2p= M*V_m  -(1/2)*dt*K*U_m + F1;
-                % VmVp = [ -(1/2)*M+(7/36)*(dt^2)*K           Mp              ;
-                %                     Mp              (1/2)*M+(1/36)*(dt^2)*K ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
+                 Mp= (1/2)*M + (5/36)*(dt^2)*K;
+                 F1 = dt*( (1/3)*HistF(:,t) + (1/6)*HistF(:,t+1) );
+                 F2 = dt*( (1/6)*HistF(:,t) + (1/3)*HistF(:,t+1) );
+                 F1p=        -(1/2)*dt*K*U_m + F2;
+                 F2p= M*V_m  -(1/2)*dt*K*U_m + F1;
+                 VmVp = [ -(1/2)*M+(7/36)*(dt^2)*K           Mp              ;
+                                     Mp              (1/2)*M+(1/36)*(dt^2)*K ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
             % % Perso
-                F1p= M*V_m + (1/2)*dt*(HistF(:,t) + HistF(:,t+1)) - dt*K*U_m;
-                F2p= -(1/6)*dt*(K*U_m - HistF(:,t+1)) - (1/3)*M*V_m;
-                VmVp = [ (1/3)*(dt^2)*K+(1/2)*dt*C  (1/6)*(dt^2)*K+M+(1/2)*dt*C ; 
-                         (1/12)*(dt^2)*K-(1/2)*M  (1/12)*(dt^2)*K+(1/6)*M+(1/6)*dt*C ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
+                %F1p= M*V_m + (1/2)*dt*(HistF(:,t) + HistF(:,t+1)) - dt*K*U_m;
+                %F2p= -(1/6)*dt*(K*U_m - HistF(:,t+1)) - (1/3)*M*V_m;
+                %VmVp = [ (1/3)*(dt^2)*K+(1/2)*dt*C  (1/6)*(dt^2)*K+M+(1/2)*dt*C ; 
+                %         (1/12)*(dt^2)*K-(1/2)*M  (1/12)*(dt^2)*K+(1/6)*M+(1/6)*dt*C ] \ [F1p ; F2p]; % Mettre en place multiplicateur Lagrange
                         
             V_m = VmVp((size(V_m)+1):end);  %V_m(t+1)
             V_p = VmVp(1:size(V_m));        %V_p(t)

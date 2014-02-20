@@ -49,7 +49,7 @@ for program=0:(IterProgram-1)
         nonLine = 0; %1;
 
     % elements
-        nombreElementsParPartie=20; %5  *2^program;
+        nombreElementsParPartie=80; %5  *2^program;
         nombrePartie=2  ;
         nombreElements = nombrePartie*nombreElementsParPartie;               
         nombreNoeuds = nombreElements + 2;  % avec le noeud derriere le ressort
@@ -66,7 +66,7 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 0;
+        cas = 8;
         disp(['cas = ' num2str(cas)]);
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
@@ -76,11 +76,13 @@ for program=0:(IterProgram-1)
         % 6 Effort continue en bout de poutre les 50 premiers pas de temps
             NbPas6 = round(2e-4/dt);
         % 7 Vitesse initiale
+        % 8 Une periode de sinusverse
+            T8=10*dt*2^program; % 10*dt < T < Ttot/4            
 
     % schema d integration :
-        schem = 0;
+        schem = 3;
         disp(['schem = ' num2str(schem)]);
-        alpha=0;    % -1/3 <= alpha <= 0 
+        alpha=-1/3;    % -1/3 <= alpha <= 0 
         % 1 Newmark - Difference centree
         % 2 Newmark - Acceleration lineaire
         % 3 Newmark - Acceleration moyenne
@@ -99,6 +101,10 @@ for program=0:(IterProgram-1)
         elseif (CL==2)
             VectL=L/nombreElements:L/nombreElements:L;
         end
+        
+        if (schem==6)
+            CL=2;
+        end
 
     % Matrice de Masse :
         RepartMasse = 3;
@@ -113,7 +119,7 @@ for program=0:(IterProgram-1)
 
 %% Conditions limites
 
-    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF,NbPas6);
+    [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF,NbPas6,T8);
 
 %% Resolution Temporelle
 
@@ -122,9 +128,14 @@ for program=0:(IterProgram-1)
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
-    figure('Name','Calcul sur base complete','NumberTitle','off')
-     surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
+    figure('Name',['Calcul de choc schem ' num2str(schem) ],'NumberTitle','off')
+     %surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
+     plot(0:dt:Ttot,sortie(1).f.HistU(40,:),0:dt:Ttot,sortie(1).f.HistU(end-1,:),'r',0:dt:Ttot,(HistF(end-1,:)/(2*AmpliF))*max(sortie(1).f.HistU(end-1,:)),'LineWidth',2);
+     chainetitre=['\fontsize{20}\bfCalcul schem:' num2str(schem) '   T=' num2str(T8, '%10.1e\n')];
+    title(chainetitre);  
+        set(gca, 'FontSize', 20);
      
+
 %     figure('Name','Difference entre U_m et U_p','NumberTitle','off')
 %      surf(0:dt:Ttot,VectL,(sortie(1).f.HistU_m - sortie(1).f.HistU_p),'EdgeColor','none');
 %         return;
@@ -137,7 +148,7 @@ for program=0:(IterProgram-1)
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VectN = 1:(size(M,1)-size(D,1));
+VectN = 1:1;%(size(M,1)-size(D,1));
 reduc = 1;
 % 1 POD
 % 2 Rayleigh
@@ -173,7 +184,7 @@ end
 
     
 %% Animation
-    for i=VectN % Animation
+    for i=1:0%VectN % Animation
         Reference1 = sortie(1).f.HistV;
         Reference2 = HistVExact;
         Resultat = sortie(1+i).p*sortie(1+i).f.HistV;
@@ -205,8 +216,8 @@ for PGD = 1
 
         OthoIntern = 0;
 
-        Mmax=0;        % Nombre de modes maximum
-        Kmax=0;        % Nombre d'iterations max pour obtenir un mode
+        Mmax=15;        % Nombre de modes maximum
+        Kmax=10;        % Nombre d'iterations max pour obtenir un mode
         epsilon = 10^-6;
 
         [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif,schem);
@@ -219,12 +230,13 @@ for PGD = 1
         ModesTemps = [];
         Resultat = 1:Mmax;
         NoDisplayResultat = 1;
-        NoDisplayErreur = 1;
+        NoDisplayErreur = 0;
         Methode = 2; % PGD
 
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
-            [ErrMaxPGD,ErrCarrePGD,ErrAmpTotalePGD] = AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+            [ErrMaxPGD,ErrCarrePGD,ErrAmpTotalePGD] = AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas,chainetitre);
 
+     
         % Convergence du point fixe
             for i=1:0 % 1:NombreResultat
                 figure('Name',['Norme du couple '  num2str(i) ' dans le point fixe' ],'NumberTitle','off')

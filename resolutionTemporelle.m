@@ -4,12 +4,15 @@ function [sortie] = resolutionTemporelle(schem,alpha,M,C,K0,dt,Ttot,HistF,U0,V0,
     if (schem == 1)             % Newmark - Difference centree
         beta = 0;
         gamma = 1/2;
+        alpha = 0;
     elseif (schem == 2)         % Newmark - Acceleration lineaire
         beta = 1/12;
         gamma = 1/2; 
+        alpha = 0;
     elseif (schem == 3)         % Newmark - Acceleration moyenne
         beta = 1/4;
         gamma = 1/2;
+        alpha = 0;
     elseif (schem == 4)        % Newmark - Acceleration moyenne modifiee
         gamma = 1/2 - alpha;
         beta  = ((1-alpha)^2)/4;  

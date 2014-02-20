@@ -1,4 +1,4 @@
-function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF,NbPas6)
+function [D,conditionU,conditionV,conditionA,M,C,K0,HistF,U0,V0,verif] = CondiLimit(CL,M,C,K0,L,nombreElements,cas,nombrePasTemps,dt,Ttot,AmpliF,NbPas6,T8)
 %% Encastrement en debut et fin (ressort encastre)
 if (CL==1)
     % Expression generale
@@ -50,6 +50,10 @@ elseif (cas ==5)
     HistF(NoeudCharge,:) = (0:dt:Ttot)*AmpliF;
 elseif (cas ==6)
     HistF(NoeudCharge,1:NbPas6) = AmpliF;
+elseif (cas ==8)
+    omega=2*pi/T8;
+    NbPas8 = round(T8/dt)+1;
+    HistF(NoeudCharge,1:NbPas8) = (1- cos( (0:dt:T8)*omega))*AmpliF;
 end
 
 

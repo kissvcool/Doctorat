@@ -1,4 +1,4 @@
-function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas)
+function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,VectL,Donnees1,Donnees2,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas,chainetitre)
 %% Verification
 
     if (Methode == 1) % POD
@@ -209,13 +209,19 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
     if (NbResultat && ~NoDisplayErreur)
         NomFigure = ['Erreur / nombre de modes ' NomMethode ' du cas #' num2str(cas, '%10.u\n') ];
         
-        figure('Name',NomFigure,'NumberTitle','off')
-        plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurCarre)));
-        legend('Log de :Erreur sur l amplitude totale','Log de :Erreur volume au carre');
+%         figure('Name',NomFigure,'NumberTitle','off')
+%         plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurCarre)));
+%         legend('Log de :Erreur sur l amplitude totale','Log de :Erreur volume au carre');
 
+%         figure('Name',NomFigure,'NumberTitle','off')
+%         plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurMaximale)));
+%         legend('\fontsize{12}\bfLog de :Erreur sur l amplitude totale','Log de :Erreur Maximale');
+%         title(['\fontsize{12}\bf' chainetitre]);
         figure('Name',NomFigure,'NumberTitle','off')
-        plotyy(Resultat,log(abs(erreurAmpTotale))/log(10),Resultat,log(abs(erreurMaximale)));
-        legend('Log de :Erreur sur l amplitude totale','Log de :Erreur Maximale');
+        plot(Resultat,log(abs(erreurMaximale))/log(10),'LineWidth',2);
+        legend('Log de :Erreur Maximale');
+        title(chainetitre);        
+        set(gca, 'FontSize', 20);
     end
 
         % Modification de l'affichage
