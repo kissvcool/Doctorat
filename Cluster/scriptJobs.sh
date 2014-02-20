@@ -1,5 +1,6 @@
 #!/bin/sh
-
+countRebut=0;
+count=0;
 for iter in `seq 1 6480` #6480`
 do
 
@@ -35,21 +36,24 @@ do
 		if [ "$(($Elem*$dt))" -ge 48 ]	# condition stabilite : c*dt < Lelem
 			then
 			rebut=1;
-			echo "$iter au rebut pour Condition stabilite $(($Elem*$dt)) > 48"
+#			echo "$iter au rebut pour Condition stabilite $(($Elem*$dt)) > 48"
 		fi
 	fi
 
-	if [ "$schem" -lt 4 ]||[ "$schem" -eq 6 ]	# Schema independents de alpha
+	if [ "$rebut" -eq 0 ]
 		then
-		if [ "$alpha" -gt 1 ]	# Calcul redondant
+		if [ "$schem" -lt 4 ]||[ "$schem" -eq 6 ]	# Schema independents de alpha
 			then
-			rebut=1;
-			echo "$iter au rebut pour Calcul redondant"
+			if [ "$alpha" -gt 1 ]	# Calcul redondant
+				then
+				rebut=1;
+#				echo "$iter au rebut pour Calcul redondant"
+			fi
+			alpha=0;
 		fi
-		alpha=0;
 	fi
 
-	ecrire=1;
+	ecrire=0;
 	if [ "$rebut" -eq 0 ]
 		then
 		if [ "$ecrire" -eq 1 ]
@@ -78,16 +82,16 @@ do
 			sed -e "s/rrrrr/rrrrr/g" Refb"$iter".m > Ref"$iter".m
 		fi
 
-		echo "$iter cas = $cas - schem = $schem - Mmax=$Mmax - Kmax=$Kmax - Elem =$Elem - alpha = -$alpha/9 - dt =$dt - rebut=$rebut"
+#		echo "$iter cas = $cas - schem = $schem - Mmax=$Mmax - Kmax=$Kmax - Elem =$Elem - alpha = -$alpha/9 - dt =$dt - rebut=$rebut"
 		T0=4;
 		Tf=$(( ($Mmax/50)*($Mmax/50)  *  ($Kmax/10)  *  ($Elem/20) * $T0 * (1+2/dt)));
-		echo "temps de calcul T0*$(( ($Mmax/50)*($Mmax/50)  ))*$(( $Kmax/10 ))*$(( $Elem/20 ))*$((1+2/dt)) = $Tf"
+#		echo "temps de calcul T0*$(( ($Mmax/50)*($Mmax/50)  ))*$(( $Kmax/10 ))*$(( $Elem/20 ))*$((1+2/dt)) = $Tf"
 		if [ $Tf -ge 60 ]
 			then
 			Th=$(($Tf/60));
 			Tm=$(($Tf%60));
 			Th=$( printf "%02d" $Th )
-			Th=$( printf "%02d" $Th )
+			Tm=$( printf "%02d" $Tm )
 		else
 			Th="00";
 			Tm=$Tf;
@@ -122,9 +126,14 @@ do
 
 			#mem=$(( ($Mmax/50) * ($Elem/20) * 3 ));
 		#### enlever echo
-			qsub -l nodes=01:ppn=3,walltime=$Th:$Tm:00,pvmem=3gb job$iter
+#			echo "qsub -l nodes=01:ppn=3,walltime=$Th:$Tm:00,pvmem=3gb job$iter"
+			count=$(($count+1));
+	else
+			countRebut=$(($countRebut+1));
 	fi
 
 done
 
 	echo "possibilites=$possibilites"
+	echo "count       = $count"
+	echo "countRebut  = $countRebut"

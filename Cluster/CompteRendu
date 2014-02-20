@@ -1,0 +1,101 @@
+
+possibilites=6480
+countRebut  = 3456
+count       = 3024
+
+2995	Dossiers
+
+1707	Dossiers vides
+1275	Fichiers Log	/	1277	Fichiers FichierLog (1708 et 5507 ont FichierLog sans Log)
++=
+2982
+
+1145	Fichiers Resultats
+
+JOB0138
+JOB1209
+JOB1538
+JOB1708
+JOB2286
+JOB2367
+JOB2396
+JOB3805
+JOB4017
+JOB4559
+JOB4991
+JOB5507
+JOB5608
+Log   = 1275
+Vide  = 1707
+Autre = 13
+Total = 2995
+
+
+
+grep walltime ~/job*.e* | wc -l
+29
+grep -l walltime ~/job*.e* 
+/u/nargil/job0003.e146502
+/u/nargil/job0004.e146503
+/u/nargil/job0993.e146994
+/u/nargil/job1083.e147030
+/u/nargil/job1104.e147051
+/u/nargil/job2076.e147525
+/u/nargil/job4486.e148669
+/u/nargil/job4530.e148695
+/u/nargil/job4701.e148746
+/u/nargil/job4959.e148866
+/u/nargil/job4982.e148877
+/u/nargil/job5064.e148929
+/u/nargil/job5132.e148949
+/u/nargil/job5994.e149313
+/u/nargil/job5996.e149315
+/u/nargil/job5997.e149316
+/u/nargil/job6002.e149321
+/u/nargil/job6003.e149322
+/u/nargil/job6004.e149323
+/u/nargil/job6149.e149414
+/u/nargil/job6176.e149417
+/u/nargil/job6177.e149418
+/u/nargil/job6181.e149422
+/u/nargil/job6182.e149423
+/u/nargil/job6183.e149424
+/u/nargil/job6184.e149425
+/u/nargil/job6186.e149427
+/u/nargil/job6356.e149477
+/u/nargil/job6362.e149483
+
+
+
+
+5988 au rebut pour Condition stabilite 160 > 48
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+./scripctJobs.sh: 92: printf: 08: not completely converted
+6013 au rebut pour Condition stabilite 320 > 48
+
+
+
+
+
