@@ -1,0 +1,2 @@
+L’encodage ISO-8859-1 peut poser des probleme et on peut convertir un fichier en UTF-8 grace a :
+	iconv -f latin1 -t utf-8 fichier.tex > fichier-utf8.tex

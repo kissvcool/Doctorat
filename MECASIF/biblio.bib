@@ -1,0 +1,539 @@
+@use{\abbrev}
+
+@string{JCS = "J. Compos. Struct." } 
+@string{IJF = "Int. J. Frac" } 
+@string{PRS = "Proc. Royal Soc. London"}
+@string{PRSA = "Proc. Royal Soc. London A"}
+@string{CRAS2 = "C. R. Acad. Sci. Paris, {S}\'erie {II}"}
+@string{IJP = "Int. J. of Plasticity" } 
+@string{MSE = "Material Science and Engineering" } 
+@string{PPS = "Physica Status Solidi" }
+@string{PhM = "Philosophical Magasine" } 
+@string{INPL = "Institut National Polytechnique de Lorraine" } 
+@string{MIT = "\'Massachusetts Institute of Technology" } 
+@string{ENSMP = "\'Ecole Nationale Sup\'erieure des Mines de Paris" } 
+@string{ENSC = "\'Ecole Normale Sup\'erieure de Cachan" } 
+@string{ENPC = "\'Ecole Nationale des Ponts et Chauss\'ees" } 
+@string{P6 = "Universit\'e Pierre et Marie Curie, Paris 6" } 
+@string{UTC = "Universit\'e de Technologie de Compi\`egne" } 
+@string{JEMT = "J. of Engng. Mat. Technol." } 
+@string{JEM = "J. of Engng Mechanics"}
+@string{RFM = "Revue fran\c caise de m\'ecanique" }
+@string{JMA = "J. de m\'ecanique appliqu\'ee" }
+@string{JACS = "J. Am. Ceram. Soc." } 
+@string{IJSS = "Int. J. Solids Structures"}
+@string{JIM = "J. Inst. Metals." } 
+@string{JNM = "J. Nucl. Mat." } 
+@string{JMPS = "J. Mech. Phys. Sol." } 
+@string{EJMS = "Eur. J. Mech., A/Solids" } 
+@string{EJCM = "Eur. J. Computational Mech." }
+@string{REEF = "Revue Europ\'eenne des \'El\'ements Finis"}
+@string{CMS = "Computational Materials Science"}
+@string{CMA = "Computational Mechanics Advances"}
+@string{ScriptaMet = "Scripta Metallurgica and Materiala"}
+@string{ACTAMET = "Acta Metall."}
+@string{ACTAMEC = "Acta Mech."}
+@string{MetTrans = "Metallurgical Transaction" } 
+@string{IJNME = "Int. J. Numer. Meth. Engng"}
+@string{CMAME = "Comp. Meth. Appl. Mech. Engng"}
+@string{IJDM = "Int. J. {D}amage {M}echanics"}
+@string{MoM = "Mech. of Materials"}
+@string{TAIME = "Trans. of the Met. Soc. of AIME"}
+@string{IJES = "Int. J. of Engng Science"}
+@string{RPA = "Revue Phys. Appl." }
+@string{NED = "Nucl. Engng and Design" }
+@string{AAM = "Advances in Appl. Mech." }
+@string{MSMSE = "Modelling Simul. Mater. Sci. Eng."}
+@string{ActaMat = "Acta Mat."}
+@string{CaS = "Computers and Structures" }
+@string{PhR = "Phys. Rev."}
+@string{JGR = "J. Geophys. Res."}
+@string{JMS = "J. Mech. Sci."}
+@string{MRS = "Mech. Res. Comm."}
+@string{JAMM = "J. Appl. Math. \& Mech."}
+@string{CST = "Composite Science Technology"}
+@string{IJMS = "Int. J. Mech. Sci."}
+@string{JMPT = "J. Mat. Proc. Tech."}
+@string{APS = "Advances in Polymer Science"}
+@string{JM = "Journal de M\'ecanique"}
+@string{TM = "Technische Mechanik"}
+@string{SIAM = "SIAM J. Math. Anal."}
+@string{JP4 = "J. de {P}hysique {IV}" }
+@string{LRA = "La {R}echerche {A}\'erospatiale" }
+@string{JMTA = "J. de m\'ecanique th\'eorique et appliqu\'ee" }
+@string{JCM = "J. of composite materials"}
+@string{CMe = "Computational Mechanics"}
+@string{RPA = "Revue de Physique Appliqu\'ee" }
+@string{AMR = "Applied {M}echanics {R}eviews" }
+@string{JPVT = "J. Press. Vessel Technol."}
+@string{JAM = "J. of Applied {M}echanics" }
+@string{FFEMS= "Fatigue and Fracture of Engng Mat and Struct"}
+@string{EFM = "Engng Fracture Mechanics" }
+@string{EngC = "Engng Computations" }
+@string{QAM = "Quarterly of Applied Mathematics"}
+@string{ArchMech = "Archives of Mechanics"}
+@string{AST = "Aerospace Science and Technology"}
+@string{MRC = "Mechanics {R}esearch {C}ommunication"}
+@string{JMPT = "J. of Materials Processing Technology" } 
+@string{IJCP = "Int. J. of Computational Physics" }
+@string{MST = "Materials Science and Technology" } 
+@string{MaD = "Materials and Design" } 
+@string{MMT = "Metallurgical and Materials Transactions" } 
+@string{JLA = "Journal of Laser Applications" } 
+@string{JMEP = "Journal of Materials Engineering and Performance" }
+@string{JAPS = "J. Appl. Polym. Sci."}
+@string{JAS = "J. Appl. Sci."}
+@string{JAP = "J. Appl. Phys."}
+@string{RCT = "Rubber Chem. Tech."} 
+@string{MAC = "Macromolecules"} 
+@string{PC = "Polymer composites"}
+@string{PRE = "Physical Review E"}
+@string{KGK = "Kautschuk Gummi Kunststoffe"}
+@string{JAPSS = "J. Appl. Polym. Sci. : Appl. Polym. Symp."}
+@string{JPSS = "Journal of Polymer Science : Polymer Symposia "}
+@string{JSC = "J. of Scientific Computing "}
+@string{JCP = "J. of Computational Physics "}
+@string{ACME = "Arch. Comput. Meth. Engng. "}
+@string{ARC = "Annual Reviews in Control"}
+@string{IP ="Inverse problems"}
+@string{SAE ="SAE Int. J. of Passeng. Cars - Mech. syst."}
+@string{CV ="Shock and Vibration"}
+@string{MCS ="Mathematics and Computers in Simulation"}
+
+
+
+@book{Nguyen-2005,
+author={N.C. Nguyen, K. Veroy and A.T. Patera},
+title={Certified real-time solution of parametrized partial differential equations. Handbook of Material Modeling}, 
+publisher={Springer},
+year={2005}}
+
+@article{Ryckelynck-2005,
+author= {Ryckelynck, D.},
+title= {A priori hypereduction method: an adaptive approach},
+journal = IJCP,
+year = 2005,
+volume = 202,
+pages = {346-366}}
+
+@ARTICLE{Ryckelynck-2009,
+author  = {Ryckelynck, D.},
+title = {Hyper reduction of mechanical models involving internal variables},
+journal      = IJNME,
+year = 2009,
+ volume = 77,
+ number = 1,
+ pages = {75-89}}
+
+@article{Sirovich-1987,
+author = {Sirovich, L.},
+title  = {Turbulence and the dynamics of coherent structures part {I} :
+    coherent structures},
+    journal      = "Quarterly of applied mathematics",
+    year = 1987,
+    volume =65,
+number = 3,
+pages = {561--571}} 
+
+@article{Sirovich-1987c,
+author = {Sirovich, L.},
+title  = {Turbulence and the dynamics of coherent structures part {III} :
+    dynamics and scaling},
+    journal      = "Quarterly of applied mathematics",
+    year = 1987,
+    volume =65,
+number = 3,
+pages = {583--590}} 
+
+@article{Everson-1995,
+author = {Everson, R. and Sirovich, L.},
+title={{Karhunen-Lo\`eve} procedure for gappy data},
+journal = {J. Opt. Soc. Am. A},
+volume = 12,
+year = 1995,
+pages={1657-1664}}
+
+@article{Ryckelynck-2009b,
+author= {Ryckelynck, D.},
+title= {Toward "green" mechanical simulations in materials science : hyper-reduction of a polycrystal plasticity model},
+journal = EJCM,
+year = 2009,
+volume = 0,
+pages = {0-0}}
+
+@article{Ryckelynck-Missoum-2010,
+author= {Ryckelynck, D. and Missoum Benziane, D.},
+title= {Multi-level a priori hyper reduction of mechanical models involving internal variables},
+journal = CMAME,
+year = 2010,
+volume = 199,
+pages = {1134-1142}}
+
+@article{Karhunen-1947,
+author= {Karhunen, K.},
+title= {Uber lineare methoden in der wahrscheinlichkeitsrechnung},
+journal = {Annales Academiae Scientiarum Fennicae},
+series = {A1 : Mathematica-Physica},
+year = 1947,
+volume = 37,
+pages = {3-79}}
+
+@book{Loeve-1963,
+author= {Loeve, MM.},
+title= {Probability theory},
+series = {The University Series in Higher Mathematics},
+publisher={Van nostrand : Princeton, NJ}, year= 1949}
+
+@article{Alexandrov-1998,
+author= {Alexandrov, N.M. and Dennis, J.E. and Lewis, R.M. and Torczon, V. },
+title = {A trust-region framework for managing the use of approximation models in optimization},
+journal = {Structural Optimization},
+year = 1998,
+volume = 15,
+pages = {16-23}}
+
+@article{Bergmann-2009,
+author={Bergmann, M. and  Bruneau, C.-H. and Iollo, A. },
+title = {Enablers for robust {POD} models},
+journal={Journal of Computational Physics},
+year = 2009,
+volume=228,
+pages={516-538}
+}
+
+@article{Bergmann-Cordier-2008,
+author= {Bergmann, M. and Cordier, L.},
+title= {Optimal control of the cylinder wake in the laminar regime by trust-region methods and {POD} reduced-order models},
+journal = JCP,
+year = 2008,
+volume = 227,
+pages = {7813-7840}}
+
+@article{Veroy-Patera-2005,
+author={Veroy, K. and Patera, A.},
+title={{Certified real-time solution of the parametrized steady incompressible Navier–Stokes equations:
+rigorous reduced-basis a posteriori error bounds.}},
+journal={International Journal for Numerical Methods in Fluids},
+year={2005},
+volume={47(8)},
+pages={773–788}}
+
+@article{Falco-2011,
+author={Falco, A. and Nouy A.},
+title={A Proper Generalized Decomposition for the solution of elliptic problems in abstract form by using a functional Eckart-Young approach},
+journal={Journal of Mathematical Analysis and Applications},
+volume={376},
+issue={2},
+year={2011},
+pages={469-480}}
+
+@article{Leblond-2011,
+author={Leblond, C. and Allery, C. and Inard, C.},
+title={An optimal projection method for the reduced-order modeling of incompressible flows},
+journal={Comput. Methods Appl. Mech. Engrg.},
+year={2011},
+volume={200},
+pages={2507-2527}}
+
+@article{Allery-2011,
+author={Allery, C. and Hamdouni, A. and Ryckelynck, D. and Verdon, N.},
+title= {A priori reduction method for solving the two-dimensional {Burger's} equations},
+journal = {Applied Mathematics and Computation}, 
+volume ={217}, 
+issue={15},
+year={2011}, 
+pages={6671-6679}}
+
+@article{Ansari-2010,
+author= {Ansari, H.},
+title= {Construction and use of surrogate models for the dynamic analysis of multibody systems},
+journal = SAE,
+year = 2010,
+volume = 3,
+pages = {8-20}}
+
+@article{Rutherford-05,
+author= {Rutherford, A.C.},
+title= {Use of response surface metamodels for identification of stiffness and damping coefficients in a simple dynamic system},
+journal = CV,
+year = 2005,
+volume = 12,
+pages = {317-331}}
+
+
+@article{Pruliere-2010,
+author= {Pruliere, E. and Chinesta, F. and Ammar, A.},
+title= {{On the deterministic solution of multidimensional parametric models using the Proper Generalized Decomposition}},
+journal = MCS,
+year = 2010,
+volume = 3487,
+pages = {1-20}}
+
+@article{Amsallem-2008,
+author={Amsallem, D. and Farhat C.},
+title={Interpolation method for adapting reduced-order models and application to aeroelasticity},
+journal={AIAA Journal},
+volume={46},
+issue={7},
+pages={1803-1813},
+year={2008}}
+
+@article{Amsallem-2009,
+author= {Amsallem, D. and Cortial, J. and Carlberg K., Farhat C.},
+title= {A method for interpolating on manifolds structural dynamics reduced-order models},
+journal = IJNME,
+year = {2009},
+volume = {80},
+pages = {1241-1258}}
+
+@article{Carlberg-2011,
+author={Carlberg, K. and Bou-Mosleh, C. and Farhat, C.},
+title={{Efficient non-linear model reduction via a least-squares Petrov-Galerkin projection and compressive tensor approximations}},
+journal={International Journal for Numerical Methods in Engineering},
+volume={86},
+pages={155-181},
+year={2011}}
+
+@article{Carlberg-2011a,
+author={Carlberg, K. and Cortial, J. and Amsallem, D. and Zahr, M. and Farhat, C.},
+title={The {GNAT} nonlinear model reduction method and its application to fluid dynamics problems},
+journal={6th AIAA Theoretical Fluid Mechanics Conference, Honolulu, Hawaii, June 27--30},
+pages={2011-3112},
+year={2011}}
+
+@article{Galbally-2010,
+author={Galbally, D. and Fidkowski, K. and Willcox, K. and Ghattas, O.},
+title={Non-linear model reduction for uncertainty quantification in large-scale inverse problems},
+journal={International Journal for Numerical Methods in Engineering},
+volume={81},
+pages={1581-1608},
+year={2010}}
+
+@article{Willcox-2006,
+author={Willcox, K.},
+title={Unsteady flow sensing and estimation via the gappy proper orthogonal decomposition},
+journal={Computers \& Fluids},
+volume={35},
+pages={208-226},
+year={2006}}
+
+@ TECHREPORT{Astrid-2004,
+author={Astrid, P.},
+title={Reduction of Process Simulation Models: a proper orthogonal decomposition approach},
+institution  = {Technische Universiteit Eindhoven},
+type         = "Ph D thesis",
+ number       = "ISBN 90-386-1653-8", 
+ year ="2004"}
+
+@ TECHREPORT{Arian-2000,
+author={Arian, E. and Fahl, M. and Sachs, E. W.},
+title={Trust-Region Proper Orthogonal Decomposition for Flow Control},
+institution = {Ohio University},
+type = {Technical report 25 {ICASE}},
+year={2000}}
+
+@article{Lumley-1967,
+author={Lumley, J.L.}, 
+title={The structure of inhomogeneous turbulence},
+journal={Atmospheric Turbulence and Wave Propagation, Nauka, Moscow},
+series = {Yaglom, A.M. Tatarski, V.I. (Eds.)},
+year={1967},
+pages={166-178}}
+
+@article{Soize-2007,
+author={Sampaio, R. and Soize, C.},
+title={Remarks on the efficiency of {POD} for model reduction in non-linear dynamics of continuous elastic systems},
+journal={International Journal for Numerical Methods in Engineering},
+volume={72}, 
+year={2007},
+issue={1},  
+pages={22-45}}
+
+@article{Ladeveze-1985, 
+author       = {Ladev\`eze, P.},
+title        = "On algorithm family in structural mechanics. {Sur une famille d'algorithmes en m\'ecanique des structures}", 
+journal      = {Comptes Rendus Acad. Sci. Paris S\`erie II},
+volume = {300},
+number = {2},
+year = {1985},
+pages =  {41-44}
+}        
+
+@book{Ladeveze-1999,
+author={Ladev\`eze, P.},
+title={Nonlinear Computational Structural Mechanics: New Approaches and Non-Incremental Methods of Calculation.},
+publisher={Springer Verlag},
+year={1999}}
+
+@ARTICLE{Ladeveze-2003,
+author={Ladev\`eze, P. and Nouy, A.},
+title={On a multiscale computational strategy with time and space homogenization for structural mechanics}, 
+journal={Comput. Methods Appl. Mech. Engrg.}, 
+volume=192,
+year={2003},
+pages={3061-3087}} 
+
+@ARTICLE{Allix-2002,
+author={Allix, O. and Vidal, P.},
+title={A new multi-solution approach suitable for structural identification problems}, 
+journal={Comput. Methods Appl. Mech. Engrg.}, 
+volume={191},
+year={2002},
+pages={2727-2758}}
+
+@ARTICLE{Boucard-2009,
+author={Boucard,   P.-A.  and Buytet, S. and Guidault, P.-A.}, 
+title={A multiscale strategy for structural optimization}, 
+journal={International Journal for Numerical Methods in Engineering}, 
+volume={78},
+year={2009},
+pages={101-126}}
+
+@ARTICLE{Ladeveze-1999b,
+author={Ladev\`eze, P. and Moes, N.}, 
+title={Adaptive control for finite element analysis in plasticity}, 
+journal={Computers \& Structures},
+year={1999}, 
+volume={73},
+pages={45-60}}
+
+@article{Ryckelynck-2006,
+author={Ryckelynck, D. and Chinesta, F. and Cueto E. and Ammar, A.},
+title = {On the “A Priori” Model Reduction: Overview and Recent Developments},
+journal={Archives of Computational Methods in Engineering, State of the Art Reviews}, 
+issue = {1}, 
+volume={13},
+pages={91-128},
+year = {2006}}
+
+@ARTICLE{Ammar-2006b,
+author={Ammar, A. and Mokdad, B. and Chinesta, F. and Keunings, R.},
+title={A new family of solvers for some classes of multidimensional partial differential equations encountered in kinetic theory modeling of complex fluids},
+journal={Journal of Non-Newtonian Fluid Mechanics},
+year={2006},
+volume={139},
+pages={153-176}}
+
+@ARTICLE{Chinesta-2011,
+author={Chinesta, F. and Ammar, A. and Leygue, A. and Keunings, R.},
+title={An overview of the proper generalized decomposition with applications in computational rheology},
+journal={Journal of Non-Newtonian Fluid Mechanics},
+volume={166},
+year={2011},
+pages={578-592}}
+
+@article{Pelle-2000,
+title={An Efficient Adaptive Strategy to Master the Global Quality of Viscoplastic Analyses}, 
+author={Pelle, J-P. and Ryckelynck, D.}, 
+journal={Computers \& Structures}, 
+volume={78}, 
+issue={1-3},
+pages={169-184},
+year={2000}}
+
+@article{Ryckelynck-2002,
+title={An a priori model reduction method for thermomechanical problems, {R\'eduction a priori de mod\`eles thermom\'ecaniques}},
+author={Ryckelynck, D.},
+journal={C.R. Mecanique},
+volume=330,
+year=2002,
+pages={499-505}
+}
+
+@article{Barrault-2004,
+author={Barrault, M. and  Maday, Y. and Nguyen, N. C. and Patera, A. T.},
+title={An 'empirical interpolation' method: application to efficient reduced-basis discretization of partial differential equations},
+journal={C. R. Acad. Sci. Paris Ser. I},
+volume={339},
+year={2004},
+pages={667-672}}
+
+@article{Nguyen-2008,
+author={Nguyen, N. C. and Patera, A. T. and Peraire, J.},
+title={A 'best points' interpolation method for efficient approximation of parametrized functions},
+journal={Int. J. Numer. Meth. in Engng.}, 
+year={2008},
+volume={73},
+pages={521-543}}
+
+@article{Krysl-2001,  
+author ={Krysl, P. and Lall, S. and  Marsden, J.E.}, 
+title = {Dimensional model reduction in non-linear finite element dynamics of solids and structures}, 
+journal={Int. J. Numer. Meth. in Engng.}, 
+volume={51},
+year={2001},
+pages={479-504}}
+
+@article{Ryckelynck-2005,
+author={Ryckelynck, D.},
+title={A priori hypereduction method: an adaptive approach}, 
+journal={International Journal of Computational Physics}, 
+volume={202},
+year={2005},
+pages={346-366}}
+
+@article{Ryckelynck-2009,
+author={Ryckelynck, D.},
+title={Hyper-reduction of mechanical models involving internal variables},
+journal={International Journal for Numerical Methods in Engineering},
+volume={77},
+year={2009},
+pages={75-89}}
+
+@TECHREPORT{Lorenz1956, 
+author       = "Lorenz, E. N. ",
+title        = "{ Empirical Orthogonal Functions and Statistical Weather Prediction}", 
+institution  = "MIT Departement of Meteorology, Statistical Forecasting Project",
+type         = "Scientific Report",
+ number       = "1", 
+ year ="1956",
+ }
+ 
+@article{Ladeveze-2010,
+author={Ladev\`eze, P. and Passieux, J.-C. and N\'eron, D.},
+title={{The LATIN multiscale computational method and the Proper Generalized Decomposition}},
+journal={Computer Methods in Applied Mechanics and Engineering},
+volume={199},
+issue={21-22},
+pages={1287-1296},
+year={2009}}
+
+@article{Lieu-2004,
+author={Lieu, T. and Lesoinne, M.},
+title={{Parameter Adaptation of Reduced Order Models for Three-Dimensional Fluter Analysis}},
+journal={AIAA Paper},
+pages={2004-0888},
+year=2004}
+
+@article{Lieu-Farhat-2005,
+author={Lieu, T. and Farhat, C.},
+title={{Adaptation of POD-based Aeroelastic ROMs for Varying Mach Number and Angle of Attack: Application to a Complete F-16 Configuration}},
+journal={AIAA Paper},
+pages={2005-7666},
+year={2005}}
+
+@article{Ammar-2006,
+author={Ammar, A. and Ryckelynck, D. and Chinesta, F. and Keunings, R. },
+title={On the reduction of kinetic theory models related to finitely extensible dumbbells},
+journal={J. Non-Newtonian Fluid Mech. },
+volume={134},
+pages={136-147},
+year={2006}}
+
+@article{Kerfriden-2011,
+title={{Bridging proper orthogonal decomposition methods and augmented Newton-Krylov algorithms: An adaptive model order reduction for highly nonlinear mechanical problems}},
+author={Kerfriden, P. and Gosselet, P. and Adhikari, S. and Bordas, S.P.A.},
+journal={Comput. Methods Appl. Mech. Engrg.},
+year={2011},
+volume={200},
+pages={850-866}} 
+
+@article{Chaturantabut-2009,
+author={Chaturantabut, S. and Sorensen, D. C.},
+title={Nonlinear model reduction via discrete empirical interpolation},
+journal={Proceedings of the 48h IEEE Conference on Decision and Control CDC held jointly with 2009 28th Chinese Control Conference},
+volume = {32},
+issue = {5},
+pages = {2737-2764},
+publisher = {Ieee},
+year={2010}}

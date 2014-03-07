@@ -1,0 +1,83 @@
+\documentclass[a4paper,12pt,titlepage]{article}
+
+\usepackage[utf8]{inputenc}  % pour PC
+\usepackage[francais]{babel}
+\usepackage{fontenc}
+%\usepackage[applemac]{inputenc}  % pour MAC 
+\usepackage{amsfonts}
+\usepackage{amsmath}
+ \usepackage{amssymb}
+\usepackage{graphicx}
+
+\usepackage{layout}
+
+\title{Livrable F1.1a MECASIF SP1, \\
+Revue critique des méthodes applicables aux SP2 SP3 et SP4}
+
+\author{David RYCKELYNCK (Armines), Pierre-Alain Boucard (ENS/LMT), \\
+Lionel Fourment (Armines), Yvon Maday(UMPC/LJLL), \\
+Fabrice Thouverez (ECL/LTDS)}
+
+\oddsidemargin = 0pt
+\textwidth = 450pt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+ %\layout
+
+ \maketitle
+ \sloppypar
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Mots clés à compléter}
+
+Afin de répartir les contributions, je propose d'attribuer une liste de mots clés à des rédacteurs principaux de ce rapport. Ceux-ci pourront évidemment déléguer cette tâche. Je propose une première répartition de mots clés à compléter ou à modifier, ainsi qu'une liste de rédacteurs principaux.
+
+\begin{itemize}
+\item Pierre-Alain Boucard : méthode PGD, méthode LATIN, TVRC (éventuellement)
+\item Yvon Maday : méthode des bases réduites, Algorithmes Glouton, méthodes EIM, GEIM, interpolation de bases réduites (éventuellement)
+\item Fabrice Thouverez : réduction de modèle en mécanique des vibrations, linéaires et non linéaires.
+\item Lionel Fourment : métamodèles et surfaces de réponse
+\item David Ryckelynck : méthode POD, classification en méthodes a priori ou a posteriori, méthode APHR, gappy POD, Missing Point Estimation, Hyper-réduction
+\end{itemize}
+
+Je propose également de rédiger nos contribution en Latex avec des références insérées dans le fichier biblio.bib.
+
+David Ryckelynck
+
+\section{Exemple de texte}
+
+La gappy POD a été proposée dans \cite{Everson-1995} puis utilisée dans \cite{{Willcox-2006},{Carlberg-2011a}}.
+
+\section{Conclusion (brouillon)}
+
+Les méthodes applicables au sous-programme SP2 sont :
+\begin{itemize}
+\item la PGD ...
+\end{itemize}
+
+Les méthodes applicables au sous-programme SP3 sont :
+\begin{itemize}
+\item l'EIM
+\item la gappy POD
+\item l'hyper-réduction
+\item la POD hiérarchique...
+\end{itemize}
+
+Les méthodes applicables au sous-programme SP4 sont :
+\begin{itemize}
+\item l'EIM
+\item la gappy POD
+\item l'hyper-réduction
+\item la POD hiérarchique ...
+\end{itemize}
+
+\bibliographystyle{unsrt}
+\bibliography{biblio.bib}
+
+\end{document}

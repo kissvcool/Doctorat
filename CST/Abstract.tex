@@ -1,0 +1,44 @@
+\documentclass[12pt,a4paper]{article}
+  \usepackage[utf8]{inputenc}
+  \usepackage[francais]{babel}
+  \usepackage[T1]{fontenc}
+  \usepackage{amsmath}
+  \usepackage{cancel} % Barrer des éléments mathématiques
+  
+  %\usepackage[linkcolor=black,colorlinks=true]{hyperref} % mettre des liens sans la couleur
+  
+\begin{document}
+\begin{center}
+\section*{PGD approach for low frequency dynamics problems}
+
+
+\noindent{\normalsize P. Nargil \textsuperscript{1,*}, F. Louf\textsuperscript{1} and P.A. Boucard\textsuperscript{1}}
+
+\end{center}
+
+\noindent{\footnotesize \textsuperscript{1}
+LMT-Cachan (ENS Cachan/CNRS/PRES UniverSud)\\
+\phantom{\textsuperscript{a}} 61 avenue du President Wilson \\
+\phantom{\textsuperscript{a}} 94235 Cachan Cedex France}\\	
+\noindent{\footnotesize \textsuperscript{*} nargil@lmt.ens-cachan.fr}
+
+\paragraph*{}
+This work takes place among the model order reduction methods. The PGD method is the center of many current studies, applying its use to various cases. This paper will be centered on dynamics problems possibly presenting material non-linearities.
+\paragraph*{}
+The need to be competitive brings more and more industrials to head towards simulation tools, which allow, at least during conception, to reduce the prototypes try-outs and therefore to decrease the time and cost of development.
+\paragraph*{}
+It also enabled technical research offices to use optimization on conceptions and to produce probabilistic models. This two processes have in common their high cost in resources and calculation time, since both need the assessment of numerous solution of the numerical model. That is why they are currently applied only to quite simple models in the industrial world. To deal with large problems, it is necessary to reduce calculation time while preserving a reasonable quality through model order reduction strategies.
+\paragraph*{}
+Among the various methods of model order reduction existing, we offer to work essentially on the PGD (Proper Generalized Decomposition) \cite{Creation,ShortReview}. Originally developed to solve evolution problems within the LATIN \cite{Creation}, this method has known numerous evolutions the past few years \cite{ElasticVisco,Parametrized} : Multiscale in space and time, stochastic use, parametric problems, "optimal" PGD base construction... This family of model order reduction using a representation with separation of variables is said a priori, since the reduced bases are built on the fly without the need for the exact solution of the problem (not even an approximation of it). The principle is to find the decomposition of the solution of a problem as a sum of products of separated variables functions (variables can represent a parameter of the problem \cite{Multidimensional}). In our case, the problem depends on the values of a set of parameters, and using the PGD ability to add parameters as variables, the resolution will provide a solution for all values of each parameter introduced this way.\paragraph*{}
+In this paper, our goal is to apply this method to dynamics problem presenting non-linearities. We will provide a comparison with another model order reduction method, the POD \cite{Chatterjee} : for Proper Orthogonalized Decomposition. This method will allow us to compare solutions but also reduced bases. The POD can be attached to the SVD and as such it guarantees a form of optimality of the reduced basis, but this method has the major drawback to be a posteriori, implying that the method is applied to a previous resolution of the complete system. This means that a first resolution is required on the complete basis and that the acquired reduced basis is linked to this resolution.
+\paragraph*{}
+An application of the PGD in the case of linear dynamics problems on academic examples will be presented comparing it to POD results. It will illustrate the performances and advantages of this method, showing the influence of the loading velocity, emphasising the results of integration scheme choice such as Galerkin time discontinuous \cite{GDDisc} and pointing out the importance of orthogonalization.
+\subsection*{Acknowledgement}
+The French government is greatly acknowledged for its funding of the FUI MECASIF project.
+\paragraph*{Keywords:}
+Reduced Order Modeling, Separated variables representation, PGD, POD, dynamics, Reduced Basis.
+%\subsection*{References:}
+\addcontentsline{toc}{part}{References} %changer titre - ne pas passer un page
+\bibliographystyle{unsrt}
+\bibliography{reference}
+\end{document}
