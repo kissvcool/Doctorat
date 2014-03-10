@@ -29,3 +29,33 @@ Comment copier plusieurs branches depuis un dépot distant :
 		~: git checkout -b Galer origin/Galer
 				-La commande générale étant 
 					~: git checkout -b [branch] [remotename]/[branch]
+
+Voir l'historique
+	~: git log -n
+	
+	
+Modifier les commit / les associer …
+	~: git rebase -i 2925189e58858dfaa73b59dc4378fe87cbc215fa
+		l’id donné sera le premier commit inaccessible par le rebase
+
+Modifier les dates des commit:
+	Il faut modifier les commit un par un.
+	Pour modifier la date d’auteur :
+		~: git filter-branch -f --env-filter 'if [ $GIT_COMMIT = a5a0307731e33256cd968d0707c7c8c25e2d671d ]
+			then
+			export GIT_AUTHOR_DATE="Sat May 19 01:01:01 2007 -0700"
+		fi'
+	
+	et pour lui associer la date de commit :
+		~: git filter-branch -f --env-filter 'if [ $GIT_COMMIT = f0e4734c2f9e393e72a98bf8a0fe92d0b6b37dca ]
+			then
+			export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
+		fi'
+
+	Quand j'ai voulu en modifier plusieurscommit, tous les commit jusqu'au debut ont subi des changements alors j'ai utilise :
+		~: git rebase origin/master
+
+Corriger le bug avec Vim :
+	Can be fixed by adding
+	let g:spf13_keep_trailing_whitespace = 1
+	into ~/.vimrc.local

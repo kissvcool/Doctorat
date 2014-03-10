@@ -11,4 +11,4 @@ do
 done
 
 cd Autres
-chmod a+x Installation.sh push.sh pull.sh Cluster/scripctJobs.sh
+chmod a+x Installation.sh push.sh pull.sh Cluster/scriptJobs.sh
