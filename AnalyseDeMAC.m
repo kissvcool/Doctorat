@@ -55,10 +55,15 @@ function AnalyseDeMAC(NbModesMethode1,NbModesMethode2,ModeMethode1,ModeMethode2)
             elseif (k == 2 )
                 figure('Name','Analyse MAC entre les modes obtenus par POD et PGD','NumberTitle','off')
             elseif (k == 3 )
+                close all;
                 figure('Name','Analyse MAC entre les modes obtenus par PGD','NumberTitle','off')
             end
             
             h=bar3(MAC);
+            if (k == 3 )
+                matlab2tikz( '../Latex/myfile.tikz' );
+            end
+            
             for n=1:numel(h)
                  cdata=get(h(n),'zdata');
                  cdata=repmat(max(cdata,[],2),1,4);
