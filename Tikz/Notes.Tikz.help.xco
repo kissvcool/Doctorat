@@ -1,0 +1,28 @@
+Creation d’image a inserer
+	~:pdf2ps *.pdf
+	~:ps2eps *.ps
+	~:mv *.eps ../InUse/
+
+Tentatives Histogramme 3D
+
+	Tikz.Utilis.Imag.Histogram
+		Ne présente pas de fichier de donnees bruts.
+		Meme avec le code propose pour obtenir les points
+			l’image ne s’aligne pas avec les axes.
+	Tikz.Dessin.Surfaces
+		Utilise du code pour contraindre l'execution
+			qui n'autorise pas la création de couleurs
+			personnalisees.
+		Il ne faut utiliser ni "\begin{axis}" ni "\edef"
+			et "\temp".
+		Les barres ont une couleur differentes au sommet
+			ou sur les cotes.
+	Tikz.Mark.Cubes
+	Tikz.Mark.Cubes.2
+		Utilisation de marque en forme de cube a chaque
+			point du trace.
+		Presente les memes problemes d'execution que
+			Tikz.Dessin.Surfaces
+	Tikz.Dessin.Rectangl
+		Choix definitif
+		Tikz.Dessin.Rectangl.minimal -> code minimal

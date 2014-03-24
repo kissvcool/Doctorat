@@ -1,0 +1,43 @@
+\documentclass{minimal}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+
+\pgfplotstableread{DataTest.dat}{\firsttable}					
+	\pgfplotstablegetrowsof{DataTest.dat}	
+	\pgfmathtruncatemacro{\rows}{\pgfplotsretval-1}   
+  
+	\pgfplotstablegetelem{0}{[index] 2}\of{\firsttable} 
+	  	\let\maxZ\pgfplotsretval 	
+	\pgfmathsetmacro{\Zscale}{4/\maxZ}
+  																						
+\begin{tikzpicture}[x={(0.866cm,-0.5cm)},y={(0.866cm,0.5cm)},z={(0cm,4 cm)}]
+
+\colorlet{redhsb}[hsb]{red}		%
+\colorlet{bluehsb}[hsb]{blue}	% 
+
+\foreach \p in {1,...,\rows}{
+		\pgfplotstablegetelem{\p}{[index] 0}\of{\firsttable} 
+	  	\let\x\pgfplotsretval 
+	  	\pgfplotstablegetelem{\p}{[index] 1}\of{\firsttable} 
+	  	\let\y\pgfplotsretval 
+	  	\pgfplotstablegetelem{\p}{[index] 2}\of{\firsttable} 
+	  	\let\z\pgfplotsretval 
+	  	
+	  	\pgfmathtruncatemacro{\teinte}{100-((\z/\maxZ)*100)}
+	  	\colorlet{col}[rgb]{bluehsb!\teinte!redhsb}   
+	  	 % Visible faces from original view
+			\fill[col] (\x+0.5,\y+0.5,\z) -- (\x+0.5,\y-0.5,\z) -- (\x+0.5,\y-0.5,0) -- (\x+0.5,\y+0.5,0) -- (\x+0.5,\y+0.5,\z);
+				\draw[black](\x+0.5,\y+0.5,\z) -- (\x+0.5,\y-0.5,\z) -- (\x+0.5,\y-0.5,0) -- (\x+0.5,\y+0.5,0) -- (\x+0.5,\y+0.5,\z);
+			\fill[col] (\x+0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,0) -- (\x+0.5,\y-0.5,0) -- (\x+0.5,\y-0.5,\z);
+				\draw[black](\x+0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,0) -- (\x+0.5,\y-0.5,0) -- (\x+0.5,\y-0.5,\z);
+	  	  % Top face
+	  	   \fill[col] (\x-0.5,\y-0.5,\z) -- (\x-0.5,\y+0.5,\z) -- (\x+0.5,\y+0.5,\z) -- (\x+0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,\z) ;
+	  	    \draw[black] (\x-0.5,\y-0.5,\z) -- (\x-0.5,\y+0.5,\z) -- (\x+0.5,\y+0.5,\z) -- (\x+0.5,\y-0.5,\z) -- (\x-0.5,\y-0.5,\z);
+}
+
+\end{tikzpicture}
+
+\end{document}

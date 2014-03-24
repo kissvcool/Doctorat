@@ -1,0 +1,20 @@
+\documentclass{minimal}
+\usepackage{pgfplots}
+%\usepackage{pgfplotstable}
+%\pgfplotsset{compat=newest}
+
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[3d box,xmin=1,xmax=15,ymin=1,ymax=15,zmin=0,zmax=1,width=9cm,height=9.25cm,grid=both]
+\addplot3 graphics[points={%
+(8.6639,11.4,0.39642) => (432.817,226.446)
+(9.4,4.4,0.0018691) => (402.303,253.748)
+(15.1984,15.4,0.99716) => (577.357,345.29)
+(8.6,8.6,1) => (399.894,350.108)
+}]
+{3dcolumnchart.png};
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

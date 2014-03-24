@@ -1,0 +1,75 @@
+\documentclass{minimal}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+
+\pgfplotstableread{DataTest.dat}{\firsttable}					% Read
+  \pgfplotstablegetrowsof{DataTest.dat}	
+  \pgfmathtruncatemacro{\rows}{\pgfplotsretval-1}   	% Put the number of row minus one in \rows, 
+  																						%		to use : \foreach \p in {0,...,\rows}
+% Assign variables max
+\pgfplotstablegetelem{0}{[index] 0}\of{\firsttable} 
+	  	\let\maxX\pgfplotsretval 
+\pgfplotstablegetelem{0}{[index] 1}\of{\firsttable} 
+	  	\let\maxY\pgfplotsretval 
+\pgfplotstablegetelem{0}{[index] 2}\of{\firsttable} 
+	  	\let\maxZ\pgfplotsretval 
+	  	
+\pgfmathsetmacro{\Zscale}{4/\maxZ} % contain the values of z between 0 and 4 cm (assuming that they are positiv)
+
+% Defining by hand the axis
+\begin{tikzpicture}[x={(0.866cm,-0.5cm)},y={(0.866cm,0.5cm)},z={(0cm,\Zscale cm)}]
+
+% Defining hsb color to have a color scale
+\colorlet{redhsb}[hsb]{red}		%
+\colorlet{bluehsb}[hsb]{blue}	% 
+
+% Drawing the system of axes
+\draw[->] (0,0,0) -- (1,0,0) node [black,left] {x};
+\draw[->] (0,0,0) -- (0,1,0) node [black,left] {y};
+\draw[->] (0,0,0) -- (0,0,1/\Zscale) node [black,left] {z};
+	  	
+% Write unit on x and y
+\foreach \p in {1,...,\maxX}{
+	\draw {(\p,0,0)} node[right] {\p};
+	% Draw the grid
+	\foreach \q in {1,...,\maxY}{
+		\draw[black] (\p-0.5,\q-0.5,0) -- (\p+0.5,\q-0.5,0) -- (\p+0.5,\q+0.5,0) -- (\p-0.5,\q+0.5,0) -- (\p-0.5,\q-0.5,0);
+		}
+}
+\foreach \p in {1,...,\maxY}{
+	\draw {(\maxX+1,\p,0)} node[left] {\p};
+}
+
+\foreach \p in {1,...,\rows}{
+		\pgfplotstablegetelem{\p}{[index] 0}\of{\firsttable} 		% The order in which the bars are drawn is determined by
+	  	\let\x\pgfplotsretval 															%		the order of the lines in the data file.
+	  	\pgfplotstablegetelem{\p}{[index] 1}\of{\firsttable} 		% And as the drawings just pile up, the last one just goes
+	  	\let\y\pgfplotsretval 															% 		on top of the previous drawings.
+	  	\pgfplotstablegetelem{\p}{[index] 2}\of{\firsttable} 		% The order here works with chosen view angle, if you
+	  	\let\z\pgfplotsretval 															%		change the angle, you might have to change it.
+	  	
+	  	\pgfmathsetmacro{\w}{0.8/2} % half the width of the bars
+	  	
+	  	\pgfmathtruncatemacro{\teinte}{100-((\z/\maxZ)*100)}
+	  	\colorlet{col}[rgb]{bluehsb!\teinte!redhsb}   
+	  	% Unseen faces from orginal view, but if you change the angle ....
+			%\fill[col] (\x-\w,\y-\w,\z) -- (\x-\w,\y+\w,\z) -- (\x-\w,\y+\w,0) -- (\x-\w,\y-\w,0) -- (\x-\w,\y-\w,\z);
+			%	\draw[black] (\x-\w,\y-\w,\z) -- (\x-\w,\y+\w,\z) -- (\x-\w,\y+\w,0) -- (\x-\w,\y-\w,0) -- (\x-\w,\y-\w,\z);
+			%\fill[col] (\x-\w,\y+\w,\z) -- (\x+\w,\y+\w,\z) -- (\x+\w,\y+\w,0) -- (\x-\w,\y+\w,0) -- (\x-\w,\y+\w,\z);
+			%	\draw[black](\x-\w,\y+\w,\z) -- (\x+\w,\y+\w,\z) -- (\x+\w,\y+\w,0) -- (\x-\w,\y+\w,0) -- (\x-\w,\y+\w,\z);
+	  	 % Visible faces from original view
+			\fill[col] (\x+\w,\y+\w,\z) -- (\x+\w,\y-\w,\z) -- (\x+\w,\y-\w,0) -- (\x+\w,\y+\w,0) -- (\x+\w,\y+\w,\z);
+				\draw[black](\x+\w,\y+\w,\z) -- (\x+\w,\y-\w,\z) -- (\x+\w,\y-\w,0) -- (\x+\w,\y+\w,0) -- (\x+\w,\y+\w,\z);
+			\fill[col!60!gray] (\x+\w,\y-\w,\z) -- (\x-\w,\y-\w,\z) -- (\x-\w,\y-\w,0) -- (\x+\w,\y-\w,0) -- (\x+\w,\y-\w,\z);
+				\draw[black](\x+\w,\y-\w,\z) -- (\x-\w,\y-\w,\z) -- (\x-\w,\y-\w,0) -- (\x+\w,\y-\w,0) -- (\x+\w,\y-\w,\z);
+	  	  % Top face
+	  	   \fill[top color=col!40!gray, bottom color=col!80!gray] (\x-\w,\y-\w,\z) -- (\x-\w,\y+\w,\z) -- (\x+\w,\y+\w,\z) -- (\x+\w,\y-\w,\z) -- (\x-\w,\y-\w,\z) ;
+	  	    \draw[black] (\x-\w,\y-\w,\z) -- (\x-\w,\y+\w,\z) -- (\x+\w,\y+\w,\z) -- (\x+\w,\y-\w,\z) -- (\x-\w,\y-\w,\z);
+}
+
+\end{tikzpicture}
+
+\end{document}

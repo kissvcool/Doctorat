@@ -1,0 +1,81 @@
+\documentclass{minimal}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+\begin{axis}[%
+view={64}{26},
+%width=\figurewidth,
+%height=\figureheight,
+scale only axis,
+xmin=0, xmax=4,
+xmajorgrids,
+ymin=0, ymax=5,
+ymajorgrids,
+zmin=0, zmax=2,
+zmajorgrids,
+axis lines=left,
+grid=none,
+point meta min=0, point meta max=1,
+]
+
+\addplot3[%
+surf,
+colormap/jet,
+shader=faceted,
+point meta=explicit, % ---- CF
+draw=black,
+fill]
+table[meta=c]{ % ---- CF
+    x   y   z           c
+    3   0   0   		0.9
+    3   1   0   		0.9
+    3   2   0  			0.9
+    3   3   0  			0.9
+    
+    3   0   0   		0.0037
+    3   1   0   		0.0037
+    3   2   0  			0.0294
+    3   3   0  			0.0448
+    
+    2   0   0   		0.0037
+    2   1   0   		0.0037
+    2   2   0  			0.0294
+    2   3   0  			0.0448
+    
+    2   0   0   		2
+    2   1   0   		3
+    2   2   0  			4
+    2   3   0  			5
+    
+    1   0   0   		6
+    1   1   0   		7
+    1   2   0  			0.0294
+    1   3   0  			0.0448
+    
+    1   0   1   		0.0037
+    1   1   1   		0.0037
+    1   2   1  			0.0294
+    1   3   1  			0.0448
+    
+    0   0   1   		0.0037
+    0   1   1   		0.0037
+    0   2   1  			0.0294
+    0   3   1  			0.0448
+    
+    0   0   0   		0.0037
+    0   1   0   		0.0037
+    0   2   0  			0.0294
+    0   3   0  			0.0448
+    
+};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{document}
