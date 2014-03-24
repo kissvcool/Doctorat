@@ -16,7 +16,7 @@
 w = warning ('off','all');
 % w = warning ('on','all');
 
-addpath('Afficher','POD','PGD')
+addpath('Afficher','POD','PGD','Matlab2Tikz')
 
 clear all
 clc
