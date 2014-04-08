@@ -1,0 +1,230 @@
+On désire calculer les intégrales pour résoudre les problèmes comme celui en espace :
+\begin{equation}
+\begin{array}{r r l}
+	&& \displaystyle
+		\int_T \! \int_\Theta
+			gh [  ~K~ gh
+				+ ~C~ \dot{g}h 
+				+ ~M~ \ddot{g}h
+				] ~dt d\theta 
+	~ f_q
+	\\
+	= &-& \displaystyle
+		\int_T \! \int_\Theta		
+			gh [  K~ \sum_{k=1}^{n-1} (f_q)_k       g_k  h_k 
+				+ ~C~ \sum_{k=1}^{n-1} (f_q)_k  \dot{g_k} h_k 
+				+ ~M~ \sum_{k=1}^{n-1} (f_q)_k \ddot{g_k} h_k
+				- ~F~] ~dt d\theta
+\end{array}
+\end{equation}
+
+On peut obtenir des termes développés ainsi:
+\begin{equation}
+\begin{array}{r r l}
+
+	&&\left[\displaystyle
+	\int_T \! \int_\Theta
+		g^2h^2 ~dt d\theta ~K~
+	+ \int_T \! \int_\Theta
+		g \dot{g} h^2 ~dt d\theta ~C~ 
+	+ \int_T \! \int_\Theta
+		g \ddot{g} h^2 ~dt d\theta ~M~
+			\right] ~ f_q
+	\\
+	= &-&
+	 \displaystyle
+	 \int_T \! \int_\Theta		
+		gh \sum_{k=1}^{n-1} (f_q)_k       g_k  h_k ~K~ ~dt d\theta
+	\\
+	&-&
+	 \displaystyle
+	 \int_T \! \int_\Theta
+	 	gh \sum_{k=1}^{n-1} (f_q)_k  \dot{g_k} h_k ~C~  ~dt d\theta
+	\\
+	&-&
+	 \displaystyle
+	 \int_T \! \int_\Theta
+	 	gh \sum_{k=1}^{n-1} (f_q)_k \ddot{g_k} h_k ~M~ ~dt d\theta
+	\\
+	&+&
+	 \displaystyle
+	 \int_T \! \int_\Theta
+	 	gh ~F ~dt d\theta 
+\end{array}
+\end{equation}
+
+En inversant somme et intégrale on a :
+\begin{equation}
+\begin{array}{r r l}
+
+	&&\left[\displaystyle
+	\int_T \! \int_\Theta
+		g^2h^2 ~dt d\theta ~K~
+	+ \int_T \! \int_\Theta
+		g \dot{g} h^2 ~dt d\theta ~C~ 
+	+ \int_T \! \int_\Theta
+		g \ddot{g} h^2 ~dt d\theta ~M~
+			\right] ~ f_q
+	\\
+	= &-&
+	 \displaystyle 
+	 \sum_{k=1}^{n-1}
+		 \int_T \! \int_\Theta		
+			gh (f_q)_k       g_k  h_k ~K~ ~dt d\theta
+	\\
+	&-&
+	 \displaystyle
+	 \sum_{k=1}^{n-1}
+		 \int_T \! \int_\Theta
+		 	gh (f_q)_k  \dot{g_k} h_k ~C~  ~dt d\theta
+	\\
+	&-&
+	 \displaystyle
+	 \sum_{k=1}^{n-1}
+		 \int_T \! \int_\Theta
+		 	gh (f_q)_k \ddot{g_k} h_k ~M~ ~dt d\theta
+	\\
+	&+&
+	 \displaystyle
+	 \int_T \! \int_\Theta
+	 	gh ~F ~dt d\theta 
+\end{array}
+\end{equation}
+
+En faisant l'hypothèse que les matrices ne dépendent pas des paramètres intégrés (hypothèse fausse en non-linéaire), la séparation des variables nous donne :
+\begin{equation}
+\begin{array}{r r l}
+
+	&&\left[\displaystyle
+	\int_T g^2~dt 			\! \int_\Theta
+		h^2  d\theta ~K~
+	+ \int_T g \dot{g}~dt 	\! \int_\Theta
+		 h^2  d\theta ~C~ 
+	+ \int_T g \ddot{g}~dt 	\! \int_\Theta
+		 h^2  d\theta ~M~
+			\right] ~ f_q
+	\\
+	= &-&
+	 \displaystyle 
+	 \sum_{k=1}^{n-1}
+		 \int_T g g_k dt \! \int_\Theta		
+			 h h_k d\theta  ~(f_q)_k ~K~
+	\\
+	&-&
+	 \displaystyle
+	 \sum_{k=1}^{n-1}
+		 \int_T g \dot{g_k} dt \! \int_\Theta
+		 	h h_k  d\theta  ~(f_q)_k ~C~
+	\\
+	&-&
+	 \displaystyle
+	 \sum_{k=1}^{n-1}
+		 \int_T g \ddot{g_k} dt \! \int_\Theta
+		 	h h_k d\theta  ~(f_q)_k ~M~
+	\\
+	&+&
+	 \displaystyle
+	 \int_T g ~F dt \! \int_\Theta
+	 	h d\theta 
+\end{array}
+\end{equation}
+
+On voit que une intégrale simple d'un produit de deux fonctions est un élément calculer de nombreuse fois, il faut donc en créer un programme.
+
+\section{Intégration d'un produit de fonctions linéaires par morceaux}
+
+Les calculs sont évidemment effectués sur des objet discrétiser pour pouvoir utiliser des outils numériques. Alors on considère deux vecteurs $G_1$ et $G_2$ contenant chacun les valeurs d'une fonction discrétisée, respectivement $g_1(t)$ et $g_2(t)$, définie $\forall t \in [t_0;t_0+T]$ tels que:  
+\begin{equation}
+	\forall n \in [1;(T/ \delta t)] ~G_1(n) = g_1((n-1) \delta t+t_0)
+	~~	idem~pour~G_2
+\end{equation}
+
+Il faut alors choisir une méthode de calcul d'intégrale, la première présentée ici fais l'hypothèse que les fonction sont linéaires entre les valeurs discrètes connues.
+
+\begin{equation}
+	\int_T g_1(t) g_2(t) dt = \sum_{n=1}^{T/\delta t} 
+							\int_{t_0+(n-1)\delta t}^{t_0+n\delta t} 
+								g_1(t) g_2(t) dt 
+\end{equation}
+
+Et si on applique l'hypothèse de linéarité, on peut écrire localement (sur le domaine de l'intégrale précédente) $g_1$ sous la forme : $at+b$, et $g_2$ sous la forme : $et+f$, où $a$, $b$, $e$ et $f$ sont des réels. Pour alléger la notation on définit $t_1=t_0+(n-1)\delta t$ et $t_2=t_0+n\delta t$, alors :
+\begin{equation}
+\begin{array}{r c}
+	&\displaystyle
+		\int_{t_1}^{t_2} g_1(t) g_2(t) dt
+	\\
+	=&\displaystyle
+		\int_{t_1}^{t_2} (at+b)(et+f) dt
+	\\
+	=&\displaystyle
+		\int_{t_1}^{t_2} \left(a e t^2 + (a f + b e) t + b f \right) dt
+	\\
+	=&\displaystyle
+		\left[ a e \frac{t^3}{3} 
+				+ (a f + b e) \frac{t^2}{2} 
+				+ b f t \right]_{t_1}^{t_2}
+	\\
+	=&\displaystyle
+		a e \frac{t_2^3 - t_1^3}{3} 
+				+ (a f + b e) \frac{t_2^2 - t_1^2}{2} 
+				+ b f (t_2 - t_1)
+\end{array} 
+\end{equation}
+
+Donc :
+\begin{equation}
+	\int_T g_1(t) g_2(t) dt = \sum_{n=1}^{T/dt} 
+							\left[ a e \frac{t_2^3 - t_1^3}{3} 
+				+ (a f + b e) \frac{t_2^2 - t_1^2}{2} 
+				+ b f (t_2 - t_1) \right]
+\end{equation}
+
+On peut identifier :
+\begin{equation}
+\begin{array}{r c c c l}
+		a &=& \displaystyle \frac{g_1(t_1)-g_1(t_2)}{\delta t}
+		  &=& \displaystyle \frac{G_1(n)  -G_1(n+1)}{\delta t}
+	\\
+		b &=& g_1(t_1) - at_1
+		  &=& G_1(n) - at_1
+	\\
+		&&& $et identiquement$ &
+	\\
+		e &=& \displaystyle \frac{g_2(t_1)-g_2(t_2)}{\delta t}
+		  &=& \displaystyle \frac{G_2(n)  -G_2(n+1)}{\delta t}
+	\\
+		f &=& g_2(t_1) - et_1
+		  &=& G_2(n) - et_1
+	
+\end{array}
+\end{equation}
+
+
+\section{Intégration de produit de fonctions constantes par morceaux}
+
+Si on considère les fonctions sont constantes par morceaux, on peut écrire l'intégrale sous la forme : 
+\begin{equation}
+	\int_T g_1(t) g_2(t) dt 	= \sum_{n=1}^{T/\delta t} 
+							\int_{t_0+(n-1)\delta t}^{t_0+n\delta t} 
+								g_1(t) g_2(t) dt 
+						= \sum_{n=1}^{T/\delta t} 
+							G_1(n) G_2(n) dt 
+\end{equation}
+
+Ceci correspond à une intégrale de Riemann, et on peut donc en avoir quelques variantes en changeant les indices de sommation :
+\begin{equation}
+\begin{array}{c}
+		\displaystyle
+		\sum_{n=1}^{T/\delta t} 
+							G_1(n) G_2(n) dt 
+	\\
+		\displaystyle
+		\sum_{n=2}^{T/\delta t +1} 
+							G_1(n) G_2(n) dt 
+	\\
+		\displaystyle
+		\sum_{n=1}^{T/\delta t +1} 
+							G_1(n) G_2(n) dt 
+		= G_1.G_2 dt
+\end{array}
+\end{equation}

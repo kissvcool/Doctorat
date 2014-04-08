@@ -1,0 +1,40 @@
+\documentclass{report}
+%\usepackage{tikz}
+%& -shell-escape
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usepackage{tkz-fct}
+\usetkzobj{all}
+\begin{document}
+	
+%\begin{center}
+%\begin{figure}
+%	\begin{minipage}{0.70\linewidth}
+%		\includegraphics[width=1\linewidth]{imageEPS.eps}
+%		\caption{Problème industriel}
+%	\end{minipage}
+%\end{figure}
+%\end{center}
+\section{A}
+		\input |"ls *.tex"
+\section{B}
+
+
+\begin{figure}
+\centering
+\resizebox {12cm} {!} {
+	\input |"sed -e 's/width=[0-9]*.[0-9]*in,/width=9cm,/' CalculSchem3.T2.tikz > CalculSchem3.T2.tikzb"
+	\input |"sed -e 's/height=[0-9]*.[0-9]*in,/height=6cm,/' CalculSchem3.T2.tikzb > CalculSchem3.T2.tikzc"
+		\input{CalculSchem3.T2.tikzc}
+	\input |"rm -rf CalculSchem3.T2.tikzb CalculSchem3.T2.tikzc"
+		%% Presence d'une erreur (ligne suplementaire tracee)
+		%		\begin{tikzpicture}
+		%		\draw[scale=1000,step=.0002cm,gray,thick]
+		% (-0.002,-0.002) grid (0.002,0.002);
+		%		\end{tikzpicture}
+	}
+\end{figure}
+
+
+\end{document}

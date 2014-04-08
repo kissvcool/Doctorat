@@ -1,2 +1,14 @@
-L’encodage ISO-8859-1 peut poser des probleme et on peut convertir un fichier en UTF-8 grace a :
+L’encodage ISO-8859-1 peut poser des probleme et on peut convertir un fichier en UTF-8 grace a (sous mac):
 	iconv -f latin1 -t utf-8 fichier.tex > fichier-utf8.tex
+	
+Comande pour les PDF
+	Reduire la taille d'un pdf
+		gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=setting -sOutputFile=output.pdf input.pdf
+
+		Quality level settings are "/screen," the lowest resolution and lowest file size, but fine for viewing on a screen; "/ebook," a mid-point in resolution and file size; "/printer" and "/prepress," high-quality settings used for printing PDFs.
+
+	Coller des pdf
+		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdffile1.pdf file2.pdf
+		
+	Couper un pdf
+		gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=2 -dLastPage=2 -sOutputFile=page2.pdf multipageinputfile.pdf

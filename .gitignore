@@ -9,3 +9,5 @@
 *.pdf
 *.dvi
 *.ps
+*.bbl
+*.blg

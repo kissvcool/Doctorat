@@ -1,0 +1,129 @@
+\section{Résumé}
+
+	
+Séparation des variables:
+\begin{equation}
+	\displaystyle U_n(X,t) = \sum_{k=1}^n f_k(X) g_k(t)
+\end{equation}
+
+Formulation variationnelle:
+\begin{equation}
+\begin{array}{c}
+ f_k = F (U_{k-1},g_k)\\
+ g_k = G (U_{k-1},f_k)
+\end{array}
+\end{equation}
+
+Algorithme
+\begin{equation}{}
+\begin{array}{l}
+ for~k = 1$ à $ n \\
+ \phantom{for~k} $initialiser $g_k \\
+ \phantom{for~k} for~j=1$ à $j_{max} \\
+ \phantom{for~k for~j } f_k = F (U_{k-1},g_k) \\
+ \phantom{for~k for~j } g_k = G (U_{k-1},f_k) \\
+ \phantom{for~k} end \\
+end
+\end{array}  \\
+\end{equation}
+
+
+\section{Orthogonalisation}
+
+\subsection{Dans le point fixe}
+\begin{equation}{}
+\begin{array}{l}
+ for~k = 1$ à $ n \\
+ \phantom{for~k} $initialiser $g_k \\
+ \phantom{for~k} for~j=1$ à $j_{max} \\
+ \phantom{for~k for~j } f_k = F (U_{k-1},g_k) \\
+ \displaystyle
+ \phantom{for~k for~j } f_k = f_k - \sum_{i=1}^{k-1} (f_k.f_i)f_i\\
+ \phantom{for~k for~j } f_k = f_k / norme(f_k)\\
+ \phantom{for~k for~j } g_k = G (U_{k-1},f_k) \\
+ \phantom{for~k} end \\
+end
+\end{array}  \\
+\end{equation}
+
+\subsection{Amélioration de la base}
+\label{AlgorithmesPGDOrthoCorrect}
+\begin{equation}{}
+\begin{array}{l}
+ for~k = 1$ à $ n \\
+ \phantom{for~k} $initialiser $g_k \\
+ \phantom{for~k} for~j=1$ à $j_{max} \\
+ \phantom{for~k for~j } f_k = F (U_{k-1},g_k) \\
+ \phantom{for~k for~j } g_k = G (U_{k-1},f_k) \\
+ \phantom{for~k} end \\ 
+ 
+ Commentaires
+ \left\{\!
+	 \begin{array}{l}
+	 $Si on enlève une partie ainsi :$\\
+	 \displaystyle
+	 ~f_k = f_k - \sum_{i=1}^{k-1} (f_k.f_i)f_i\\
+	 $On veux améliorer la base par :$\\
+	 \displaystyle
+	 ~U_{k-1} = U_{k-1} 
+	 			+ \sum_{i=1}^{k-1} (f_k.f_i)f_i ~ g_k\\
+	 $Une manière de le faire est d'impacter les $g_i$ :$\\
+	 \displaystyle
+	 ~U_{k-1} = \sum_{i=1}^{k-1} f_i g_i 
+	 			+ \sum_{i=1}^{k-1} (f_k.f_i)f_i ~ g_k\\
+	 \displaystyle
+	 ~U_{k-1} = \sum_{i=1}^{k-1} f_i (g_i + (f_k.f_i)g_k)\\
+	 $Donc :$\\
+	 \end{array}
+ \right.
+ \\
+ \phantom{for~k} for~i=1$ à $(k-1) \\
+ \phantom{for~k for~i } g_i = g_i + (f_k.f_i)g_k\\
+ \phantom{for~k} end\\
+ \displaystyle
+ \phantom{for~k} f_k = f_k - \sum_{i=1}^{k-1} (f_k.f_i)f_i\\
+ 
+ Commentaires
+ \left\{\!
+	 \begin{array}{l}
+	 $Si le mode $f_k$ orthogonalisé est très petit : $\\
+	 ~~$C'est que le mode trouvé par le point fixe pouvait $\\
+	 ~~~$être représenté dans la base des modes précédents. $\\
+	 ~~$Alors on choisit de l'ignorer pour ne pas polluer la base.$\\
+	 $Si le mode $f_k$ orthogonalisé satisfait un critère de norme : $\\
+	 ~~$On l'ajoute à la base comme précédemment.$\\
+	 $Donc :$\\
+	 \end{array}
+ \right.
+ \\
+ \phantom{for~k} $if $ \left( \left\Vert g_k  \right\Vert . 
+ 						\left\Vert f_k  \right\Vert \right)
+ 						< \epsilon\\
+ \phantom{for~k end} k = k-1 \\
+ \phantom{for~k} end\\
+end
+\end{array}  \\
+\end{equation}
+
+Sans les commentaires cela peut être plus lisible :
+\begin{equation}{}
+\begin{array}{l}
+ for~k = 1$ à $ n \\
+ \phantom{for~k} $initialiser $g_k \\
+ \phantom{for~k} for~j=1$ à $j_{max} \\
+ \phantom{for~k for~j } f_k = F (U_{k-1},g_k) \\
+ \phantom{for~k for~j } g_k = G (U_{k-1},f_k) \\
+ \phantom{for~k} end \\ 
+ \phantom{for~k} for~i=1$ à $(k-1) \\
+ \phantom{for~k for~i } g_i = g_i - (f_k.f_i)g_k\\
+ \phantom{for~k} end\\
+ \displaystyle
+ \phantom{for~k} f_k = f_k - \sum_{i=1}^{k-1} (f_k.f_i)f_i\\
+ \phantom{for~k} $if $ \left( \left\Vert g_k  \right\Vert . 
+ 						\left\Vert f_k  \right\Vert \right)
+ 						< \epsilon\\
+ \phantom{for~k end} k = k-1 \\
+ \phantom{for~k} end\\
+end
+\end{array}  \\
+\end{equation}

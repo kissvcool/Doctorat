@@ -1,0 +1,104 @@
+% \DeclareOptionBeamer{shadow}[true]{\def\beamer@themeLMT@shadow{#1}}
+\ExecuteOptionsBeamer{shadow=false}
+\ProcessOptionsBeamer
+
+
+
+
+\mode<presentation>
+
+\pgfdeclareimage[height=0.06\paperheight]{bullet}{bullet_pp_2}
+\pgfdeclareimage[height=0.03\paperheight]{bullet_gray}{bullet_gray}
+\pgfdeclareimage[height=\paperheight,width=\paperwidth]{fond_titre}{Fond_LMT_couverture}
+
+
+\defbeamertemplate*{title page}{LMT theme}[1][]  
+{ 
+\vbox{}
+  \vfill    
+\vskip5em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\textbf{\inserttitle}\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+%    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+%      \usebeamerfont{institute}\insertinstitute
+%    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+		\begin{minipage}{0.2\linewidth}
+			\includegraphics[width=1\linewidth]{Safran.png}
+		\end{minipage}
+		 \hspace{0.5cm}
+		\begin{minipage}{0.2\linewidth}
+			\includegraphics[width=1\linewidth]{eads.jpg}
+		\end{minipage}
+		 \hspace{0.5cm}
+		\begin{minipage}{0.16\linewidth}
+			\includegraphics[width=1\linewidth]{LMT.jpg}	
+		\end{minipage}
+		 \hspace{0.5cm}
+    \end{beamercolorbox}
+ %   {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+%\insertlogo
+  \vfill
+
+}
+
+
+
+
+% \defbeamertemplate*{part page}{LMT theme}[1][]
+% {
+%   \begin{centering}
+%     {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\partname~\insertromanpartnumber}
+%     \vskip1em\par
+%     \begin{beamercolorbox}[sep=8pt,center,#1]{part title}
+%       \usebeamerfont{part title}\fleche~\insertpart\par
+%     \end{beamercolorbox}
+%   \end{centering}
+% }
+
+
+\defbeamertemplate{itemize item}{fleche}{ \pgfuseimage{bullet}}
+\defbeamertemplate{itemize subitem}{fleche}{ \pgfuseimage{bullet_gray}}
+\defbeamertemplate{itemize subsubitem}{fleche}{ \pgfuseimage{bullet_gray}}
+
+
+% \setbeamertemplate{blocks}[rounded][shadow=\beamer@themeLMT@shadow]
+\setbeamertemplate{items}[fleche]
+\setbeamertemplate{sections/subsections in toc}[ball]
+% \setbeamertemplate{title page}[LMT theme][colsep=-4bp,rounded=true,shadow=\beamer@LMT@shadow]
+% \setbeamertemplate{part page}[LMT theme][colsep=-4bp,rounded=true,shadow=\beamer@LMT@shadow]
+
+
+
+% Blocks
+
+\defbeamertemplate*{block begin}{LMT theme}
+{ 
+ \begin{beamercolorbox}[colsep*=.45ex]{block title}
+    \usebeamerfont*{block title}\insertblocktitle%
+  \end{beamercolorbox}%
+  {\parskip0.1pt\par}%
+\nointerlineskip
+\vskip\smallskipamount
+  \begin{beamercolorbox}[colsep*=.45ex,vmode]{block body}%
+    \ifbeamercolorempty[bg]{block body}{\vskip-.25ex}{\vskip-.75ex}\vbox{}%
+}
+\defbeamertemplate*{block end}{LMT theme}  
+{\end{beamercolorbox}
+\vskip\smallskipamount
+}
+
+\mode<all>
