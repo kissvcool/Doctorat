@@ -59,3 +59,11 @@ Corriger le bug avec Vim :
 	Can be fixed by adding
 	let g:spf13_keep_trailing_whitespace = 1
 	into ~/.vimrc.local
+	
+Avoir un aperçu des log
+	git log --pretty=oneline --abbrev-commit
+	
+		
+Executer une commande git pour une liste de fichier
+	Creer un fichierTempGit contenant les noms fournis par git status et
+		for line in $(cat TempGit); do git rm "$line" ; done
