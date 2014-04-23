@@ -22,7 +22,7 @@ clear all
 clc
 diary FichierLog
 
-IterProgram=1;
+IterProgram=10;
 
 sortie(IterProgram)=struct('f',[],'a',0,'p',[]);
 
@@ -57,7 +57,7 @@ for program=0:(IterProgram-1)
         disp(['nombreElementsParPartie = ' num2str(nombreElementsParPartie)]);
 
     % temps
-        dt=  4e-6 ; %*0.5^program;
+        dt=  4e-6;%*2^-program ; %*0.5^program;
         Ttot= 1.0e-03;% * 5^program;% dt*400; %3.0000e-04;
 
         c=(Egene/rho)^(0.5);
@@ -77,7 +77,8 @@ for program=0:(IterProgram-1)
             NbPas6 = round(2e-4/dt);
         % 7 Vitesse initiale
         % 8 Une periode de sinusverse
-            T8=10*dt*2^program; % 10*dt < T < Ttot/4            
+            %T8=10*dt*2^program; % 10*dt < T < Ttot/4   
+            T8=dt*(10+5*program);
 
     % schema d integration :
         schem = 3;
@@ -128,23 +129,30 @@ for program=0:(IterProgram-1)
     Tcalcul=toc;
     disp(['Estimation du temps de calcul sur base complete ' num2str(Tcalcul, '%10.1e\n') 's']);
     
-    figure('Name',['Calcul de choc schem ' num2str(schem) ],'NumberTitle','off')
-     %surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
-     plot(0:dt:Ttot,sortie(1).f.HistU(40,:),0:dt:Ttot,sortie(1).f.HistU(end-1,:),'r',0:dt:Ttot,(HistF(end-1,:)/(2*AmpliF))*max(sortie(1).f.HistU(end-1,:)),'LineWidth',2);
-     chainetitre=['\fontsize{20}\bfCalcul schem:' num2str(schem) '   T=' num2str(T8, '%10.1e\n')];
-    title(chainetitre);  
-        set(gca, 'FontSize', 20);
+%     figure('Name',['Calcul de choc schem ' num2str(schem) ],'NumberTitle','off')
+%      surf(0:dt:Ttot,VectL,sortie(1).f.HistU,'EdgeColor','none');
+%      plot(0:dt:Ttot,sortie(1).f.HistU(40,:),0:dt:Ttot,sortie(1).f.HistU(end-1,:),'r',0:dt:Ttot,(HistF(end-1,:)/(2*AmpliF))*max(sortie(1).f.HistU(end-1,:)),'LineWidth',2);
+%      chainetitre=['Schema Newmark - Acceleration moyenne, T=' num2str(T8, '%10.1e\n') ', dt=' num2str(dt, '%10.1e\n')];
+%     title(chainetitre);  
+%         set(gca, 'FontSize', 20);
+%         
+%         matlab2tikz( ['../Latex/CalculSchem3.T1.dt' num2str(dt) '.tikz'] );
      
+% end
+% return;
+% 
+% for i=0:1
 
 %     figure('Name','Difference entre U_m et U_p','NumberTitle','off')
 %      surf(0:dt:Ttot,VectL,(sortie(1).f.HistU_m - sortie(1).f.HistU_p),'EdgeColor','none');
 %         return;
         
+
 %% Solution Exacte
 
     % Sans ressort - Cas 4, 5 et 6
     [HistUExact,HistVExact,HistAExact] = SolutionExacte(cas,c,AmpliF,Egene,Sec,L,VectL,VectT,dt,NbPas6);
-    
+
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -222,6 +230,7 @@ for PGD = 1
 
         [HistMf,HistMg,HistMgp,HistMgpp,HistTotf,HistTotg,HistTotgp,HistTotgpp,TableConv,Mmax] = CalcModesPGD(Mmax,Kmax,M, C, K0, HistF, U0, V0, D, conditionU, OthoIntern,VectL,epsilon,Ttot,dt,verif,schem);
 
+
     %% Affichage Complet
 
         Reference = sortie(1).f.HistU;
@@ -233,6 +242,8 @@ for PGD = 1
         NoDisplayErreur = 0;
         Methode = 2; % PGD
 
+        chainetitre = ['T=' num2str(T8) ];
+        
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
             [ErrMaxPGD,ErrCarrePGD,ErrAmpTotalePGD] = AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas,chainetitre);
 
@@ -262,9 +273,13 @@ for PGD = 1
             AfficherAnimation(Reference1,Reference2,Resultat,VectL,L);
         end
     
-end 
 
-                        
+end
+             
+
+% for program=
+end 
+return;
                         %% Analyse des modes %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
@@ -283,8 +298,6 @@ end
     % fichier = ['Resultats' num2str(program+1)];
     % save(fichier);
 
-% for program=
-end 
 
 
 

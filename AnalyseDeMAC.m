@@ -66,6 +66,23 @@ function AnalyseDeMAC(NbModesMethode1,NbModesMethode2,ModeMethode1,ModeMethode2)
                  cdata=repmat(max(cdata,[],2),1,4);
                  set(h(n),'cdata',cdata,'facecolor','flat')
             end
+            
+            for l=1:0 %Creation du fichier pour histogramme 3D tikz
+                fileID = fopen('../Latex/Tikz/TentativesHist3D/DataOutMac.dat','w');
+                MaxMAC = max(MAC(:));
+                fprintf(fileID,'X \t\t Y \t\t Z \n');
+                %Maximums
+                fprintf(fileID,['' num2str(size(MAC,1)) ' \t\t ' num2str(size(MAC,2)) ' \t\t ' num2str(MaxMAC) ' \t\t %% max \n \n']);
+                for i=1:size(MAC,1)
+                    for j=size(MAC,2):-1:1
+                        if MAC(i,j)>(MaxMAC/10000)
+                            fprintf(fileID,['' num2str(i) ' \t\t ' num2str(j) ' \t\t%12.8f \n'], MAC(i,j));%'%12.8f\n'], MAC(i,j));
+                        end
+                    end
+                end
+                fclose(fileID);
+            end
+
         end
     end
     

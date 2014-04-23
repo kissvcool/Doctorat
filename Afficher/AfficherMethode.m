@@ -219,9 +219,11 @@ function [erreurMaximale,erreurCarre,erreurAmpTotale] = AfficherMethode(dt,Ttot,
 %         title(['\fontsize{12}\bf' chainetitre]);
         figure('Name',NomFigure,'NumberTitle','off')
         plot(Resultat,log(abs(erreurMaximale))/log(10),'LineWidth',2);
-        legend('Log de :Erreur Maximale');
+        legend('Log of Maximal Error');
         title(chainetitre);        
         set(gca, 'FontSize', 20);
+        
+        %matlab2tikz( chainetitre );
     end
 
         % Modification de l'affichage
