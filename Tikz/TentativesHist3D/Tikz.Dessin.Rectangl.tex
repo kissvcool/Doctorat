@@ -1,12 +1,12 @@
-\documentclass{minimal}
+\documentclass{standalone}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \pgfplotsset{compat=newest}
 
 \begin{document}
 
-\pgfplotstableread{DataTest.dat}{\firsttable}					% Read
-  \pgfplotstablegetrowsof{DataTest.dat}	
+\pgfplotstableread{DataOutMac.dat}{\firsttable}					% Read
+  \pgfplotstablegetrowsof{DataOutMac.dat}	
   \pgfmathtruncatemacro{\rows}{\pgfplotsretval-1}   	% Put the number of row minus one in \rows, 
   																						%		to use : \foreach \p in {0,...,\rows}
 % Assign variables max
@@ -18,30 +18,42 @@
 	  	\let\maxZ\pgfplotsretval 
 	  	
 \pgfmathsetmacro{\Zscale}{4/\maxZ} % contain the values of z between 0 and 4 cm (assuming that they are positiv)
+\pgfmathsetmacro{\XYscale}{1/10}
 
 % Defining by hand the axis
-\begin{tikzpicture}[x={(0.866cm,-0.5cm)},y={(0.866cm,0.5cm)},z={(0cm,\Zscale cm)}]
+\begin{tikzpicture}[x={(\XYscale*0.866cm,\XYscale*-0.5cm)},y={(\XYscale*0.866cm,\XYscale*0.5cm)},z={(0cm,\Zscale cm)}]
 
 % Defining hsb color to have a color scale
 \colorlet{redhsb}[hsb]{red}		%
 \colorlet{bluehsb}[hsb]{blue}	% 
 
-% Drawing the system of axes
-\draw[->] (0,0,0) -- (1,0,0) node [black,left] {x};
-\draw[->] (0,0,0) -- (0,1,0) node [black,left] {y};
-\draw[->] (0,0,0) -- (0,0,1/\Zscale) node [black,left] {z};
-	  	
+%% Drawing the system of axes
+%\draw[->] (-0.7/\XYscale,-0.7/\XYscale,0) -- (0,-0.7/\XYscale,0) node [black,left] {x};
+%\draw[->] (-0.7/\XYscale,-0.7/\XYscale,0) -- (-0.7/\XYscale,0,0) node [black,left] {y};
+%\draw[->] (-0.7/\XYscale,-0.7/\XYscale,0) -- (-0.7/\XYscale,-0.7/\XYscale,0.7/\Zscale) node [black,left] {z};
+
+\draw (0.5,0.5,0) -- (0.5,0.5,1);	  	
+\draw (1,0.5,1) -- (-1,0.5,1) node [black,left] {1};	  	
+
 % Write unit on x and y
-\foreach \p in {1,...,\maxX}{
-	\draw {(\p,0,0)} node[right] {\p};
+\foreach \p in {1,5,10,15}{ %{1,...,\maxX}{
+	\draw {(\p,-0.4/\XYscale,0)} node {\p};
+	\draw (\p,-0.2/\XYscale,0) -- (\p,0.5,0);
+}
+\foreach \p in {1,20,40,60,80,100}{%{1,...,\maxY}{
+	\draw {(\maxX+0.5+0.4/\XYscale,\p,0)} node {\p};
+	\draw (\maxX+0.5+0.2/\XYscale, \p,0) -- (\maxX+0.5,\p,0);
+}
+
 	% Draw the grid
+\foreach \p in {1,...,\maxX}{
 	\foreach \q in {1,...,\maxY}{
 		\draw[black] (\p-0.5,\q-0.5,0) -- (\p+0.5,\q-0.5,0) -- (\p+0.5,\q+0.5,0) -- (\p-0.5,\q+0.5,0) -- (\p-0.5,\q-0.5,0);
 		}
 }
-\foreach \p in {1,...,\maxY}{
-	\draw {(\maxX+1,\p,0)} node[left] {\p};
-}
+% Axis label
+\draw {(\maxX+0.5+1/\XYscale,\maxY/2,0)} node[rotate=30]  {PGD space functions};
+\draw {(\maxX/2,-1.2/\XYscale,0)} node[rotate=-30] {POD space functions};
 
 \foreach \p in {1,...,\rows}{
 		\pgfplotstablegetelem{\p}{[index] 0}\of{\firsttable} 		% The order in which the bars are drawn is determined by

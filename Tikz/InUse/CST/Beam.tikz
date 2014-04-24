@@ -1,0 +1,15 @@
+\usetikzlibrary{patterns}
+\begin{tikzpicture}[scale=0.5]
+
+\draw[line width=3pt] (0,0) -- (8,0);
+\draw[line width=2pt] (0,1.5) -- (0,-1.5);
+\fill[pattern=north east lines,] (0,-1.5) arc (270:90:1.5);
+\draw[<-,line width=2pt,black!50!green] (8cm+6pt,0) -- (10,0);
+\draw (9cm+3pt,0) node[above] {$F(t)$};
+\draw (0,0) node[below right] {$x=0$};
+\draw (9,0) node[below left] {$x=L$};
+\draw (4,0) node[above] {$E,S$};
+\fill[blue] (4,0) circle(6pt);
+\fill[red] (8,0) circle(6pt);
+
+\end{tikzpicture}

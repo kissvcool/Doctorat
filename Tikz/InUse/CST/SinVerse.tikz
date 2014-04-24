@@ -1,0 +1,14 @@
+
+\begin{tikzpicture}[scale=1]
+
+\draw[black!50!green,samples=100,line width=2pt] plot [domain=0:pi] (\x,{sin(2*(-pi/4+\x) r)+1}) plot [domain=pi:7] (\x,0);
+\draw[dashed] (0,2) node[left] {$F_{max}$} -- (pi/2,2)  ;
+\draw[->,line width=0.5pt] (0,-0.5) -- (0,3) node[left] {$N$};
+\draw[->,line width=0.5pt] (-0.5,0) -- (8,0) node[above] {$t$};
+\draw (7,0) node[below] {$t_{end}$};
+\draw[<->,line width=0.5pt] (0,-0.5) -- (pi,-0.5);
+\draw[dashed] (pi,-0.5) -- (pi,0)  ;
+\draw (pi/2,-0.5) node[below] {$T$} ;
+\draw (3*pi/4,{sin(pi r)+1}) node[above right] {$F(t)$} ;
+
+\end{tikzpicture}

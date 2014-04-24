@@ -1,13 +1,12 @@
 *~
-/Corbeille/*
-/Resultat*/*
 *.aux
 *.out
 *.gz
 *.toc
 *.log
-*.pdf
 *.dvi
 *.ps
 *.bbl
 *.blg
+biblio-mauvais.encodage.bib
+stack/Temp/*

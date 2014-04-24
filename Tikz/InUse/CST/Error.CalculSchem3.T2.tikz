@@ -1,0 +1,43 @@
+% This file was created by matlab2tikz v0.4.7 (commit 9d7ddd53b3fb1f0df255c7d242269793e3f459e5) running on MATLAB 7.14.
+% Copyright (c) 2008--2014, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% Minimal pgfplots version: 1.3
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=6.02303149606299in,
+height=4.75042322834646in,
+scale only axis,
+xmin=0,
+xmax=15,xlabel={Number of modes of the PGD solution},
+ymin=-1.4,
+ymax=-0.6,
+title={$T=8e-05$ s},
+legend style={draw=black,fill=white,legend cell align=left}
+]
+\addplot [color=blue,solid,line width=2.0pt]
+  table[row sep=crcr]{1	-0.634265909776236\\
+2	-0.862951274276787\\
+3	-1.00502334564444\\
+4	-1.0125359792978\\
+5	-1.10129276028414\\
+6	-1.08419659090678\\
+7	-1.01976280892709\\
+8	-1.03515987736547\\
+9	-1.02804881756922\\
+10	-1.05545477933954\\
+11	-1.15563818780346\\
+12	-1.249371248345\\
+13	-1.22938278929309\\
+14	-1.23980461924839\\
+15	-1.30264632355294\\
+};
+\addlegendentry{Log of Maximal Error};
+
+\end{axis}
+\end{tikzpicture}%

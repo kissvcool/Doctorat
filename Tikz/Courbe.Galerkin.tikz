@@ -1,0 +1,19 @@
+
+\begin{tikzpicture}[x={(1cm,0cm)},y={(0cm,1cm)}]
+
+% Drawing the system of axes
+\draw[->] (-0.5,0) -- (8,0) node [black,above left] {$t$};
+\draw[->] (0,-0.5) -- (0,4) node [black,left] {$a$};
+	  	
+% Write unit on x and y
+	\draw {(1,0,0)} node[below] {$t_{n-1}$};
+	\draw {(3,0,0)} node[below] {$t_{n}$};
+	\draw {(5,0,0)} node[below] {$t_{n+1}$};
+	\draw {(7,0,0)} node[below] {$t_{n+2}$};
+	
+% Drawing the system of axes
+\draw (1,1) 		node {$\bullet$}	node [below] {$a_{n-1}^+$} -- (3,2) node {$\bullet$} 		node [below] {$a_{n}^-$}	;
+\draw (3,2.5) 	node {$\bullet$}	node [above] {$a_{n}^+$} 			 -- (5,1.5) node {$\bullet$} 	node [below] {$a_{n+1}^-$}	;
+\draw (5,2) 		node {$\bullet$}	node [above] {$a_{n+1}^+$} -- (7,1) node {$\bullet$} 		node [below] {$a_{n+2}^-$}	;
+
+\end{tikzpicture}

@@ -1,0 +1,34 @@
+% This file was created by matlab2tikz v0.4.7 (commit 9d7ddd53b3fb1f0df255c7d242269793e3f459e5) running on MATLAB 7.14.
+% Copyright (c) 2008--2014, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% Minimal pgfplots version: 1.3
+% 
+% The latest updates can be retrieved from
+%   http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz
+% where you can also make suggestions and rate matlab2tikz.
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=6.02303149606299in,
+height=4.75042322834646in,
+scale only axis,
+xmin=1,
+xmax=10,xlabel={Number of iterations of the fixed point},
+ymin=0,
+ymax=12
+]
+\addplot [color=blue,dashed,line width=2.0pt,mark size=3.5pt,mark=square*,mark options={solid,fill=red,draw=black},forget plot]
+  table[row sep=crcr]{1	0\\
+2	10.5690528126018\\
+3	1.38840346009924\\
+4	3.88171706977564\\
+5	4.56040019968669\\
+6	0.252112991744958\\
+7	5.1295675863073\\
+8	2.07810194358012\\
+9	3.21540631726409\\
+10	1.48498109876415\\
+};
+\end{axis}
+\end{tikzpicture}%

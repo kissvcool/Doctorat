@@ -1,0 +1,4 @@
+PGD approach for low frequency dynamics problems
+
+P. Nargil, F. Louf and P.-A. Boucard, 
+LMT-Cachan, ENS Cachan/CNRS/UPMC/PRES UniverSud, France

@@ -8,7 +8,13 @@ Comande pour les PDF
 		Quality level settings are "/screen," the lowest resolution and lowest file size, but fine for viewing on a screen; "/ebook," a mid-point in resolution and file size; "/printer" and "/prepress," high-quality settings used for printing PDFs.
 
 	Coller des pdf
-		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdffile1.pdf file2.pdf
+		gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf file1.pdf file2.pdf
 		
 	Couper un pdf
 		gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -dFirstPage=2 -dLastPage=2 -sOutputFile=page2.pdf multipageinputfile.pdf
+		
+Executer du code bash a la compilation
+	Authoriser le compilateur a executer des commandes exterieures, en ajoutant " --shell-escape" a la commande de compilation,
+	puis utiliser la commande "\input |" dont voici deux exemples:
+		\input |"ls *.tex"
+		\input |"sed -e 's/width=[0-9]*.[0-9]*in,/width=9cm,/' CalculSchem3.T2.tikz > CalculSchem3.T2.tikzb"
