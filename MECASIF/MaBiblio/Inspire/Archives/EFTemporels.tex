@@ -1,0 +1,136 @@
+\subsection*{Problème en temps}
+\begin{equation}
+\begin{array}{r r l}
+	\forall g^*
+	&\int_T \! \int_\Theta \!\!\!&		
+		\boldsymbol{\phi_q}^Tg^*h [~\mathbf{K}~ \boldsymbol{\phi_q}gh
+						+ ~\mathbf{C}~ \boldsymbol{\phi_q} \dot{g}h 
+						+ ~\mathbf{M}~ \boldsymbol{\phi_q} \ddot{g}h
+	\\
+	  &&
+		\phantom{\boldsymbol{\phi_q}g^*h
+			}+ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k       g_k  h_k 
+			+ ~\mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k  \dot{g_k} h_k 
+			+ ~\mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k \ddot{g_k} h_k
+	\\
+	  &&
+		\phantom{\boldsymbol{\phi_q}^*gh} -\mathbf{f}~] ~dt d\theta
+	\\
+	&= &0 
+\end{array}
+\end{equation}
+
+\noindent
+En discrétisant en temps on obtient :
+\begin{equation}
+\begin{array}{r r l}
+	\forall \mathbf{g_q}^*
+	&\int_T \! \int_\Theta&		
+		\boldsymbol{\phi_q}^TN_g(t)\mathbf{g_q}^*h [~\mathbf{K}~ \boldsymbol{\phi_q}N_g(t)\mathbf{g_q}h
+						+ ~\mathbf{C}~ \boldsymbol{\phi_q} \dot{N_g(t)}\mathbf{g_q}h 
+						+ ~\mathbf{M}~ \boldsymbol{\phi_q} \ddot{N_g(t)}\mathbf{g_q}h
+	\\
+	  &&
+		\phantom{\boldsymbol{\phi_q}N_g(t)\mathbf{g_q}^*h[
+			}+~\mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k       N_g(t)(\mathbf{g_q})_k  h_k 
+			\\ && \phantom{\boldsymbol{\phi_q}N_g(t)\mathbf{g_q}^*h[}
+			+ ~\mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k  \dot{N_g(t)}(\mathbf{g_q})_k h_k 
+			\\ && \phantom{\boldsymbol{\phi_q}N_g(t)\mathbf{g_q}^*h[}
+			+ ~\mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k \ddot{N_g(t)}(\mathbf{g_q})_k h_k
+	\\
+	  &&
+		 \phantom{\boldsymbol{\phi_q}N_g(t)\mathbf{g_q}^*h[} -\mathbf{f}~] ~dt d\theta
+	\\
+	&= &0 
+\end{array}
+\end{equation}
+
+\noindent
+Donc:
+\begin{equation}
+\begin{array}{r r l}
+	&\int_T \! \int_\Theta&		
+		\boldsymbol{\phi_q}^TN_g(t)h [~\mathbf{K}~ \boldsymbol{\phi_q}N_g(t)\mathbf{g_q}h
+						+ ~\mathbf{C}~ \boldsymbol{\phi_q} \dot{N_g(t)}\mathbf{g_q}h 
+						+ ~\mathbf{M}~ \boldsymbol{\phi_q} \ddot{N_g(t)}\mathbf{g_q}h
+	\\
+	  	&&\phantom{\boldsymbol{\phi_q}N_g(t)h[
+			}+~\mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k       N_g(t)(\mathbf{g_q})_k  h_k 
+		\\ && \phantom{\boldsymbol{\phi_q}N_g(t)h[}
+			+ ~\mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k  \dot{N_g(t)}(\mathbf{g_q})_k h_k 
+		\\ && \phantom{\boldsymbol{\phi_q}N_g(t)h[}
+			+ ~\mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k \ddot{N_g(t)}(\mathbf{g_q})_k h_k
+		\\ && \phantom{\boldsymbol{\phi_q}N_g(t)h[}
+		 -\mathbf{f}~ ] ~dt d\theta
+	\\
+	&= &0 
+\end{array}
+\end{equation}
+
+\noindent
+Soit:
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!
+\begin{array}{r r l}
+	&&\displaystyle \int_T N_g(t) \left( 
+		 N_g(t) \!\!\int_\Theta\!\!		
+			\boldsymbol{\phi_q}^Th ~\mathbf{K}~ \boldsymbol{\phi_q}h d\theta
+	+ 
+		\dot{N_g(t)} \!\!\int_\Theta\!\!		
+			\boldsymbol{\phi_q}^Th ~\mathbf{C}~ \boldsymbol{\phi_q}h d\theta
+	+ 
+		\ddot{N_g(t)} \!\!\int_\Theta\!\!		
+			\boldsymbol{\phi_q}^Th ~\mathbf{M}~ \boldsymbol{\phi_q}h d\theta
+	  \right) ~dt ~\mathbf{g_q}
+	\\
+	= &-&
+	\displaystyle
+		\int_T N_g(t) \!\!\int_\Theta\!\!		
+			\boldsymbol{\phi_q}^Th  \left[
+				\left[
+				   \mathbf{K}~ N_g(t)
+				+ ~\mathbf{C}~ \dot{N_g(t)}
+				+ ~\mathbf{M}~ \ddot{N_g(t)} \right] 
+				\sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k (\mathbf{g_q})_k h_k
+				- ~\mathbf{f}~ \right] ~dt ~d\theta
+\end{array}
+\end{equation}
+
+Pour alléger l'écriture on définie :
+\begin{equation}
+\mathbf{G}        = \int_T \!\! N_g(t)       N_g(t)  ~dt, ~~ 
+\mathbf{\dot{G}}  = \int_T \!\! N_g(t)  \dot{N_g(t)} ~dt, ~~ 
+\mathbf{\ddot{G}} = \int_T \!\! N_g(t) \ddot{N_g(t)} ~dt, ~~
+\mathbf{f}_g = \int_T N_g(t) ~\mathbf{f} ~dt 
+\end{equation}
+
+\noindent
+Alors on a :
+\begin{equation}
+\begin{array}{r r l}
+	&&\displaystyle \left( 
+		 \mathbf{G} \int_\Theta		
+			\boldsymbol{\phi_q}^Th ~\mathbf{K}~ \boldsymbol{\phi_q}h ~d\theta
+	+ 
+		\mathbf{\dot{G}} \int_\Theta		
+			\boldsymbol{\phi_q}^Th ~\mathbf{C}~ \boldsymbol{\phi_q}h ~d\theta
+	+ 
+		\mathbf{\ddot{G}} \int_\Theta		
+			\boldsymbol{\phi_q}^Th ~\mathbf{M}~ \boldsymbol{\phi_q}h ~d\theta
+	  \right) ~\mathbf{g_q}
+	\\
+	= &-&
+	\displaystyle
+		\int_\Theta		
+			\boldsymbol{\phi_q}^Th  \left[
+				\left[
+				   \mathbf{K}~ \mathbf{G}
+				+ ~\mathbf{C}~ \mathbf{\dot{G}}
+				+ ~\mathbf{M}~ \mathbf{\ddot{G}} \right] 
+				\sum_{k=1}^{n-1} (\boldsymbol{\phi_q})_k (\mathbf{g_q})_k h_k
+				\right] ~d\theta
+			+ ~\mathbf{f}_g~ 
+\end{array}
+\end{equation}
+
+Note : Le produit $\mathbf{K}~\mathbf{G}$ n'est pas possible, ils n'ont pas de raison d'avoir la même dimension. L'expression précédente est une forme factorisée qu'il faut développer pour retrouver les produits entre les termes qui conviennent (termes discrétisés en espace entre eux, termes discrétisés en temps entre eux...)

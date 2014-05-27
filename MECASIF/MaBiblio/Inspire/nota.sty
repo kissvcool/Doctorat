@@ -1,0 +1,569 @@
+% =====================================================================
+%  Notations
+%  --------------------------------------------------------------------
+%  David Neron
+%  Last changes: 08/01/08
+% =====================================================================
+
+\RequirePackage{xspace}
+
+% Divers --------------------------------------------------------------
+\renewcommand{\vec}{\underline}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\let\oldtimes\times
+%\renewcommand{\times}{\!\oldtimes\!}
+\newcommand{\paral}{\colorbox{black}{\textcolor{white}{//}}\xspace}
+\newlength{\tutu}
+\newcommand{\ensemb}[3][0mm]{\def\toto{\hspace{.5em}}
+  \def\titi{\enm{#3}}\settoheight{\tutu}{\titi}\addtolength{\tutu}{#1}
+  \expandafter\left\{\toto#2\toto\left|
+  \rule{0em}{\tutu}\toto\enm{#3}\toto\right.\right\}}
+\newcommand{\ens}[2][2mm]{\def\toto{\hspace{.5em}}
+  \def\titi{\enm{#2}}\settoheight{\tutu}{\titi}\addtolength{\tutu}{#1}
+  \expandafter\left\{\rule{0em}{\tutu}\toto\enm{#2}\toto\right\}}
+\newcommand{\iif}{\Longleftrightarrow}
+%\let\oldint\int
+%\renewcommand{\int}{\oldint\limits}
+
+% Forcer le mode maths ------------------------------------------------ 
+\newcommand{\enm}[1]{\ensuremath{#1}\xspace}
+
+% Pierrot -------------------------------------------------------------
+\newcommand{\sd}[1]{\utilde{#1}}
+\newcommand{\sub}[1]{\enm{_{#1}}}
+\def\sube{\sub{E}}
+
+% Inconnues continues -------------------------------------------------
+\def\@dep         {\vec{U}}
+\def\@deppt       {\dot{\@dep}}
+\def\@defor       {\bm{\varepsilon}}
+\def\@deforpt     {\dot{\@defor}}
+\def\@cont        {\bm{\sigma}}
+\def\posx         {\vec{x}}
+\def\@p           {p}
+\def\@ppt         {\dot{\@p}}
+\def\@q           {q}
+\def\@Z           {\vec{Z}}
+\def\@W           {\vec{W}}
+\def\@F           {\vec{F}}
+\def\@X           {\vec{X}}
+\def\dep          {\enm{\@dep}}
+\def\depE         {\enm{\@dep_{E}}}
+\def\depEs        {\enm{\@dep_{E}^\star}}
+\def\depptEs      {\enm{\@deppt_{E}^\star}}
+\def\deppt        {\enm{\@deppt}}
+\def\depptE       {\enm{\@deppt_{E}}}
+\def\defor        {\enm{\@defor}}
+\def\deforE       {\enm{\defor_{E}}}
+\def\defore       {\enm{\@defor_\textrm{e}}}
+\def\deforeE      {\enm{\@defor_{\textrm{e}E}}}
+\def\deforp       {\enm{\@defor_\textrm{p}}}
+\def\deforpE      {\enm{\@defor_{\textrm{p}E}}}
+\def\deforop      {\enm{\@defor}}
+\def\deforpt      {\enm{\@deforpt}}
+\def\deforptE     {\enm{\@deforpt_{E}}}
+\def\deforept     {\enm{\@deforpt_\textrm{e}}}
+\def\deforppt     {\enm{\@deforpt_\textrm{p}}}
+\def\deforpptE    {\enm{\@deforpt_{\textrm{p}E}}}
+\def\deforpptc    {\enm{\dot{\hat{\@defor}}_\textrm{p}}}
+\def\cont         {\enm{\@cont}}
+\def\contE        {\enm{\@cont_{E}}}
+\def\contEs       {\enm{\@cont_{E}^\star}}
+\def\contEc       {\enm{\hat{\@cont}_{E}}}
+\def\varprimu     {\enm{\mathbf{u}}}
+\def\varprimupt   {\enm{\dot{\mathbf{u}}}}
+\def\varprimuE    {\enm{\varprimu_{E}}}
+\def\varprimuEs   {\enm{\varprimu_{E}^\star}}
+\def\varprimuptE  {\enm{\dot{u}_{E}}}
+\def\@varprim     {\mathbf{e}}
+\def\varprimp     {\enm{\@varprim_{\textrm{p}}}}
+\def\varprimpptn  {\enm{\dot{\@varprim}_{\textrm{p}n}}}
+\def\varprimppt   {\enm{\dot{\@varprim}_{\textrm{p}}}}
+\def\varprimpptc  {\enm{\hat{\dot{\@varprim}}_{\textrm{p}}}}
+\def\varprimpE    {\enm{\@varprim_{\textrm{p}E}}}
+\def\varprimpptE  {\enm{\dot{\@varprim}_{\textrm{p}E}}}
+\def\varprime     {\enm{\@varprim_{\textrm{e}}}}
+\def\varprimept   {\enm{\dot{\@varprim}_{\textrm{e}}}}
+\def\varprimeE    {\enm{\@varprim_{\textrm{e}E}}}
+\def\varprimeptE  {\enm{\dot{\@varprim}_{\textrm{e}E}}}
+\def\varprim      {\enm{\@varprim}}
+\def\varprimpt    {\enm{\dot{\@varprim}}}
+\def\varprimE     {\enm{\@varprim_{E}}}
+\def\varprimptE   {\enm{\dot{\@varprim}_{E}}}
+\def\@vardual     {\mathbf{f}}
+\def\vardual      {\enm{\@vardual}}
+\def\vardualc     {\enm{\hat{\@vardual}}}
+\def\vardualn     {\enm{\@vardual}_{n}}
+\def\varduals     {\enm{\@vardual^\star}}
+\def\vardualpt    {\enm{\dot{\@vardual}}}
+\def\vardualE     {\enm{\@vardual_{E}}}
+\def\vardualEs    {\enm{\@vardual_{E}^\star}}
+\def\vardualptE   {\enm{\vardualpt_{E}}}
+\def\p            {\enm{\@p}}
+\def\ppt          {\enm{\@ppt}}
+\def\q            {\enm{\@q}}
+\def\Z            {\enm{\@Z}}
+\def\W            {\enm{\@W}}
+\def\WE           {\enm{\W_{E}}}
+\def\WEp          {\enm{\W_{E'}}}
+\def\Wpt          {\enm{\dot{\W}}}
+\def\WptE         {\enm{\Wpt_{E}}}
+\def\WptEs        {\enm{\Wpt_{E}^\star}}
+\def\WptEp        {\enm{\Wpt_{E'}}}
+\def\WL           {\enm{\widetilde{\@W}}}
+\def\WLE          {\enm{\WL_{E}}}
+\def\WLpt         {\enm{\dot{\WL}}}
+\def\WLptE        {\enm{\WLpt_{E}}}
+\def\Xint         {\enm{\mathbf{X}}}
+\def\XintE        {\enm{\Xint_{E}}}
+\def\Xintpt       {\enm{\dot{\Xint}}}
+\def\XintptE      {\enm{\Xintpt_{E}}}
+\def\Yint         {\enm{\mathbf{Y}}}
+\def\YintE        {\enm{\Yint_{E}}}
+\def\depc         {\enm{\hat{\@dep}}}
+\def\depptc       {\enm{\hat{\@deppt}}}
+\def\deforc       {\enm{\hat{\@defor}}}
+\def\deforptc     {\enm{\hat{\@deforpt}}}
+\def\contc        {\enm{\hat{\@cont}}}
+\def\pc           {\enm{\hat{\@p}}}
+\def\pptc         {\enm{\hat{\@ppt}}}
+\def\qc           {\enm{\hat{\@q}}}
+\def\Zc           {\enm{\hat{\@Z}}}
+\def\Wc           {\enm{\hat{\@W}}}
+\def\Wcpt           {\enm{\dot{\hat{\@W}}}}
+\def\WcptE           {\enm{\dot{\hat{\@W}}_E}}
+\def\S            {\enm{\mathbf{S}}}
+\def\T            {\enm{T}}
+\def\Y            {\enm{\vec{Y}}}
+\def\deps         {\enm{\@dep^\star}}
+\def\deppts       {\enm{\@deppt^\star}}
+\def\Yints        {\enm{\Yint^\star}}
+\def\ps           {\enm{\@p^\star}}
+\def\ppts         {\enm{\@ppt^\star}}
+\def\qs           {\enm{\@q^\star}}
+\def\conts        {\enm{\@cont^\star}}
+\def\Zs           {\enm{\@Z^\star}}
+\def\Ws           {\enm{\@W^\star}}
+\def\WEs          {\enm{\@W_{E}^\star}}
+\def\Wpts         {\enm{\dot{\@W}^\star}}
+\def\V            {\enm{\vec{V}}}
+\def\Vs           {\enm{\V^\star}}
+\def\X            {\enm{\vec{X}}}
+\def\F            {\enm{\vec{F}}}
+\def\Fc           {\enm{\hat{\@F}}}
+\def\Fs           {\enm{\F^\star}}
+\def\FE           {\enm{\F_{E}}}
+\def\FEs          {\enm{\FE^\star}}
+\def\FEp          {\enm{\F_{E'}}}
+\def\FEc          {\enm{\Fc_{E}}}
+\def\fd           {\enm{\vec{f}_d}}
+\def\depd         {\enm{\@dep_d}}
+\def\depptd       {\enm{\dot{\@dep}_d}}
+\def\Fd           {\enm{\F_d}}
+\def\pd           {\enm{\@p_d}}
+\def\Wd           {\enm{w_d}}
+\def\ptM          {\enm{\vec{M}}}
+\def\n            {\enm{\vec{n}}}
+\def\vnull        {\enm{\vec{0}}}
+\def\Ac           {\enm{\hat{\A}}}
+\def\alphac       {\enm{\hat{\alpha}}}
+\def\betac        {\enm{\hat{\vec{\beta}}}}
+\def\Trdefor      {\enm{e}}
+\def\Trdeforpt    {\enm{\dot{e}}}
+\def\Trdeforc     {\enm{\hat{e}}}
+\def\Trdeforptc   {\enm{\hat{\dot{e}}}}
+\def\Ep           {\enm{\mathbf{E}_\mathrm{p}}}
+\def\FF           {\enm{\mathbf{F}}}
+\def\E            {\enm{\mathbf{E}}}
+\def\C            {\enm{\mathbf{C}}}
+\def\R            {\enm{\mathbf{R}}}
+\def\D            {\enm{\mathbf{D}}}
+\def\G            {\enm{\underline{G}}}
+
+% Inconnues discretisees----------------------------------------------
+\def\De           {\enm{\mathrm{e}}}
+\def\Dp           {\enm{\mathrm{\p}}}
+
+% Solutions -----------------------------------------------------------
+\def\sols         {\enm{\mathbf{s}}}
+\def\solsE        {\enm{\sols_{E}}}
+\def\solsex       {\enm{\mathbf{s_{ref}}}}
+\def\solschap     {\enm{\hat{\sols}}}
+\def\solsc        {\enm{\hat{\sols}}}
+\def\solsb        {\enm{\overline{\sols}}}
+
+% Espaces de solutions ------------------------------------------------
+\def\espsols      {\enm{\mathbf{S}}}
+\def\espsolsE     {\enm{\espsols_{E}}}
+\def\espsolsS     {\enm{\espsols_{S}}}
+\def\espsolsF     {\enm{\espsols_{F}}}
+\def\esprepres    {\enm{\mathbf{R}}}
+\def\espdepl      {\enm{\mbox{\boldmath$\mathcal{U}$}}}
+\def\espdeplE     {\enm{\espdepl_{E}}}
+\def\espdefor     {\enm{\mbox{\boldmath$\mathcal{E}$}}}
+\def\espdeforX    {\enm{\mathbf{E}}}
+\def\espdeforXE   {\enm{\espdeforX_{E}}}
+\def\espdeforE    {\enm{\espdefor_{E}}}
+\def\espcont      {\enm{\mbox{\boldmath$\mathcal{F}$}}}
+\def\espcontY     {\enm{\mathbf{F}}}
+\def\espcontYE    {\enm{\espcontY_{E}}}
+\def\espcontE     {\enm{\espcont_{E}}}
+\def\esppres      {\enm{\mbox{\boldmath$\mathcal{P}$}}}
+\def\espq         {\enm{\mbox{\boldmath$\mathcal{Q}$}}}
+\def\espZ         {\enm{\mbox{\boldmath$\mathcal{Z}$}}}
+\def\espW         {\enm{\mbox{\boldmath$\mathcal{W}$}}}
+\def\espWad       {\enm{\espW_{\mathbf{ad}}}}
+\def\espWE        {\enm{\espW_{E}}}
+\def\espF         {\enm{\mbox{\boldmath$\mathcal{F}$}}}
+\def\espFad       {\enm{\espF_{\mathbf{ad}}}}
+\def\espFE        {\enm{\espF_{E}}}
+\def\esppZ        {\enm{\mbox{\boldmath$\mathcal{Z}$}}}
+\def\espqW        {\enm{\mbox{\boldmath$\mathcal{W}$}}}
+\def\Espdepl      {\enm{\mathbf{U}}}
+\def\Espcont      {\enm{\mathbf{S}}}
+\def\Espcont      {\enm{\boldsymbol{\Sigma}}}
+\def\Esppres      {\enm{\mathbf{P}}}
+\def\Espq         {\enm{\mathbf{Q}}}
+\def\EspZ         {\enm{\mathbf{Z}}}
+\def\EspW         {\enm{\mathbf{W}}}
+\def\espad        {\enm{\mathbf{A}_\mathbf{d}}}
+\def\espado       {\enm{\mathbf{A}_\mathbf{d}^\star}}
+\def\espadE       {\enm{{\espad}_{E}}}
+\def\espadS       {\enm{\mathbf{A}_{\mathbf{d}S}}}
+\def\espadF       {\enm{\mathbf{A}_{\mathbf{d}F}}}
+\def\espadoE      {\enm{{\espado}_{E}}}
+\def\espgam       {\enm{\boldsymbol{\Gamma}}}
+\def\espft        {\enm{\mathcal{F}^{\Time}}}
+\def\espGD        {\enm{\mathcal{D}^{\Time}}}
+\def\espGDk       {\enm{\mathcal{D}^{I_{k}}}}
+\def\ddrup        {\enm{\mathbf{E}^{+}}}
+\def\ddrdown      {\enm{\mathbf{E}^{-}}}
+\def\HHup         {\enm{\mathbb{H}^{+}}}
+\def\HHupE        {\enm{\mathbb{H}^{+}_{E}}}
+\def\Hup          {\enm{\mathbf{H}^{+}}}
+\def\HupE         {\enm{\mathbf{H}^{+}_{E}}}
+\def\HHdown       {\enm{\mathbb{H}^{-}}}
+\def\HHdownE      {\enm{\mathbb{H}^{-}_{E}}}
+\def\Hdown        {\enm{\mathbf{H}^{-}}}
+\def\HdownE       {\enm{\mathbf{H}^{-}_{E}}}
+\def\hup          {\enm{\mathbf{h}^{+}}}
+\def\hupE         {\enm{\mathbf{h}^{+}_{E}}}
+\def\hdown        {\enm{\mathbf{h}^{-}}}
+\def\hdownE       {\enm{\mathbf{h}^{-}_{E}}}
+\def\espneighborE {\enm{\boldsymbol{\Omega}_{E}}}
+\def\esplambda    {\enm{\boldsymbol{\lambda}}}
+\def\espLambda    {\enm{\boldsymbol{\Lambda}}}
+
+% Operateurs du probleme ----------------------------------------------
+\def\hooke        {\enm{\mathbf{K}}}
+\def\normform     {\enm{\bm{\Lambda}}}
+\def\constitutdec {\enm{\mathbf{A}}}
+\def\constitutdecE{\enm{\constitutdec_{E}}}
+\def\constitutive {\enm{\mathbf{B}}}
+\def\constitutiveE{\enm{\constitutive_{E}}}
+\def\H            {\enm{\mathbf{H}}}
+\def\h            {\enm{\mathbf{h}}}
+\def\HH           {\enm{\mathbf{M}}}
+\def\L            {\enm{\mathbf{L}}}
+\def\opun         {\enm{\mathbf{I}}}
+\def\opnull       {\enm{\mathbb{O}}}
+\def\A            {\enm{\mathbf{A}}}
+\def\b            {\enm{\mathbf{b}}}
+\def\cbiot        {\enm{b}}
+\def\visco        {\enm{\mathbf{Z}}}
+
+% Operateurs specifiques ----------------------------------------------
+\def\interp       {\enm{\mathbf{I}}}
+\def\proj         {\enm{\mathbf{P}}}
+\def\restri       {\enm{\mathbf{R}}}
+\def\identity     {\mathrm{\mathbf{id}}}
+\def\projM        {\enm{\boldsymbol{\pi}}}
+\def\projm        {\enm{(\identity - \projM)}}
+\def\GaussF       {\enm{\mathbf{D}_{F}}}
+\def\GaussS       {\enm{\mathbf{D}_{S}}}
+\def\projSF       {\enm{\Pi_{S}^{F}}}
+\def\projFS       {\enm{\Pi_{F}^{S}}}
+\def\projtime     {\mathbf{P}}
+\def\projTSI      {\enm{\projtime_{SI}}}
+\def\projTIS      {\enm{\projtime_{IS}}}
+\def\projTFI      {\enm{\projtime_{FI}}}
+\def\projTIF      {\enm{\projtime_{IF}}}
+\def\projTSF      {\enm{\projtime_{SF}}}
+\def\projTFS      {\enm{\projtime_{FS}}}
+\DeclareSymbolFont{calcm}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcalcm}{calcm}
+\def\projspace    {\mathcalcm{P}}
+\def\projMSI      {\enm{\projspace_{SI}}}
+\def\projMIS      {\enm{\projspace_{IS}}}
+\def\projMFI      {\enm{\projspace_{FI}}}
+\def\projMIF      {\enm{\projspace_{IF}}}
+\def\projMSF      {\enm{\projspace_{SF}}}
+\def\projMFS      {\enm{\projspace_{FS}}}
+\def\Mb           {\enm{\textbf{\textit{M}}}}
+\def\Pb           {\enm{\textbf{\textit{P}}}}
+
+% En discretise -------------------------------------------------------
+\def\solsS        {\enm{\sols_{S}}}
+\def\SolsS        {\enm{\sd{\sols}_{S}}}
+\def\LambdaS      {\enm{\sd{\dLambda}}_{S}}
+\def\BS           {\enm{\sd{\mathbb{B}}_{S}}}
+\def\PS           {\enm{\sd{\mathbb{P}}_{S}}}
+\def\XS           {\enm{\sd{X}_{S}}}
+\def\XSc          {\enm{\sd{\hat{X}}_{S}}}
+\def\xS           {\enm{\sd{x}_{S}}}
+\def\YS           {\enm{\sd{Y}_{S}}}
+\def\YSc          {\enm{\sd{\hat{Y}}_{S}}}
+\def\XptS         {\enm{\sd{\dot{X}}_{S}}}
+\def\XptSc        {\enm{\sd{\hat{\dot{X}}}_{S}}}
+\def\xptS         {\enm{\sd{\dot{x}}_{S}}}
+\def\YptS         {\enm{\sd{\dot{Y}}_{S}}}
+\def\xSd          {\enm{\sd{x}_{S}^{d}}}
+\def\xptSd        {\enm{\sd{\dot{x}}_{S}^{d}}}
+\def\FSd          {\enm{\sd{F}_{S}^{d}}}
+\def\opunS        {\enm{\sd{\mathbb{I}}_{S}}}
+\def\hookeS       {\enm{\sd{\mathbb{K}}_{S}}}
+\def\viscoS       {\enm{\sd{\mathbb{H}}_{S}}}
+\def\bighookeS    {\enm{\sd{\mathbf{K}}_{S}}}
+\def\bigviscoS    {\enm{\sd{\mathbf{H}}_{S}}}
+
+\def\solsF        {\enm{\sols_{F}}}
+\def\SolsF        {\enm{\sd{\sols}_{F}}}
+\def\LambdaF      {\enm{\sd{\dLambda}}_{F}}
+\def\BF           {\enm{\sd{\mathbb{B}}_{F}}}
+\def\PF           {\enm{\sd{\mathbb{P}}_{F}}}
+\def\XF           {\enm{\sd{X}_{F}}}
+\def\XFc          {\enm{\sd{\hat{X}}_{F}}}
+\def\xF           {\enm{\sd{x}_{F}}}
+\def\YF           {\enm{\sd{Y}_{F}}}
+\def\YFc          {\enm{\sd{\hat{Y}}_{F}}}
+\def\XptF         {\enm{\sd{\dot{X}}_{F}}}
+\def\XptFc        {\enm{\sd{\hat{\dot{X}}}_{F}}}
+\def\xptF         {\enm{\sd{\dot{x}}_{F}}}
+\def\YptF         {\enm{\sd{\dot{Y}}_{F}}}
+\def\YptFc        {\enm{\sd{\hat{\dot{Y}}}_{F}}}
+\def\xFd          {\enm{\sd{x}_{F}^{d}}}
+\def\xptFd        {\enm{\sd{\dot{x}}_{F}^{d}}}
+\def\FSd          {\enm{\sd{F}_{S}^{d}}}
+\def\QFd          {\enm{\sd{Q}_{F}^{d}}}
+\def\opunF        {\enm{\sd{\mathbb{I}}_{F}}}
+\def\QF           {\enm{\sd{\mathbb{Q}}_{F}}}
+\def\RF           {\enm{\sd{\mathbb{R}}_{F}}}
+\def\bigQF        {\enm{\sd{\mathbf{Q}}_{F}}}
+\def\bigRF        {\enm{\sd{\mathbf{R}}_{F}}}
+
+\def\Sols         {\enm{\sd{\sols}}}
+\def\Solsc        {\enm{\hat{\sd{\sols}}}}
+\def\Solsex       {\enm{\Sols_{ex}}}
+\def\X            {\enm{\sd{X}}}
+\def\Xc           {\enm{\sd{\hat{X}}}}
+\def\x            {\enm{\sd{x}}}
+\def\Y            {\enm{\sd{Y}}}
+\def\Yc           {\enm{\sd{\hat{Y}}}}
+\def\Xpt          {\enm{\sd{\dot{X}}}}
+\def\Xptc         {\enm{\sd{\hat{\dot{X}}}}}
+\def\xpt          {\enm{\sd{\dot{x}}}}
+\def\Ypt          {\enm{\sd{\dot{Y}}}}
+
+\def\Zrdc         {\enm{\sd{\mathbb{Z}}}}
+\def\Lddr         {\enm{\sd{\mathbb{L}}_{S}}}
+\def\Gddr         {\enm{\sd{\mathbb{G}}_{F}}}
+\def\espAd        {\enm{\sd{\mathbf{A}}_\mathbf{d}}}
+\def\espGam       {\enm{\sd{\boldsymbol{\Gamma}}}}
+\def\Ddrup        {\enm{\sd{E}^{+}}}
+\def\Ddrdown      {\enm{\sd{E}^{-}}}
+
+\def\RFm    {\enm{r_F}}
+\def\RWm    {\enm{r_W}}
+\def\RFM    {\enm{R_{F,EE',k}}}
+\def\RWM    {\enm{R_{W,EE',k}}}
+
+\def\vEp          {\enm{\mathbb{E}_\mathbf{p}}}
+\def\vE            {\enm{\mathbb{E}}}
+\def\vC            {\enm{\mathbb{C}}}
+\def\vG            {\enm{\underline{\mathbb{G}}}}
+\def\vZ            {\enm{\underline{\mathbb{Z}}}}
+\def\valpha    {\enm{\underline{\alpha}}}
+
+\newcommand{\ZT}[1]{\mathbf{Z}_{#1}^{[0,T]}}
+\def\ZrT 		{\mathbf{Z}_{r}^{[0,T]}}
+
+\def\mgros            {\enm{\mathbf{M}}}
+\def\mpetit            {\enm{\mathbf{m}}}
+
+% Divers --------------------------------------------------------------
+\def\resolv       {\enm{\dashleftarrow}}
+\def\LATIN        {\mbox{LATIN}\xspace}
+\def\MATLAB       {\mbox{Matlab\texttrademark}\xspace}
+\def\CASTEM       {\mbox{Cast3M\texttrademark}\xspace}
+\def\sansP        {0P3\xspace}
+\def\semiP        {\textonehalf{}P3\xspace}
+\def\fullP        {P3\xspace}
+\def\dom          {\enm{\Omega}}
+\def\interf       {\enm{\Phi}}
+\def\interfEEp    {\enm{\interf_{EE'}}}
+\def\domS         {\enm{{\dom_{S}}}}
+\def\domF         {\enm{{\dom_{F}}}}
+\def\domI         {\enm{{\dom_{I}}}}
+\def\domE         {\enm{{\dom_{E}}}}
+\def\domEp        {\enm{{\dom_{E'}}}}
+\def\contribS     {\enm{\eta_{S}}}
+\def\contribF     {\enm{\eta_{F}}}
+\def\erreur       {\enm{\eta}}
+\def\erreurS      {\enm{E_{S}}}
+\def\erreurF      {\enm{E_{F}}}
+\def\base         {\enm{\mathrm{\mathbf{e}}}}
+\def\baseM        {\enm{\M{\base}}}
+\def\ptgauss      {\enm{\underline{i}_{g}}}
+%\def\Timetot      {\enm{{[0,T]}}}
+\def\Timetot      {\enm{{I}}}
+\def\Time         {\enm{{I^C_i}}}
+\def\Timeh        {\enm{\mathcal{T}_{h}}}
+\def\TimeS        {\enm{{\Time_{S}}}}
+\def\TimeF        {\enm{{\Time_{F}}}}
+\def\TimeI        {\enm{{\Time_{I}}}}
+\def\TimeGD       {\enm{{\Time_{\mathcal{D}}}}}
+\def\TimeGDk      {\enm{{I_{k}}}}
+\def\nit          {\enm{n_{\textrm{it}}}}
+\def\nsub         {\enm{n_{\textrm{sub}}}}
+\def\nT           {\enm{n_{T}}}
+\def\circE        {\enm{\circ_{E}}}
+\def\Dbar		{\enm{\overline\Delta}}
+\def\dbar		{\enm{\overline{\underline\delta}}}
+
+% --------------------------------------------------------> Macros <---
+
+% Operateurs mathematiques classiques ---------------------------------
+\newcommand{\diver}{\operatornamewithlimits{\mathrm{div}}}
+\newcommand{\diverv}{\operatornamewithlimits{\vec{\mathrm{div}}}}
+\newcommand{\gradv}{\operatornamewithlimits{\mathrm{\vec{grad}}}}
+\newcommand{\Grad}{\operatornamewithlimits{\mathrm{Grad}}}
+\newcommand{\Tr}{\operatornamewithlimits{\mathrm{Tr}}}
+\DeclareRobustCommand{\pscal}[3][{}]{#2\cdot#1#3}
+\DeclareRobustCommand{\pcarre}[2][{}]{\pscal[#1]{#2}{#2}}
+\DeclareRobustCommand{\Pscal}[3][{}]{\Tr[#2#1#3]}
+\DeclareRobustCommand{\Pcarre}[2][{}]{\Pscal[#1]{#2}{#2}}
+\DeclareRobustCommand{\carre}[2][{}]{#2\cdot#1#2}
+
+% Operateurs mathematiques specifiques --------------------------------
+\DeclareRobustCommand{\bilin}[2]{\langle #1,#2 \rangle}
+\DeclareRobustCommand{\pbilin}[2]{( #1,#2 )}
+\DeclareRobustCommand{\bilinS}[2]{\langle #1,#2 \rangle_{S}}
+\DeclareRobustCommand{\bilinF}[2]{\langle #1,#2 \rangle_{F}}
+\DeclareRobustCommand{\IntS}[1]{\int_{\dom\times\Time}\Tr[#1]d\dom dt}
+\DeclareRobustCommand{\IntF}[1]{\int_{\dom\times\Time}#1d\dom dt}
+\DeclareRobustCommand{\saut}[1]{\llbracket#1\rrbracket}
+
+% Operateurs micro/macro ----------------------------------------------
+\newcommand{\m}[1]{\enm{#1^m}}
+\newcommand{\M}[1]{\enm{#1^M}}
+\newcommand{\block}[1]{\enm{#1^\diamond}}
+\newcommand{\leftpar}{\left(\vphantom{\int}\right.}
+\newcommand{\rightpar}{\left.\vphantom{\int}\right)}
+% des trucs
+\newcommand{\alphabold}{{\boldsymbol \alpha}}
+\newcommand{\betabold}{{\boldsymbol \beta}}
+\newcommand{\gammabold}{{\boldsymbol \gamma}}
+\newcommand{\deltabold}{{\boldsymbol \delta}}
+\newcommand{\epsilonbold}{{\boldsymbol \epsilon}}
+\newcommand{\zetabold}{{\boldsymbol \zeta}}
+\newcommand{\etabold}{{\boldsymbol \eta}}
+\newcommand{\thetabold}{{\boldsymbol \theta}}
+\newcommand{\iotabold}{{\boldsymbol \iota}}
+\newcommand{\kappabold}{{\boldsymbol \kappa}}
+\newcommand{\lambdabold}{{\boldsymbol \lambda}}
+\newcommand{\mubold}{{\boldsymbol \mu}}
+\newcommand{\nubold}{{\boldsymbol \nu}}
+\newcommand{\xibold}{{\boldsymbol \xi}}
+\newcommand{\omicronbold}{{\boldsymbol \omicron}}
+\newcommand{\rhobold}{{\boldsymbol \rho}}
+\newcommand{\sigmabold}{{\boldsymbol \sigma}}
+\newcommand{\taubold}{{\boldsymbol \tau}}
+\newcommand{\upsilonbold}{{\boldsymbol \upsilon}}
+\newcommand{\phibold}{{\boldsymbol \phi}}
+\newcommand{\chibold}{{\boldsymbol \chi}}
+\newcommand{\psibold}{{\boldsymbol \psi}}
+\newcommand{\omegabold}{{\boldsymbol \omega}}
+%
+\newcommand{\Alphabold}{\mathbf{A}}
+\newcommand{\Betabold}{\mathbf{B}}
+\newcommand{\Gammabold}{{\boldsymbol \varGamma}}
+\newcommand{\Deltabold}{{\boldsymbol \varDelta}}
+\newcommand{\Epsilonbold}{\mathbf{E}}
+\newcommand{\Zetabold}{\mathbf{Z}}
+\newcommand{\Etabold}{\mathbf{H}}
+\newcommand{\Thetabold}{{\boldsymbol \varTheta}}
+\newcommand{\Iotabold}{\mathbf{I}}
+\newcommand{\Kappabold}{\mathbf{K}}
+\newcommand{\Lambdabold}{{\boldsymbol \varLambda}}
+\newcommand{\Mubold}{\mathbf{M}}
+\newcommand{\Nubold}{\mathbf{N}}
+\newcommand{\Xibold}{\boldsymbol \varXi}
+\newcommand{\Omicronbold}{\mathbf{O}}
+\newcommand{\Rhobold}{\mathbf{P}}
+\newcommand{\Sigmabold}{{\boldsymbol \varSigma}}
+\newcommand{\Taubold}{{\boldsymbol \varTau}}
+\newcommand{\Upsilonbold}{{\boldsymbol \varUpsilon}}
+\newcommand{\Phibold}{{\boldsymbol \varPhi}}
+\newcommand{\Chibold}{\mathbf{X}}
+\newcommand{\Psibold}{{\boldsymbol \varPsi}}
+\newcommand{\Omegabold}{{\boldsymbol \varOmega}}
+%
+\newcommand{\varepsilonbold}{{\boldsymbol \varepsilon}}
+\newcommand{\varthetabold}{{\boldsymbol \vartheta}}
+\newcommand{\varpibold}{{\boldsymbol \varpi}}
+\newcommand{\varrhobold}{{\boldsymbol \varrho}}
+\newcommand{\varsigmabold}{{\boldsymbol \varsigma}}
+\newcommand{\varphibold}{{\boldsymbol \varphi}}
+\newcommand{\trace}{\enm{\operatorname{Tr}}}
+
+
+
+% Noms des flottants
+%\newcommand{\Figure}{\textsc{Fig.}}
+%\newcommand{\Tableau}{\textsc{Tab.}}
+%\newcommand{\Algorithme}{\textsc{Alg.}}
+%\newcommand{\Chapitre}{\textsc{Chap.}}
+%\newcommand{\Equation}{\textsc{Eq.}}
+
+
+%Pour moi
+
+\newcommand{\Ys}{\underline{Y}}
+\newcommand{\Ms}{\underline{M}}
+\newcommand{\domaine}{\Omega}
+\newcommand{\inttps}{\mathcal{I}}
+\newcommand{\mvol}{\rho}
+\newcommand{\capa}{c}
+\newcommand{\conduc}{\lambda}
+\newcommand{\bordT}{\partial_{T} \Omega}
+\newcommand{\bordY}{\partial_{Y} \Omega}
+\newcommand{\Tinit}{T_{init}}
+\newcommand{\Ad}{\mathbf{A_d}}
+\newcommand{\Ado}{\mathbf{A^*_d}}
+\newcommand{\Comp}{\mbox{$\boldsymbol{\Gamma}$}}
+\newcommand{\CA}{\mathcal{T}}
+\newcommand{\SA}{\mathcal{Y}}
+\newcommand{\dintxt}{d \Omega  d t}
+\newcommand{\intomega}{\mathbb{I}_\textrm{M}}
+\newcommand{\intbordY}{\mathbb{I}_\textrm{S}}
+\newcommand{\rechm}{\mathbf{E^-}}
+\newcommand{\rechp}{\mathbf{E^+}}
+\newcommand{\secmv}{\textit{L}}
+
+
+\newcommand{\argmin}{\operatornamewithlimits{arg\:min}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+
+%Les mots à ne pas couper :
+
+\hyphenation {LATIN}
+
+
+%Changer le nom des flottants :
+
+\addto\captionsfrench{%
+\renewcommand{\tablename}{Tableau}%
+}
+

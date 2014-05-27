@@ -1,0 +1,58 @@
+
+\documentclass[12pt,a4paper]{report}
+  \usepackage[utf8]{inputenc}
+  \usepackage[francais]{babel}
+  \usepackage[T1]{fontenc}
+%\usepackage{mdwlist}								% for a compact itemize*
+  
+  \begin{document}
+  
+La méthode LATIN (Large Time INcrement method) [Ladevèze, 1985, Ladevèze, 1989, Ladevèze, 1999] a été initialement proposée pour traiter des problèmes non li- néaires dépendants du temps. Depuis son introduction, cette méthode a été exploitée autour de nombreux grands axes de développements :
+  \begin{itemize}
+  \item Grandes déformations,plasticité(PGD)[Bussy,1984,Vauchez,1991,Liu,1992]
+  \item Grandes transformations,formulation corotationnelle (PGD) [Boucard et al.,1997, Aubard et al., 2002]
+  \item Elasto-visco-plasticité, grand nombre de cycles, thermo-élasto-visco-plasticité (PGD) [Cognard, 1989, Arzt, 1994, Cognard et al., 1999]
+  \item Dynamiquenon-llinéaire(PGD)[Royer,1990]
+  \item Endommagement et composites
+  	\begin{itemize}
+  		\item Formulation fonctionnelle (loi de comportement intégrale) [Allix and Lade- vèze, 1992, Guinard et al., 2002]
+	 	\item Formulationvariablesinternes[DouchinandLadevèze,2001]  \item Multi-échellecomposite[Trovalet,2010]
+	 	\item Couplageflambage-délaminage[Saavedraetal.,2012]
+  	\end{itemize}  
+  	\item Dynamiquerapide[Lemoussuetal.,2002,Boucardetal.,2003,Guptaetal.,2005]
+    \item Assemblages
+    
+		\begin{itemize}
+		 \item 2Dstatique[Danwe,1993]
+		 \item Evolutionversle3D(bridesenstatique)[Champaneyetal.,1999]  \item Applicationenquasi-statique[Blanzéetal.,2000]
+		 \item Extensionàladynamique[Lemoussuetal.,2002]
+		 \item Optimisation[Boucardetal.,2010,Laurentetal.,2013]
+ 		\end{itemize}
+ 	\item Décompositiondedomaineausenslarge
+		\begin{itemize}
+		 \item Parallélisme[Ladevèze,1987,Lorong,1994,Champaneyetal.,1997]
+		 \item Multiéchelle[LadevèzeandDureisseix,1999,Ladevèzeetal.,2001]
+		 \item Multiéchelle-stratégieréutilisation,stochastique[Ladevèzeetal.,2002]  \item Multiphysique[Dureisseixetal.,2003]
+		 \item CouplageXFem-fissuration[Guidaultetal.,2007]
+		 \item Multiéchelle3D[Ladevèzeetal.,2006]
+		 \item Multiéchelletemps[Ladevèzeetal.,2010]
+		 \item Amortissement[Caignotetal.,2010]
+		 \item Composites[Allixetal.,2010]
+ 		\end{itemize}
+ 	\item Identification-Problèmesinverses
+		\begin{itemize}
+		 \item IdentificationavecPGD[AllixandVidal,2002]
+		 \item CouplageavecRICATI[Nguyenetal.,2008]
+ 		\end{itemize}
+ 	\item MultiparamétriquesansPGD
+		\begin{itemize}
+		 \item Assemblages[BoucardandChampaney,2003]
+		 \item Dynamiquemultiéchelle[Boucardetal.,2011]
+		 \item Assemblagecomposites[Rouletetal.,2013]
+ 		\end{itemize}
+ 	\item MultiparamétriqueavecPGD[Relunetal.,2013]
+  \end{itemize}
+C'est suivant ce dernier grand axe de recherche que s'illustre cette thèse.
+De manière très grossière, on peut schématiser la méthode de résolution LATIN comme étant une stratégie qui génère une approximation de la solution s du problème sur l'ensemble de l'espace et du temps et en améliore automatiquement la qualité à chaque itération, quitte à commencer par une approximation très grossière. En ceci, la
+
+\end{document}

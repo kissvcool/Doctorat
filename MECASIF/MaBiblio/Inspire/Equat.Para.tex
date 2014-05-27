@@ -1,0 +1,111 @@
+\documentclass[12pt,a4paper]{report}
+  \usepackage[utf8]{inputenc}
+  \usepackage[francais]{babel}
+  \usepackage[T1]{fontenc}
+  \usepackage{amsmath}		% \boldsymbol
+  
+  \begin{document}
+  
+Partant de l'équation \ref{TotalProblem} on annule les termes en $\boldsymbol{\varphi_q}^*$ et $g^*$, pour obtenir :
+  \begin{equation}
+\begin{array}{r r l}
+	\forall h^*
+	&\int_T \! \int_\Theta \!  \boldsymbol{\varphi_q}^Tgh^* &
+						[  ~\mathbf{K}~ \boldsymbol{\varphi_q}gh
+						+ ~\mathbf{C}~ \boldsymbol{\varphi_q} \dot{g}h 
+						+ ~\mathbf{M}~ \boldsymbol{\varphi_q} \ddot{g}h
+	\\ &&
+	  		+ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k       g_k  h_k 
+			+ \mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k  \dot{g_k} h_k 
+	\\ &&
+			+ \mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k \ddot{g_k} h_k
+			-\mathbf{f}~] ~dt d\theta ~~=0
+\end{array}
+\end{equation}
+
+On sort h (indépendant de $t$) de l'integrale sur $T$ :  
+\begin{equation}
+\begin{array}{r r l}
+	\forall h^*
+	&\int_\Theta \!  h^* \int_T \! g \boldsymbol{\varphi_q}^T &
+						\left[  ~\mathbf{K}~ \boldsymbol{\varphi_q}g
+							+ ~\mathbf{C}~ \boldsymbol{\varphi_q} \dot{g}
+							+ ~\mathbf{M}~ \boldsymbol{\varphi_q} \ddot{g}
+						\right]~dt ~ h ~d\theta
+	\\ = &\int_\Theta \!  h^* \int_T \! g \boldsymbol{\varphi_q}^T &
+	  		-[~ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k       g_k  h_k 
+			+ \mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k  \dot{g_k} h_k 
+	\\ &&
+			+ \mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k \ddot{g_k} h_k
+			-\mathbf{f}~] ~dt d\theta 
+\end{array}
+\end{equation}
+
+Contrairement au problème précédant (en temps) on a une dépendance des termes intégrés par rapport à la variable $\theta$. Pour continuer on fait donc apparaitre la forme discrétisée :
+\begin{equation}
+	\begin{array}{l c l c l}
+		h(\theta) &=& \displaystyle \sum_{i=1}^{Nbc_\theta}  {N_h}_i (\theta) h_i &=& N_h(\theta) \boldsymbol{h_q} \\
+	\end{array}
+\end{equation}
+
+Ce qui donne :
+\begin{equation}
+\begin{array}{r r l}
+	\forall \boldsymbol{h_q}^*
+	&\int_\Theta \!  \boldsymbol{h_q}^{*T} N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+						\left[  \mathbf{K} \boldsymbol{\varphi_q}g
+							+ \mathbf{C} \boldsymbol{\varphi_q} \dot{g}
+							+ \mathbf{M} \boldsymbol{\varphi_q} \ddot{g}
+						\right] dt  N_h(\theta) \boldsymbol{h_q} d\theta
+	\\ = &\int_\Theta \!  \boldsymbol{h_q}^{*T} N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+	  		-[~ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k       g_k N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k  \dot{g_k} N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k \ddot{g_k} N_h(\theta) (\boldsymbol{h_q})_k
+	  \\&& \phantom{-[}
+			-\mathbf{f}~] ~dt d\theta 
+\end{array}
+\end{equation}
+
+Soit :
+\begin{equation}
+\begin{array}{r r l}
+	&\int_\Theta \!  N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+						\left[  \mathbf{K} \boldsymbol{\varphi_q}g
+							+ \mathbf{C} \boldsymbol{\varphi_q} \dot{g}
+							+ \mathbf{M} \boldsymbol{\varphi_q} \ddot{g}
+						\right] dt  N_h(\theta) \boldsymbol{h_q} d\theta
+	\\ = &\int_\Theta \!  N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+	  		-[~ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k       g_k N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k  \dot{g_k} N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k \ddot{g_k} N_h(\theta) (\boldsymbol{h_q})_k
+	  \\&& \phantom{-[}
+			-\mathbf{f}~] ~dt d\theta 
+\end{array}
+\end{equation}
+  
+On sort l'inconnue $\boldsymbol{h_q}$ pour obtenir le système:
+\begin{equation}
+\begin{array}{r r l}
+	&\int_\Theta \!  N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+						\left[  \mathbf{K} \boldsymbol{\varphi_q}g
+							+ \mathbf{C} \boldsymbol{\varphi_q} \dot{g}
+							+ \mathbf{M} \boldsymbol{\varphi_q} \ddot{g}
+						\right] dt  N_h(\theta) d\theta \boldsymbol{h_q}
+	\\ = &\int_\Theta \!  N_h(\theta)^{T}  \!\! \int_T \! g \boldsymbol{\varphi_q}^T &
+	  		-[~ \mathbf{K}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k       g_k N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{C}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k  \dot{g_k} N_h(\theta) (\boldsymbol{h_q})_k 
+	  \\&& \phantom{-[}
+			+ \mathbf{M}~ \sum_{k=1}^{n-1} (\boldsymbol{\varphi_q})_k \ddot{g_k} N_h(\theta) (\boldsymbol{h_q})_k
+	  \\&& \phantom{-[}
+			-\mathbf{f}~] ~dt d\theta 
+\end{array}
+\end{equation}
+
+Et pour continuer les calculs il faudrait expliciter la dépendance des termes par rapport à $\theta$.
+  
+  \end{document}
