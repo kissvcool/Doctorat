@@ -22,13 +22,21 @@ clear all
 clc
 diary FichierLog
 
-IterProgram=10;
+fileID = fopen('PGD.Conv.dat','w');
+    fprintf(fileID,'Creation \n');
+    fclose(fileID);
+                
+
+IterProgram=1;
 
 sortie(IterProgram)=struct('f',[],'a',0,'p',[]);
-
+% for iterSchem=3:6
+%     fileID = fopen('PGD.Conv.dat','a');
+%     fprintf(fileID,['\nSchem = ' num2str(iterSchem) ' \n Cas 8 T8=10*dt*2^(0:3) \t']);
+%     fclose(fileID);
 for program=0:(IterProgram-1)
     
-    % clearvars -except program IterProgram ;
+    % clearvars -except program IterProgram iterSchem;
     % program
     
 %% Parametres
@@ -66,22 +74,26 @@ for program=0:(IterProgram-1)
         VectT=0:dt:Ttot;
 
     % probleme :
-        cas = 8;
+        cas = 2;
         disp(['cas = ' num2str(cas)]);
         % 1 Deformee de depart correspondant a un effort en bout de poutre puis relachee
         % 2 Effort sinusoidal en bout de poutre
         % 3 Deplacement impose en milieu de poutre
         % 4 Effort continue en bout de poutre
         % 5 Effort augmentant lineairement en bout de poutre
+            %AmpliF = AmpliF/(10^program);
         % 6 Effort continue en bout de poutre les 50 premiers pas de temps
             NbPas6 = round(2e-4/dt);
         % 7 Vitesse initiale
         % 8 Une periode de sinusverse
-            %T8=10*dt*2^program; % 10*dt < T < Ttot/4   
-            T8=dt*(10+5*program);
+            T8=10*dt*2^program; % 10*dt < T < Ttot/4  
+            
+            fileID = fopen('PGD.Conv.dat','a');
+            fprintf(fileID,' \t');
+            fclose(fileID);
 
     % schema d integration :
-        schem = 3;
+        schem = 3;%iterSchem;
         disp(['schem = ' num2str(schem)]);
         alpha=-1/3;    % -1/3 <= alpha <= 0 
         % 1 Newmark - Difference centree
@@ -92,7 +104,7 @@ for program=0:(IterProgram-1)
         % 6 Galerkin Discontinu
 
     % Application des conditions limites :
-        CL=1;
+        CL=2;
         disp(['CL = ' num2str(CL)]);
         % 1 Multiplicateur de Lagrange
         % 2 Substitution
@@ -135,6 +147,7 @@ for program=0:(IterProgram-1)
 %      chainetitre=['Schema Newmark - Acceleration moyenne, T=' num2str(T8, '%10.1e\n') ', dt=' num2str(dt, '%10.1e\n')];
 %     title(chainetitre);  
 %         set(gca, 'FontSize', 20);
+
 %         
 %         matlab2tikz( ['../Latex/CalculSchem3.T1.dt' num2str(dt) '.tikz'] );
      
@@ -156,7 +169,7 @@ for program=0:(IterProgram-1)
                       %% Reduction du modele %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-VectN = 1:1;%(size(M,1)-size(D,1));
+VectN = 1:5;%(size(M,1)-size(D,1));
 reduc = 1;
 % 1 POD
 % 2 Rayleigh
@@ -210,8 +223,9 @@ end
     NoDisplayResultat = 1;
     NoDisplayErreur = 1;
     Methode = 1; % POD
+    chainetitre = ['POD T=' num2str(T8) ' schem=' num2str(schem)];
 
-    [ErrMaxPOD,ErrCarrePOD,ErrAmpTotalePOD] = AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas);
+    [ErrMaxPOD,ErrCarrePOD,ErrAmpTotalePOD] = AfficherMethode(dt,Ttot,VectL,sortie(1).f.HistU',sortie(:),Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas,chainetitre);
     
 
                             %% PGD %%
@@ -241,13 +255,12 @@ for PGD = 1
         NoDisplayResultat = 1;
         NoDisplayErreur = 0;
         Methode = 2; % PGD
-
-        chainetitre = ['T=' num2str(T8) ];
+        chainetitre = ['PGD_T=' num2str(T8) '_schem=' num2str(schem)];
         
         % AfficherPGD(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,NombreResultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat);
             [ErrMaxPGD,ErrCarrePGD,ErrAmpTotalePGD] = AfficherMethode(dt,Ttot,VectL,HistMf(1:size(VectL,2),:),HistMg,Reference,Resultat,ModesEspaceTemps,ModesEspace,ModesTemps,NoDisplayResultat,NoDisplayErreur,Methode,D,cas,chainetitre);
-
-     
+            %matlab2tikz( ['../Latex/CalculConv.' num2str(dt) '.tikz']);
+            
         % Convergence du point fixe
             for i=1:0 % 1:NombreResultat
                 figure('Name',['Norme du couple '  num2str(i) ' dans le point fixe' ],'NumberTitle','off')
@@ -277,9 +290,6 @@ for PGD = 1
 end
              
 
-% for program=
-end 
-return;
                         %% Analyse des modes %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
@@ -298,6 +308,11 @@ return;
     % fichier = ['Resultats' num2str(program+1)];
     % save(fichier);
 
+% for program=
+end 
+% for iterSchem
+%end
+return;
 
 
 
