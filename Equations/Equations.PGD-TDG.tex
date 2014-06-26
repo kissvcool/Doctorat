@@ -1,0 +1,540 @@
+\documentclass[12pt,a4paper]{report}
+  \usepackage[utf8]{inputenc}
+  \usepackage[francais]{babel}
+  \usepackage[T1]{fontenc}
+  \usepackage{amsmath}
+  \usepackage{cancel} % Barrer des éléments mathématiques
+  \usepackage{pgfplots}  % Tikz
+  \usepackage[linkcolor=black,colorlinks=true]{hyperref}
+  
+\begin{document}
+
+
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+
+\section{Système de départ, TDG en dynamique}
+
+À l'instant $m$ :
+\begin{equation}
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\begin{bmatrix}
+		   \mathbf{u}_m^+  		\\
+		   \mathbf{u}_{m+1}^-  	\\
+		   \mathbf{v}_m^+  		\\
+		   \mathbf{v}_{m+1}^-  	\\
+	\end{bmatrix}
+	\\ =
+	\begin{bmatrix}	
+		  \mathbf{K} \mathbf{u}_m^-
+		\\ \mathbf{K} \mathbf{u}_m^-
+		\\ 	\left( \mathbf{M} \mathbf{v}_m^-
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K} \mathbf{u}_m^-
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K} \mathbf{u}_m^- 
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} \mathbf{v}_m^-
+	\end{bmatrix}
+\end{array}
+\end{equation}
+
+\chapter{Formulation à variable séparée }
+
+Note : Les indices de sommation à l'intérieur de $\Sigma$ ne sont pas indiqués pour éviter une surcharge des équations. Il s'agit de la somme des produits fournissant la solution PGD trouvée à l'itération précédente.
+
+-Pertinence de la représentation des vitesses avec $\varphi$ ?
+
+\begin{equation}
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\begin{bmatrix}
+		   \varphi {\mathbf{g}^u_m}^+ h + \Sigma \varphi {\mathbf{g}^u_m}^+ h 		\\
+		   \varphi {\mathbf{g}^u_{m+1}}^- h + \Sigma \varphi {\mathbf{g}^u_{m+1}}^ h  	\\
+		   \varphi {\mathbf{g}^v_m}^+  h + \Sigma \varphi {\mathbf{g}^v_m}^+ h 		\\
+		   \varphi {\mathbf{g}^v_{m+1}}^-  h + \Sigma \varphi {\mathbf{g}^v_{m+1}}^- h 	\\
+	\end{bmatrix}
+	\\ =
+	\begin{bmatrix}	
+		  \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^-  h)
+		\\ 	\left( \mathbf{M}  (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+ 
+\begin{equation}
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\left(
+	\begin{bmatrix}
+		\varphi h \begin{bmatrix}
+		   {\mathbf{g}^u_m}^+  		\\
+		   {\mathbf{g}^u_{m+1}}^-  	\\
+		   {\mathbf{g}^v_m}^+  		\\
+		   {\mathbf{g}^v_{m+1}}^-  	\\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+		   \Sigma \varphi {\mathbf{g}^u_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^u_{m+1}}^- h  	\\
+		   \Sigma \varphi {\mathbf{g}^v_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^v_{m+1}}^- h 	\\
+		\end{bmatrix}
+	\end{bmatrix}
+	\right)
+	\\ =
+	\begin{bmatrix}	
+		  \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ 	\left( \mathbf{M}  (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi{\mathbf{g}^u_m}^- h)
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+ 
+ L'équation doit être scalaire :
+ 
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	(\varphi h)^T \times
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\left(
+	\begin{bmatrix}
+		\varphi h \begin{bmatrix}
+		   {\mathbf{g}^u_m}^+  		\\
+		   {\mathbf{g}^u_{m+1}}^-  	\\
+		   {\mathbf{g}^v_m}^+  		\\
+		   {\mathbf{g}^v_{m+1}}^-  	\\
+		\end{bmatrix}
+		+
+		\begin{bmatrix}
+		   \Sigma \varphi {\mathbf{g}^u_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^u_{m+1}}^- h  	\\
+		   \Sigma \varphi {\mathbf{g}^v_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^v_{m+1}}^- h 	\\
+		\end{bmatrix}
+	\end{bmatrix}
+	\right)
+	\\ =	
+			(\varphi h)^T \times
+	\begin{bmatrix}	
+		  \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ 	\left( \mathbf{M}  (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi{\mathbf{g}^u_m}^- h)
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+	\end{bmatrix}
+\end{array}
+\end{equation}
+ 
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+	(\varphi h)^T \times
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+	\left(
+		\varphi h \begin{bmatrix}
+		   {\mathbf{g}^u_m}^+  		\\
+		   {\mathbf{g}^u_{m+1}}^-  	\\
+		   {\mathbf{g}^v_m}^+  		\\
+		   {\mathbf{g}^v_{m+1}}^-  	\\
+		\end{bmatrix}
+	\right)
+	\\ =	
+			(\varphi h)^T \times
+	\begin{bmatrix}	
+		  \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ \mathbf{K} (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+		\\ 	\left( \mathbf{M}  (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+		     			+\frac{\Delta t}{2}  (\mathbf{f}_m + \mathbf{f}_{m+1})
+			  \right)
+			-\Delta t.
+			 \left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi{\mathbf{g}^u_m}^- h)
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( \mathbf{K}  (\varphi {\mathbf{g}^u_m}^- h + \Sigma \varphi {\mathbf{g}^u_m}^- h)
+						-\mathbf{f}_{m+1}
+				\right)
+					  
+			- \frac{1}{3} .  \mathbf{M} (\varphi {\mathbf{g}^v_m}^- h + \Sigma \varphi {\mathbf{g}^v_m}^- h)
+	\end{bmatrix}
+	\\
+	-
+	(\varphi h)^T \times
+		\begin{bmatrix}   
+		   		\mathbf{K}
+			&
+		   		0
+		   	&
+			   	-\mathbf{K} \frac{\Delta t}{6} 
+		   	&
+		   		\mathbf{K} \frac{\Delta t}{6} 
+		\\ 	     
+			   0 
+			&
+				\mathbf{K} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2} 
+		   	&
+		   		-\mathbf{K} \frac{\Delta t}{2}
+		\\   
+		   		0
+		   	& 
+		   		0
+		   	&
+			   	\mathbf{K}
+			   		\frac{(\Delta t)^2}{3} 
+		   		+\mathbf{C} \frac{\Delta t}{2}
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{6} 
+		   		+\mathbf{M} 
+			   	+\mathbf{C} \frac{\Delta t}{2}
+		\\    
+		   		0
+		   	&
+		   		0
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		-\mathbf{M}
+			   		\frac{1}{2} 
+		   	&
+		   		\mathbf{K} \frac{(\Delta t)^2}{12}
+		   		+\mathbf{M} \frac{1}{6} 
+			   +\mathbf{C} \frac{\Delta t}{6} 
+	\end{bmatrix}
+		\begin{bmatrix}
+		   \Sigma \varphi {\mathbf{g}^u_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^u_{m+1}}^- h  	\\
+		   \Sigma \varphi {\mathbf{g}^v_m}^+ h 		\\
+		   \Sigma \varphi {\mathbf{g}^v_{m+1}}^- h 	\\
+		\end{bmatrix}
+\end{array}
+\end{equation}
+
+\begin{equation}
+\begin{array}{c}
+	\\
+	 \varphi h^T \times \mathbf{f} 		= f
+	\\
+	\varphi h^T \times \mathbf{K} \times \varphi h			= K
+	\\
+	\varphi h^T \times \mathbf{K} \times \varphi_i h_i	= K_i
+\end{array}
+\end{equation}
+	Où $_i$ est l'indice de sommation.  Même chose pour $\mathbf{M}$ et $\mathbf{C}$.
+	Ceci permet de n'avoir plus que des scalaires.
+ 
+\begin{equation}
+\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!
+\begin{array}{c}
+		\begin{bmatrix}   
+		   		K  &  0  &	-K \frac{\Delta t}{6}   &  K \frac{\Delta t}{6} 
+		\\ 	     
+			   0  &  K	 &  -K \frac{\Delta t}{2} 	&  -K \frac{\Delta t}{2}
+		\\   
+		   		0  &  0  &  	K
+			   						\frac{(\Delta t)^2}{3} 
+		   							+C \frac{\Delta t}{2}
+		   	&
+		   		K \frac{(\Delta t)^2}{6} 
+		   		+M 
+			   	+C \frac{\Delta t}{2}
+		\\    
+		   		0 	&  0  &  K \frac{(\Delta t)^2}{12}
+						   		-M \frac{1}{2} 
+		   	&
+		   		K \frac{(\Delta t)^2}{12}
+		   		+M \frac{1}{6} 
+			   +C \frac{\Delta t}{6} 
+	\end{bmatrix}
+		\begin{bmatrix}
+		   {\mathbf{g}^u_m}^+  		\\
+		   {\mathbf{g}^u_{m+1}}^-  	\\
+		   {\mathbf{g}^v_m}^+  		\\
+		   {\mathbf{g}^v_{m+1}}^-  	\\
+		\end{bmatrix}
+	\\ =	
+	\begin{bmatrix}	
+		  K {\mathbf{g}^u_m}^- + \Sigma K_i ({\mathbf{g}^u_m}^-)_i
+		\\ K {\mathbf{g}^u_m}^- + \Sigma K_i ({\mathbf{g}^u_m}^-)_i
+		\\ 	 M {\mathbf{g}^v_m}^- + \Sigma M_i ({\mathbf{g}^v_m}^-)_i
+		     			+\frac{\Delta t}{2}  (f_m + f_{m+1})
+			-\Delta t
+			 \left(  K {\mathbf{g}^u_m}^- + \Sigma K_i ({\mathbf{g}^u_m}^-)_i 
+			  \right)
+		\\-\frac{\Delta t}{6}
+				\left( K {\mathbf{g}^u_m}^- + \Sigma K_i ({\mathbf{g}^u_m}^- )_i )
+						-f_{m+1}
+				\right)
+			- \frac{1}{3}  (M {\mathbf{g}^v_m}^- + \Sigma K_i ({\mathbf{g}^v_m}^-)_i )
+	\end{bmatrix}
+	\\
+	- \displaystyle \sum^i
+		\begin{bmatrix}   
+		   		K_i  &  0  &  -K_i \frac{\Delta t}{6}  &  K_i \frac{\Delta t}{6} 
+		\\ 	     
+			   0  &  K_i  &  -K_i \frac{\Delta t}{2}  &  -K_i \frac{\Delta t}{2}
+		\\   
+		   		0  &  0  &  K_i
+						   		\frac{(\Delta t)^2}{3} 
+					   			+C_i \frac{\Delta t}{2}
+		   	&
+		   		K_i \frac{(\Delta t)^2}{6} 
+		   		+M_i 
+			   	+C_i \frac{\Delta t}{2}
+		\\    
+		   		0  &  0  &  K_i \frac{(\Delta t)^2}{12}
+		   						-M_i \frac{1}{2} 
+		   	&
+		   		K_i \frac{(\Delta t)^2}{12}
+		   		+M_i \frac{1}{6} 
+			   +C_i \frac{\Delta t}{6} 
+	\end{bmatrix}
+		\begin{bmatrix}
+		  {\mathbf{g}^u_m}^+ 		\\
+		  {\mathbf{g}^u_{m+1}}^-  	\\
+		  {\mathbf{g}^v_m}^+ 		\\
+		  {\mathbf{g}^v_{m+1}}^- 	\\
+		\end{bmatrix}_i
+\end{array}
+\end{equation}
+
+\end{document}
